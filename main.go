@@ -35,6 +35,8 @@ func main() {
 	}
 
 	mux := http.NewServeMux()
+	
+	mux.HandleFunc("GET /healthz", handlerReadiness)
 
 	srv := &http.Server{
 		Addr:    ":" + port,
