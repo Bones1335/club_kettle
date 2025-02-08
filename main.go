@@ -13,12 +13,14 @@ import (
 )
 
 type apiConfig struct {
-	db *database.Queries
+	db       *database.Queries
+	platform string
 }
 
 func main() {
 	godotenv.Load()
 	dbURL := os.Getenv("DB_URL")
+	platform := os.Getenv("PLATFORM")
 
 	const filepathRoot = "."
 	const port = "8080"
@@ -31,12 +33,15 @@ func main() {
 	dbQueries := database.New(db)
 
 	apiCfg := apiConfig{
-		db: dbQueries,
+		db:       dbQueries,
+		platform: platform,
 	}
 
 	mux := http.NewServeMux()
 
 	mux.HandleFunc("GET /healthz", handlerReadiness)
+
+	mux.HandleFunc("POST /admin/reset", apiCfg.handlerReset)
 
 	mux.HandleFunc("POST /api/users", apiCfg.handlerCreateUser)
 
