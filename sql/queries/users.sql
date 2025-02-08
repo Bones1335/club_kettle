@@ -6,9 +6,9 @@ INSERT INTO users (
     email
 )
 Values (
-    $1,
-    $2,
-    $3,
-    $4
+    gen_random_uuid(),
+    NOW(),
+    NOW(),
+    $1
 )
 RETURNING *;
