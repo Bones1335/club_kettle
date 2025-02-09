@@ -14,24 +14,45 @@ INSERT INTO users (
     id,
     created_at,
     updated_at,
+    last_name,
+    first_name,
+    username,
     email
 )
 Values (
     gen_random_uuid(),
     NOW(),
     NOW(),
-    $1
+    $1,
+    $2,
+    $3,
+    $4
 )
-RETURNING id, created_at, updated_at, email
+RETURNING id, created_at, updated_at, last_name, first_name, username, email
 `
 
-func (q *Queries) CreateUser(ctx context.Context, email string) (User, error) {
-	row := q.db.QueryRowContext(ctx, createUser, email)
+type CreateUserParams struct {
+	LastName  string `json:"last_name"`
+	FirstName string `json:"first_name"`
+	Username  string `json:"username"`
+	Email     string `json:"email"`
+}
+
+func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) (User, error) {
+	row := q.db.QueryRowContext(ctx, createUser,
+		arg.LastName,
+		arg.FirstName,
+		arg.Username,
+		arg.Email,
+	)
 	var i User
 	err := row.Scan(
 		&i.ID,
 		&i.CreatedAt,
 		&i.UpdatedAt,
+		&i.LastName,
+		&i.FirstName,
+		&i.Username,
 		&i.Email,
 	)
 	return i, err
