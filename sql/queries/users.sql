@@ -18,3 +18,8 @@ Values (
     $4
 )
 RETURNING *;
+
+-- name: UpdateUser :one
+UPDATE users SET last_name = $2, first_name = $3, username = $4, email = $5, updated_at = NOW()
+WHERE id = $1
+RETURNING *;

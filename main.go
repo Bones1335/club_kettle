@@ -46,7 +46,7 @@ func main() {
 	// User endpoints
 	mux.HandleFunc("POST /api/users", apiCfg.handlerCreateUsers)
 	//TODO: mux.HandleFunc("GET /api/users/{user_id}", apiCfg.handlerGetUsers)
-	//TODO: mux.HandleFunc("PUT /api/users/{user_id}", apiCfg.handlerUpdateExercises)
+	//TODO: mux.HandleFunc("PUT /api/users/{user_id}", apiCfg.handlerUpdateUsers)
 	//TODO: mux.HandleFunc("DELETE /api/users/{user_id}", apiCfg.handlerDeleteUsers)
 
 	// Exercise endpoints
