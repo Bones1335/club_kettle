@@ -26,6 +26,7 @@ func (cfg *apiConfig) handlerUpdateUsers(w http.ResponseWriter, r *http.Request)
 	err := decoder.Decode(&params)
 	if err != nil {
 		respondWithError(w, http.StatusInternalServerError, "Couldn't decode parameters", err)
+		return
 	}
 
 	user, err := cfg.db.UpdateUser(r.Context(), database.UpdateUserParams{
@@ -37,11 +38,14 @@ func (cfg *apiConfig) handlerUpdateUsers(w http.ResponseWriter, r *http.Request)
 	})
 	if err != nil {
 		respondWithError(w, http.StatusInternalServerError, "Couldn't update user", err)
+		return
 	}
 
 	respondWithJSON(w, http.StatusOK, response{
 		database.User{
 			ID:        user.ID,
+			CreatedAt: user.CreatedAt,
+			UpdatedAt: user.UpdatedAt,
 			LastName:  user.LastName,
 			FirstName: user.FirstName,
 			Username:  user.Username,
