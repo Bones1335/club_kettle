@@ -10,6 +10,15 @@ import (
 	"github.com/google/uuid"
 )
 
+type Exercise struct {
+	ID        uuid.UUID `json:"id"`
+	CreatedAt time.Time `json:"created_at"`
+	UpdatedAt time.Time `json:"updated_at"`
+	Name      string    `json:"name"`
+	Tool      string    `json:"tool"`
+	UserID    uuid.UUID `json:"user_id"`
+}
+
 type User struct {
 	ID        uuid.UUID `json:"id"`
 	CreatedAt time.Time `json:"created_at"`

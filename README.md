@@ -7,7 +7,7 @@ This API allows the user to interact with a Postgresql database to track and sto
  - [x] CREATE basic user (more user info to be added later)
  - [x] For testing/development, CREATE a reset endpoint to reset the database to zero
  - [ ] GET user info
- - [ ] UPDATE user info
+ - [x] UPDATE user info
  - [ ] DELETE user info
  - [ ] CREATE exercise endpoint where the user can create various exercises
  - [ ] Endpoint to GET all created exercises by a user
