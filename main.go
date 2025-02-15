@@ -51,7 +51,7 @@ func main() {
 
 	// Exercise endpoints
 	mux.HandleFunc("POST /api/exercises", apiCfg.handlerCreateExercises)
-	//TODO: mux.HandleFunc("GET /api/exercises/{user_id}", apiCfg.handlerGetExercises)
+	mux.HandleFunc("GET /api/users/{user_id}/exercises", apiCfg.handlerGetUserExercises)
 	//TODO: mux.HandleFunc("PUT /api/exercises/{exercise_id}", apiCfg.handlerUpdateExercises)
 	//TODO: mux.HandleFunc("DELETE /api/exercises/{exercise_id}", apiCfg.handlerDeleteExercises)
 
