@@ -21,3 +21,11 @@ echo $JSON_PUT1 | jq .
 JSON_POST2=$(curl -X POST http://localhost:8080/api/exercises -H "Content-Type:appication/json" -d "{\"name\":\"inside circle\",\"tool\":\"clubbell\",\"user_id\":\"$user_id\"}")
 
 echo $JSON_POST2 | jq .
+
+JSON_POST3=$(curl -X POST http://localhost:8080/api/exercises -H "Content-Type:appication/json" -d "{\"name\":\"outside circle\",\"tool\":\"clubbell\",\"user_id\":\"$user_id\"}")
+
+echo $JSON_POST3 | jq .
+
+JSON_GET=$(curl -X GET "http://localhost:8080/api/users/$user_id/exercises" -H "Content-Type:application/json" -d "{\"user_id\":\"$user_id\"}")
+
+echo $JSON_GET | jq .
