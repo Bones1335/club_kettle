@@ -50,3 +50,48 @@ func (q *Queries) CreateExercise(ctx context.Context, arg CreateExerciseParams) 
 	)
 	return i, err
 }
+
+const deleteExercise = `-- name: DeleteExercise :exec
+DELETE FROM exercises
+WHERE id = $1
+`
+
+func (q *Queries) DeleteExercise(ctx context.Context, id uuid.UUID) error {
+	_, err := q.db.ExecContext(ctx, deleteExercise, id)
+	return err
+}
+
+const getUserExercises = `-- name: GetUserExercises :many
+SELECT id, created_at, updated_at, name, tool, user_id FROM exercises
+WHERE user_id = $1
+`
+
+func (q *Queries) GetUserExercises(ctx context.Context, userID uuid.UUID) ([]Exercise, error) {
+	rows, err := q.db.QueryContext(ctx, getUserExercises, userID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []Exercise
+	for rows.Next() {
+		var i Exercise
+		if err := rows.Scan(
+			&i.ID,
+			&i.CreatedAt,
+			&i.UpdatedAt,
+			&i.Name,
+			&i.Tool,
+			&i.UserID,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}

@@ -16,3 +16,11 @@ VALUES (
     $3
 )
 RETURNING *;
+
+-- name: GetUserExercises :many
+SELECT * FROM exercises
+WHERE user_id = $1;
+
+-- name: DeleteExercise :exec
+DELETE FROM exercises
+WHERE id = $1;
