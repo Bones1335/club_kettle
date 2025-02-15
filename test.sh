@@ -26,6 +26,13 @@ JSON_POST3=$(curl -X POST http://localhost:8080/api/exercises -H "Content-Type:a
 
 echo $JSON_POST3 | jq .
 
+
 JSON_GET=$(curl -X GET "http://localhost:8080/api/users/$user_id/exercises" -H "Content-Type:application/json" -d "{\"user_id\":\"$user_id\"}")
 
 echo $JSON_GET | jq .
+
+exercise_id=$(echo $JSON_POST3 | jq -r .id)
+
+curl -X DELETE "http://localhost:8080/api/exercises/$exercise_id" 
+
+curl -X GET "http://localhost:8080/api/users/$user_id/exercises" | jq .
