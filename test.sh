@@ -36,3 +36,5 @@ exercise_id=$(echo $JSON_POST3 | jq -r .id)
 curl -X DELETE "http://localhost:8080/api/exercises/$exercise_id" 
 
 curl -X GET "http://localhost:8080/api/users/$user_id/exercises" | jq .
+
+curl -X GET "http://localhost:8080/api/users/$user_id" | jq .

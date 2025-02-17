@@ -19,6 +19,10 @@ Values (
 )
 RETURNING *;
 
+-- name: GetUser :one
+SELECT * FROM users
+WHERE id = $1;
+
 -- name: UpdateUser :one
 UPDATE users SET last_name = $2, first_name = $3, username = $4, email = $5, updated_at = NOW()
 WHERE id = $1
