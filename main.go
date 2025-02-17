@@ -52,7 +52,7 @@ func main() {
 	// Exercise endpoints
 	mux.HandleFunc("POST /api/exercises", apiCfg.handlerCreateExercises)
 	mux.HandleFunc("GET /api/users/{user_id}/exercises", apiCfg.handlerGetUserExercises)
-	//TODO: mux.HandleFunc("PUT /api/exercises/{exercise_id}", apiCfg.handlerUpdateExercises)
+	mux.HandleFunc("PUT /api/exercises/{exercise_id}", apiCfg.handlerUpdateExercises)
 	mux.HandleFunc("DELETE /api/exercises/{exercise_id}", apiCfg.handlerDeleteExercises)
 
 	srv := &http.Server{

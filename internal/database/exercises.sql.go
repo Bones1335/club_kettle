@@ -95,3 +95,29 @@ func (q *Queries) GetUserExercises(ctx context.Context, userID uuid.UUID) ([]Exe
 	}
 	return items, nil
 }
+
+const updateExercise = `-- name: UpdateExercise :one
+UPDATE exercises SET name = $2, tool = $3, updated_at = NOW()
+WHERE id = $1
+RETURNING id, created_at, updated_at, name, tool, user_id
+`
+
+type UpdateExerciseParams struct {
+	ID   uuid.UUID `json:"id"`
+	Name string    `json:"name"`
+	Tool string    `json:"tool"`
+}
+
+func (q *Queries) UpdateExercise(ctx context.Context, arg UpdateExerciseParams) (Exercise, error) {
+	row := q.db.QueryRowContext(ctx, updateExercise, arg.ID, arg.Name, arg.Tool)
+	var i Exercise
+	err := row.Scan(
+		&i.ID,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+		&i.Name,
+		&i.Tool,
+		&i.UserID,
+	)
+	return i, err
+}

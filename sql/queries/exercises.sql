@@ -21,6 +21,11 @@ RETURNING *;
 SELECT * FROM exercises
 WHERE user_id = $1;
 
+-- name: UpdateExercise :one
+UPDATE exercises SET name = $2, tool = $3, updated_at = NOW()
+WHERE id = $1
+RETURNING *;
+
 -- name: DeleteExercise :exec
 DELETE FROM exercises
 WHERE id = $1;
