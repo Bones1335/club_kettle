@@ -11,7 +11,7 @@ This API allows the user to interact with a Postgresql database to track and sto
  - [ ] DELETE user info
  - [x] CREATE exercise endpoint where the user can create various exercises
  - [x] Endpoint to GET all created exercises by a user
- - [ ] UPDATE an exercise
+ - [x] UPDATE an exercise
  - [x] DELETE an exercise
  - [ ] CREATE workout with registered exercises
  - [ ] GET full workout
