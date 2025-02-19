@@ -28,3 +28,13 @@ type User struct {
 	Username  string    `json:"username"`
 	Email     string    `json:"email"`
 }
+
+type Workout struct {
+	ID            uuid.UUID `json:"id"`
+	CreatedAt     time.Time `json:"created_at"`
+	UpdatedAt     time.Time `json:"updated_at"`
+	Name          string    `json:"name"`
+	Description   string    `json:"description"`
+	TotalDuration int32     `json:"total_duration"`
+	UserID        uuid.UUID `json:"user_id"`
+}
