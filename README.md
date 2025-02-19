@@ -17,3 +17,8 @@ This API allows the user to interact with a Postgresql database to track and sto
  - [ ] GET full workout
  - [ ] UPDATE workout 
  - [ ] DELETE workout
+
+ # References
+
+ - Prototype design for the database in regard to implementing exercises into workouts.
+    - https://softwareengineering.stackexchange.com/questions/226189/designing-a-fitness-weight-lifiting-routine-database
