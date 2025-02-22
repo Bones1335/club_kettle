@@ -14,21 +14,17 @@ import (
 const createExercise = `-- name: CreateExercise :one
 INSERT INTO exercises (
     id,
-    created_at,
-    updated_at,
     name,
     tool,
     user_id
 )
 VALUES (
     gen_random_uuid(),
-    NOW(),
-    NOW(),
     $1,
     $2,
     $3
 )
-RETURNING id, created_at, updated_at, name, tool, user_id
+RETURNING id, name, tool, user_id
 `
 
 type CreateExerciseParams struct {
@@ -42,8 +38,6 @@ func (q *Queries) CreateExercise(ctx context.Context, arg CreateExerciseParams) 
 	var i Exercise
 	err := row.Scan(
 		&i.ID,
-		&i.CreatedAt,
-		&i.UpdatedAt,
 		&i.Name,
 		&i.Tool,
 		&i.UserID,
@@ -62,7 +56,7 @@ func (q *Queries) DeleteExercise(ctx context.Context, id uuid.UUID) error {
 }
 
 const getUserExercises = `-- name: GetUserExercises :many
-SELECT id, created_at, updated_at, name, tool, user_id FROM exercises
+SELECT id, name, tool, user_id FROM exercises
 WHERE user_id = $1
 `
 
@@ -77,8 +71,6 @@ func (q *Queries) GetUserExercises(ctx context.Context, userID uuid.UUID) ([]Exe
 		var i Exercise
 		if err := rows.Scan(
 			&i.ID,
-			&i.CreatedAt,
-			&i.UpdatedAt,
 			&i.Name,
 			&i.Tool,
 			&i.UserID,
@@ -97,9 +89,9 @@ func (q *Queries) GetUserExercises(ctx context.Context, userID uuid.UUID) ([]Exe
 }
 
 const updateExercise = `-- name: UpdateExercise :one
-UPDATE exercises SET name = $2, tool = $3, updated_at = NOW()
+UPDATE exercises SET name = $2, tool = $3 
 WHERE id = $1
-RETURNING id, created_at, updated_at, name, tool, user_id
+RETURNING id, name, tool, user_id
 `
 
 type UpdateExerciseParams struct {
@@ -113,8 +105,6 @@ func (q *Queries) UpdateExercise(ctx context.Context, arg UpdateExerciseParams) 
 	var i Exercise
 	err := row.Scan(
 		&i.ID,
-		&i.CreatedAt,
-		&i.UpdatedAt,
 		&i.Name,
 		&i.Tool,
 		&i.UserID,

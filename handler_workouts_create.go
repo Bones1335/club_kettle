@@ -45,8 +45,6 @@ func (cfg *apiConfig) handlerCreateWorkouts(w http.ResponseWriter, r *http.Reque
 	respondWithJSON(w, http.StatusCreated, response{
 		database.Workout{
 			ID:            workout.ID,
-			CreatedAt:     workout.CreatedAt,
-			UpdatedAt:     workout.UpdatedAt,
 			Name:          workout.Name,
 			Description:   workout.Description,
 			TotalDuration: workout.TotalDuration,

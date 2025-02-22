@@ -11,12 +11,17 @@ import (
 )
 
 type Exercise struct {
-	ID        uuid.UUID `json:"id"`
-	CreatedAt time.Time `json:"created_at"`
-	UpdatedAt time.Time `json:"updated_at"`
-	Name      string    `json:"name"`
-	Tool      string    `json:"tool"`
-	UserID    uuid.UUID `json:"user_id"`
+	ID     uuid.UUID `json:"id"`
+	Name   string    `json:"name"`
+	Tool   string    `json:"tool"`
+	UserID uuid.UUID `json:"user_id"`
+}
+
+type Round struct {
+	ID                uuid.UUID     `json:"id"`
+	RoundNumber       int32         `json:"round_number"`
+	RepsCompleted     string        `json:"reps_completed"`
+	WorkoutExerciseID uuid.NullUUID `json:"workout_exercise_id"`
 }
 
 type User struct {
@@ -31,12 +36,16 @@ type User struct {
 
 type Workout struct {
 	ID            uuid.UUID `json:"id"`
-	CreatedAt     time.Time `json:"created_at"`
-	UpdatedAt     time.Time `json:"updated_at"`
 	Name          string    `json:"name"`
 	Description   string    `json:"description"`
 	TotalDuration int32     `json:"total_duration"`
 	UserID        uuid.UUID `json:"user_id"`
+}
+
+type WorkoutSummary struct {
+	WorkoutExerciseID uuid.NullUUID `json:"workout_exercise_id"`
+	TotalReps         string        `json:"total_reps"`
+	WorkCapacity      string        `json:"work_capacity"`
 }
 
 type WorkoutsExercise struct {

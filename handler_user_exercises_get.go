@@ -25,8 +25,6 @@ func (cfg *apiConfig) handlerGetUserExercises(w http.ResponseWriter, r *http.Req
 	for _, dbUserExercise := range dbUserExercises {
 		exercises = append(exercises, database.Exercise{
 			ID:        dbUserExercise.ID,
-			CreatedAt: dbUserExercise.CreatedAt,
-			UpdatedAt: dbUserExercise.UpdatedAt,
 			Name:      dbUserExercise.Name,
 			Tool:      dbUserExercise.Tool,
 			UserID:    dbUserExercise.UserID,

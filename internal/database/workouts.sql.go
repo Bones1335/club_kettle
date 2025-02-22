@@ -11,11 +11,43 @@ import (
 	"github.com/google/uuid"
 )
 
+const createRound = `-- name: CreateRound :one
+INSERT INTO rounds (
+    id,
+    round_number,
+    reps_completed,
+    workout_exercise_id
+)
+VALUES (
+    gen_random_uuid(),
+    $1,
+    $2,
+    $3
+)
+RETURNING id, round_number, reps_completed, workout_exercise_id
+`
+
+type CreateRoundParams struct {
+	RoundNumber       int32         `json:"round_number"`
+	RepsCompleted     string        `json:"reps_completed"`
+	WorkoutExerciseID uuid.NullUUID `json:"workout_exercise_id"`
+}
+
+func (q *Queries) CreateRound(ctx context.Context, arg CreateRoundParams) (Round, error) {
+	row := q.db.QueryRowContext(ctx, createRound, arg.RoundNumber, arg.RepsCompleted, arg.WorkoutExerciseID)
+	var i Round
+	err := row.Scan(
+		&i.ID,
+		&i.RoundNumber,
+		&i.RepsCompleted,
+		&i.WorkoutExerciseID,
+	)
+	return i, err
+}
+
 const createWorkout = `-- name: CreateWorkout :one
 INSERT INTO workouts (
     id,
-    created_at,
-    updated_at,
     name,
     description,
     total_duration,
@@ -23,14 +55,12 @@ INSERT INTO workouts (
 )
 VALUES (
     gen_random_uuid(),
-    NOW(),
-    NOW(),
     $1,
     $2,
     $3,
     $4
 )
-RETURNING id, created_at, updated_at, name, description, total_duration, user_id
+RETURNING id, name, description, total_duration, user_id
 `
 
 type CreateWorkoutParams struct {
@@ -50,8 +80,6 @@ func (q *Queries) CreateWorkout(ctx context.Context, arg CreateWorkoutParams) (W
 	var i Workout
 	err := row.Scan(
 		&i.ID,
-		&i.CreatedAt,
-		&i.UpdatedAt,
 		&i.Name,
 		&i.Description,
 		&i.TotalDuration,
@@ -100,5 +128,32 @@ func (q *Queries) CreateWorkoutExercise(ctx context.Context, arg CreateWorkoutEx
 		&i.WorkoutID,
 		&i.ExerciseID,
 	)
+	return i, err
+}
+
+const createWorkoutSummary = `-- name: CreateWorkoutSummary :one
+INSERT INTO workout_summary (
+    workout_exercise_id,
+    total_reps,
+    work_capacity
+)
+VALUES (
+    $1,
+    $2,
+    $3
+)
+RETURNING workout_exercise_id, total_reps, work_capacity
+`
+
+type CreateWorkoutSummaryParams struct {
+	WorkoutExerciseID uuid.NullUUID `json:"workout_exercise_id"`
+	TotalReps         string        `json:"total_reps"`
+	WorkCapacity      string        `json:"work_capacity"`
+}
+
+func (q *Queries) CreateWorkoutSummary(ctx context.Context, arg CreateWorkoutSummaryParams) (WorkoutSummary, error) {
+	row := q.db.QueryRowContext(ctx, createWorkoutSummary, arg.WorkoutExerciseID, arg.TotalReps, arg.WorkCapacity)
+	var i WorkoutSummary
+	err := row.Scan(&i.WorkoutExerciseID, &i.TotalReps, &i.WorkCapacity)
 	return i, err
 }

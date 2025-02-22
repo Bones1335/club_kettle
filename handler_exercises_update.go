@@ -46,8 +46,6 @@ func (cfg *apiConfig) handlerUpdateExercises(w http.ResponseWriter, r *http.Requ
 	respondWithJSON(w, http.StatusOK, response{
 		database.Exercise{
 			ID:        exercise.ID,
-			CreatedAt: exercise.CreatedAt,
-			UpdatedAt: exercise.UpdatedAt,
 			Name:      exercise.Name,
 			Tool:      exercise.Tool,
 			UserID:    exercise.UserID,

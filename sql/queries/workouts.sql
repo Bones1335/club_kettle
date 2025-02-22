@@ -1,8 +1,6 @@
 -- name: CreateWorkout :one
 INSERT INTO workouts (
     id,
-    created_at,
-    updated_at,
     name,
     description,
     total_duration,
@@ -10,8 +8,6 @@ INSERT INTO workouts (
 )
 VALUES (
     gen_random_uuid(),
-    NOW(),
-    NOW(),
     $1,
     $2,
     $3,
@@ -45,6 +41,19 @@ INSERT INTO rounds (
 )
 VALUES (
     gen_random_uuid(),
+    $1,
+    $2,
+    $3
+)
+RETURNING *;
+
+-- name: CreateWorkoutSummary :one
+INSERT INTO workout_summary (
+    workout_exercise_id,
+    total_reps,
+    work_capacity
+)
+VALUES (
     $1,
     $2,
     $3
