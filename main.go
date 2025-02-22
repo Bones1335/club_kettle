@@ -39,7 +39,7 @@ func main() {
 
 	mux := http.NewServeMux()
 
-	fsHandler := http.StripPrefix("/app", http.FileServer(http.Dir(filepathRoot)))
+	fsHandler := http.StripPrefix("/app", http.FileServer(http.Dir(filepathRoot+"/front-end/.")))
 	mux.Handle("/app/", fsHandler)
 
 	// Admin endpoints
