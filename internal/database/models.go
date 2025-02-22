@@ -20,7 +20,7 @@ type Exercise struct {
 type Round struct {
 	ID                uuid.UUID     `json:"id"`
 	RoundNumber       int32         `json:"round_number"`
-	RepsCompleted     string        `json:"reps_completed"`
+	RepsCompleted     float32       `json:"reps_completed"`
 	WorkoutExerciseID uuid.NullUUID `json:"workout_exercise_id"`
 }
 
@@ -44,14 +44,14 @@ type Workout struct {
 
 type WorkoutSummary struct {
 	WorkoutExerciseID uuid.NullUUID `json:"workout_exercise_id"`
-	TotalReps         string        `json:"total_reps"`
-	WorkCapacity      string        `json:"work_capacity"`
+	TotalReps         float32       `json:"total_reps"`
+	WorkCapacity      float32       `json:"work_capacity"`
 }
 
 type WorkoutsExercise struct {
 	ID          uuid.UUID `json:"id"`
 	TimeSeconds int32     `json:"time_seconds"`
-	WeightKg    int32     `json:"weight_kg"`
+	WeightKg    float32   `json:"weight_kg"`
 	WorkoutID   uuid.UUID `json:"workout_id"`
 	ExerciseID  uuid.UUID `json:"exercise_id"`
 }

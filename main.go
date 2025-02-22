@@ -39,6 +39,9 @@ func main() {
 
 	mux := http.NewServeMux()
 
+	fsHandler := http.StripPrefix("/app", http.FileServer(http.Dir(filepathRoot)))
+	mux.Handle("/app/", fsHandler)
+
 	// Admin endpoints
 	mux.HandleFunc("GET /healthz", handlerReadiness)
 	mux.HandleFunc("POST /admin/reset", apiCfg.handlerReset)

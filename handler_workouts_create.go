@@ -10,17 +10,26 @@ import (
 
 func (cfg *apiConfig) handlerCreateWorkouts(w http.ResponseWriter, r *http.Request) {
 	type parameters struct {
-		Name          string      `json:"name"`
-		Description   string      `json:"description"`
-		TotalDuration int         `json:"total_duration"`
-		UserID        uuid.UUID   `json:"user_id"`
-		TimeSeconds   int         `json:"time_seconds"`
-		WeightKg      int         `json:"weight_kg"`
-		ExerciseIDs   []uuid.UUID `json:"exercise_id"`
+		// Workout
+		Name          string    `json:"name"`
+		Description   string    `json:"description"`
+		TotalDuration int32     `json:"total_duration"`
+		UserID        uuid.UUID `json:"user_id"`
+		//Exercise
+		Exercises []database.Exercise `json:"exercise"`
+		//Rounds
+		Rounds []database.Round `json:"round"`
+		//WorkoutsExercise
+		TimeSeconds int32   `json:"time_seconds"`
+		WeightKg    float32 `json:"weight_kg"`
+		//WorkoutSummary
+		TotalReps    float32 `json:"total_reps"`
+		WorkCapacity float32 `json:"work_capacity"`
 	}
 
 	type response struct {
 		database.Workout
+		database.WorkoutSummary
 	}
 
 	decoder := json.NewDecoder(r.Body)
@@ -50,5 +59,6 @@ func (cfg *apiConfig) handlerCreateWorkouts(w http.ResponseWriter, r *http.Reque
 			TotalDuration: workout.TotalDuration,
 			UserID:        workout.UserID,
 		},
+		database.WorkoutSummary{},
 	})
 }

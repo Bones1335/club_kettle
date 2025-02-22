@@ -29,7 +29,7 @@ RETURNING id, round_number, reps_completed, workout_exercise_id
 
 type CreateRoundParams struct {
 	RoundNumber       int32         `json:"round_number"`
-	RepsCompleted     string        `json:"reps_completed"`
+	RepsCompleted     float32       `json:"reps_completed"`
 	WorkoutExerciseID uuid.NullUUID `json:"workout_exercise_id"`
 }
 
@@ -108,7 +108,7 @@ RETURNING id, time_seconds, weight_kg, workout_id, exercise_id
 
 type CreateWorkoutExerciseParams struct {
 	TimeSeconds int32     `json:"time_seconds"`
-	WeightKg    int32     `json:"weight_kg"`
+	WeightKg    float32   `json:"weight_kg"`
 	WorkoutID   uuid.UUID `json:"workout_id"`
 	ExerciseID  uuid.UUID `json:"exercise_id"`
 }
@@ -147,8 +147,8 @@ RETURNING workout_exercise_id, total_reps, work_capacity
 
 type CreateWorkoutSummaryParams struct {
 	WorkoutExerciseID uuid.NullUUID `json:"workout_exercise_id"`
-	TotalReps         string        `json:"total_reps"`
-	WorkCapacity      string        `json:"work_capacity"`
+	TotalReps         float32       `json:"total_reps"`
+	WorkCapacity      float32       `json:"work_capacity"`
 }
 
 func (q *Queries) CreateWorkoutSummary(ctx context.Context, arg CreateWorkoutSummaryParams) (WorkoutSummary, error) {
