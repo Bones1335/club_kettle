@@ -38,3 +38,11 @@ type Workout struct {
 	TotalDuration int32     `json:"total_duration"`
 	UserID        uuid.UUID `json:"user_id"`
 }
+
+type WorkoutsExercise struct {
+	ID          uuid.UUID `json:"id"`
+	TimeSeconds int32     `json:"time_seconds"`
+	WeightKg    int32     `json:"weight_kg"`
+	WorkoutID   uuid.UUID `json:"workout_id"`
+	ExerciseID  uuid.UUID `json:"exercise_id"`
+}

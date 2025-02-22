@@ -10,10 +10,13 @@ import (
 
 func (cfg *apiConfig) handlerCreateWorkouts(w http.ResponseWriter, r *http.Request) {
 	type parameters struct {
-		Name          string `json:"name"`
-		Description   string `json:"description"`
-		TotalDuration int    `json:"total_duration"`
-		UserID        uuid.UUID
+		Name          string      `json:"name"`
+		Description   string      `json:"description"`
+		TotalDuration int         `json:"total_duration"`
+		UserID        uuid.UUID   `json:"user_id"`
+		TimeSeconds   int         `json:"time_seconds"`
+		WeightKg      int         `json:"weight_kg"`
+		ExerciseIDs   []uuid.UUID `json:"exercise_id"`
 	}
 
 	type response struct {
@@ -47,7 +50,7 @@ func (cfg *apiConfig) handlerCreateWorkouts(w http.ResponseWriter, r *http.Reque
 			Name:          workout.Name,
 			Description:   workout.Description,
 			TotalDuration: workout.TotalDuration,
-			UserID:        workout.ID,
+			UserID:        workout.UserID,
 		},
 	})
 }

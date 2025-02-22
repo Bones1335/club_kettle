@@ -59,3 +59,46 @@ func (q *Queries) CreateWorkout(ctx context.Context, arg CreateWorkoutParams) (W
 	)
 	return i, err
 }
+
+const createWorkoutExercise = `-- name: CreateWorkoutExercise :one
+INSERT INTO workouts_exercises (
+    id,
+    time_seconds,
+    weight_kg,
+    workout_id,
+    exercise_id
+)
+VALUES (
+    gen_random_uuid(),
+    $1,
+    $2,
+    $3,
+    $4
+)
+RETURNING id, time_seconds, weight_kg, workout_id, exercise_id
+`
+
+type CreateWorkoutExerciseParams struct {
+	TimeSeconds int32     `json:"time_seconds"`
+	WeightKg    int32     `json:"weight_kg"`
+	WorkoutID   uuid.UUID `json:"workout_id"`
+	ExerciseID  uuid.UUID `json:"exercise_id"`
+}
+
+func (q *Queries) CreateWorkoutExercise(ctx context.Context, arg CreateWorkoutExerciseParams) (WorkoutsExercise, error) {
+	row := q.db.QueryRowContext(ctx, createWorkoutExercise,
+		arg.TimeSeconds,
+		arg.WeightKg,
+		arg.WorkoutID,
+		arg.ExerciseID,
+	)
+	var i WorkoutsExercise
+	err := row.Scan(
+		&i.ID,
+		&i.TimeSeconds,
+		&i.WeightKg,
+		&i.WorkoutID,
+		&i.ExerciseID,
+	)
+	return i, err
+}
