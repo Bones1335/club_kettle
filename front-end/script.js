@@ -9,30 +9,33 @@ function convertToJson() {
             formData[element.name] = element.value;
         }
     }
-    let jsonData = JSON.stringify(formData);
-    
-    async function sendData(data) {
-        let url = URL + "api/users"
-        try {
-            const response = await fetch(url, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: data
-            })
+    return JSON.stringify(formData);
+}    
 
-            const json = await response.json()
-            console.log(json)
-            let jsonOutput = document.getElementById("jsonOutput");
-            jsonOutput.innerHTML = "<pre>" + json.last_name + "</pre>";
-        }
-        catch (error) {
-            console.error('Error:', error)
-        }
-   }
+async function sendData(jsonData) {
+    let url = URL + "api/users"
+    try {
+        const response = await fetch(url, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: jsonData
+        });
 
-   sendData(jsonData);
+        const json = await response.json()
+        console.log(json)
+        let jsonOutput = document.getElementById("jsonOutput");
+        jsonOutput.innerHTML = "<pre>" + json.last_name + "</pre>";
+    }
+    catch (error) {
+        console.error('Error:', error)
+    }
+}
+
+function submitFormData() {
+    JSONData = convertToJson();
+    sendData(JSONData)
 }
 
 function mySubmitFunction(e) {
