@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+    <h1>Welcome to Club Kettle!</h1>
+
+    <h2>Create User</h2>
+    <form id="userData" onsubmit="return mySubmitFunction(event)" method="post">
+        <label for="last_name">Last Name:</label>
+        <input type="text" name="last_name" id="last_name">
+
+        <label for="first_name">First Name:</label>
+        <input type="text" name="first_name" id="first_name">
+
+        <label for="username">Username:</label>
+        <input type="text" name="username" id="username">
+
+        <label for="email">Email:</label>
+        <input type="email" name="email" id="email">
+
+        <button type="submit" onclick="convertToJson()">Submit</button>
+    </form>
+
+    <div id="jsonOutput"></div>    
+
+    <div id="createdUser"></div>
+</body>
+<script src="./script.js">
+</script>
+</html>
