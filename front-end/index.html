@@ -3,14 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Club Kettle</title>
 </head>
 <body>
     
     <h1>Welcome to Club Kettle!</h1>
 
+    <div id="Users">
     <h2>Create User</h2>
-    <form id="userData" onsubmit="return mySubmitFunction(event)" method="post">
+    <form id="userData" onsubmit="mySubmitFunction(event)" method="post">
         <label for="last_name">Last Name:</label>
         <input type="text" name="last_name" id="last_name">
 
@@ -23,13 +24,22 @@
         <label for="email">Email:</label>
         <input type="email" name="email" id="email">
 
-        <button type="submit" onclick="convertToJson()">Submit</button>
+        <button type="submit" onclick="submitFormData()">Submit</button>
     </form>
 
     <div id="jsonOutput"></div>    
+    </div>
 
-    <div id="createdUser"></div>
+    <div id="Exercises">
+    <h2>Create Exercises</h2>
+    <button type="button" onclick="addExerciseForm()">Add Exercise</button>
+
+    <div id="exercises"></div>
+
+    <div id="jsonOutput2"></div>    
+    </div>
+
+
 </body>
-<script src="./script.js">
-</script>
+<script src="./script.js"></script>
 </html>
