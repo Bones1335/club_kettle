@@ -29,7 +29,8 @@ func (cfg *apiConfig) handlerCreateWorkouts(w http.ResponseWriter, r *http.Reque
 
 	type response struct {
 		database.Workout
-		database.WorkoutSummary
+		workoutsExercise []database.WorkoutsExercise
+		roundsData       []database.Round
 	}
 
 	decoder := json.NewDecoder(r.Body)
@@ -51,6 +52,37 @@ func (cfg *apiConfig) handlerCreateWorkouts(w http.ResponseWriter, r *http.Reque
 		return
 	}
 
+	var workoutsExercise []database.WorkoutsExercise
+	for _, exercise := range params.Exercises {
+		workoutExercise, err := cfg.db.CreateWorkoutExercise(r.Context(), database.CreateWorkoutExerciseParams{
+			TimeSeconds: params.TimeSeconds,
+			WeightKg:    params.WeightKg,
+			WorkoutID:   workout.ID,
+			ExerciseID:  exercise.ID,
+		})
+		if err != nil {
+			respondWithError(w, http.StatusInternalServerError, "couldn't create Workouts Exercise data", err)
+			return
+		}
+
+		workoutsExercise = append(workoutsExercise, workoutExercise)
+	}
+
+	var roundsData []database.Round
+	for workoutExerciseID, round := range params.Rounds {
+		roundData, err := cfg.db.CreateRound(r.Context(), database.CreateRoundParams{
+			RoundNumber:       round.RoundNumber,
+			RepsCompleted:     round.RepsCompleted,
+			WorkoutExerciseID: workoutsExercise[workoutExerciseID].ID,
+		})
+		if err != nil {
+			respondWithError(w, http.StatusInternalServerError, "couldn't create Round data entry", err)
+			return
+		}
+
+		roundsData = append(roundsData, roundData)
+	}
+
 	respondWithJSON(w, http.StatusCreated, response{
 		database.Workout{
 			ID:            workout.ID,
@@ -59,6 +91,7 @@ func (cfg *apiConfig) handlerCreateWorkouts(w http.ResponseWriter, r *http.Reque
 			TotalDuration: workout.TotalDuration,
 			UserID:        workout.UserID,
 		},
-		database.WorkoutSummary{},
+		workoutsExercise,
+		roundsData,
 	})
 }
