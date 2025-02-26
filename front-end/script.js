@@ -1,6 +1,6 @@
 const URL = "http://localhost:8080/"
 
-function convertToJson() {
+function convertUserToJson() {
     let form = document.getElementById("userData");
     let formData = {};
     for (let i = 0; i < form.elements.length; i++) {
@@ -34,7 +34,7 @@ async function sendData(jsonData) {
 }
 
 function submitFormData() {
-    JSONData = convertToJson();
+    JSONData = convertUserToJson();
     sendData(JSONData)
 }
 
@@ -49,29 +49,38 @@ async function getUsers() {
     document.getElementById('output').textContent = JSON.stringify(users, null, 2);
 }
 
-let exerciseFormCount = 0;
-
 function addExerciseForm() {
-    exerciseFormCount++;
-
     const formContainer = document.createElement("div");
-    formContainer.id = `exercise-${exerciseFormCount}`;
+    formContainer.id = `exerciseFromContainer`;
 
     formContainer.innerHTML = `        
-     <form onsubmit="mySubmitFunction(event)" method="post">
-        <label for="name-${exerciseFormCount}">Exercise Name:</label>
-        <input type="text" name="name" id="name-${exerciseFormCount}">
+     <form id="exerciseData" onsubmit="mySubmitFunction(event)" method="post">
+        <label for="name">Exercise Name:</label>
+        <input type="text" name="name" id="name">
 
-        <label for="tool-${exerciseFormCount}">Exercise Tool:</label>
-        <input type="text" name="tool" id="tool-${exerciseFormCount}">
+        <label for="tool">Exercise Tool:</label>
+        <input type="text" name="tool" id="tool">
 
-        <label for="username-${exerciseFormCount}">User Who Created Exercise:</label>
-        <input type="text" name="username" id="username-${exerciseFormCount}">
+        <label for="username">User Who Created Exercise:</label>
+        <input type="text" name="username" id="username">
 
         <button type="submit" onclick="submitFormData()">Submit</button>
         
     </form>
     `;
 
-    document.getElementById('exercises').appendChild(formContainer);
+    document.getElementById('createExercise').style.display = 'none';
+    document.getElementById('Exercises').appendChild(formContainer);
 }
+
+function convertExerciseToJson() {
+    let form = document.getElementById("exerciseData");
+    let formData = {};
+    for (let i = 0; i < form.elements.length; i++) {
+        let element = form.elements[i];
+        if (element.type !== "submit") {
+            formData[element.name] = element.value;
+        }
+    }
+    return JSON.stringify(formData);
+} 
