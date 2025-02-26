@@ -32,7 +32,7 @@ async function sendUserData(jsonData) {
     }
 }
 
-function clearUserFormFields(formID) {
+function clearUserFormFields() {
     document.getElementById('last_name').value = '';
     document.getElementById('first_name').value = '';
     document.getElementById('username').value = '';
@@ -41,10 +41,9 @@ function clearUserFormFields(formID) {
 }
 
 function submitUserFormData() {
-    let formID = document.getElementById("userData");
     let JSONData = convertUserToJson();
     sendUserData(JSONData)
-    clearUserFormFields(formID);
+    clearUserFormFields();
 }
 
 function mySubmitFunction(e) {
@@ -108,23 +107,24 @@ async function sendExerciseData(jsonData) {
 
         const json = await response.json()
         console.log(json)
+        let div = document.createElement('div')
         let jsonOutput = document.getElementById("exercises");
-        jsonOutput.innerHTML = `<pre>${json.name}, ${json.tool}, ${json.id}, ${json.user_id} </pre>`;
+        div.innerHTML = `<pre>${json.name}, ${json.tool}, ${json.id}, ${json.user_id} </pre>`;
+        jsonOutput.appendChild(div);
     }
     catch (error) {
         console.error('Error:', error)
     }
 }
 
-function clearExerciseFromFields(formID) {
+function clearExerciseFromFields() {
     document.getElementById('name').value = '';
     document.getElementById('tool').value = '';
     document.getElementById('user_id').value = '';
 }
 
 function submitExerciseFormData() {
-    let formID = document.getElementById('exerciseData')
     let jsonData = convertExerciseToJson();
     sendExerciseData(jsonData);
-    clearExerciseFromFields(formID);
+    clearExerciseFromFields();
 }
