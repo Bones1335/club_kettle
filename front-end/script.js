@@ -32,9 +32,19 @@ async function sendUserData(jsonData) {
     }
 }
 
+function clearUserFormFields(formID) {
+    document.getElementById('last_name').value = '';
+    document.getElementById('first_name').value = '';
+    document.getElementById('username').value = '';
+    document.getElementById('email').value = '';
+
+}
+
 function submitUserFormData() {
+    let formID = document.getElementById("userData");
     let JSONData = convertUserToJson();
     sendUserData(JSONData)
+    clearUserFormFields(formID);
 }
 
 function mySubmitFunction(e) {
@@ -106,7 +116,15 @@ async function sendExerciseData(jsonData) {
     }
 }
 
+function clearExerciseFromFields(formID) {
+    document.getElementById('name').value = '';
+    document.getElementById('tool').value = '';
+    document.getElementById('user_id').value = '';
+}
+
 function submitExerciseFormData() {
+    let formID = document.getElementById('exerciseData')
     let jsonData = convertExerciseToJson();
     sendExerciseData(jsonData);
+    clearExerciseFromFields(formID);
 }
