@@ -10,34 +10,162 @@
     <h1>Welcome to Club Kettle!</h1>
 
     <div id="Users">
-    <h2>Create User</h2>
-    <form id="userData" onsubmit="mySubmitFunction(event)" method="post">
-        <label for="last_name">Last Name:</label>
-        <input type="text" name="last_name" id="last_name">
+        <h2>Create User</h2>
+        <form id="userData" onsubmit="mySubmitFunction(event)" method="post">
+            <label for="last_name">Last Name:</label>
+            <input type="text" name="last_name" id="last_name">
 
-        <label for="first_name">First Name:</label>
-        <input type="text" name="first_name" id="first_name">
+            <label for="first_name">First Name:</label>
+            <input type="text" name="first_name" id="first_name">
 
-        <label for="username">Username:</label>
-        <input type="text" name="username" id="username">
+            <label for="username">Username:</label>
+            <input type="text" name="username" id="username">
 
-        <label for="email">Email:</label>
-        <input type="email" name="email" id="email">
+            <label for="email">Email:</label>
+            <input type="email" name="email" id="email">
 
-        <button type="submit" onclick="submitUserFormData()">Submit</button>
-    </form>
+            <button type="submit" onclick="submitUserFormData()">Submit</button>
+        </form>
 
-    <div id="jsonOutput"></div>    
+        <div id="jsonOutput"></div>    
     </div>
 
     <div id="Exercises">
-    <h2>Create Exercises</h2>
-    <button id="createExercise" type="button" onclick="addExerciseForm()">Add Exercise</button>
+        <h2>Create Exercises</h2>
+        <button id="createExercise" type="button" onclick="addExerciseForm()">Add Exercise</button>
 
-    <div id="exercises"></div>
+        <div id="exercises"></div>
 
     </div>
 
+    <div id="WorkoutRoutines">
+        <h2>Create Workout Routine</h2>
+        <form id="workoutRoutineData" onsubmit="mySubmitFunction(event)" method="post">
+            <label for="workoutRoutineName">Workout Name:</label>
+            <input type="text" name="name" id="workoutRoutineName">
+
+            <label for="description">Workout Description:</label>
+            <textarea form="workoutRoutineData" cols="40" rows="5" name="description" id="description"></textarea>
+
+            <label for="duration">Workout Duration (in minutes):</label>
+            <input type="number" name="total_duration" id="duration">
+
+            <label for="roundsPerExercise">Rounds per exercise:</label>
+            <input type="number" name="roundsPerExercise" id="roundsPerExercise">
+
+            <label for="roundDuration">Time per round (in seconds):</label>
+            <input type="number" name="roundDuration" id="roundDuration">
+
+            <label for="restDuration">Rest period (in seconds):</label>
+            <input type="number" name="restDuration" id="restDuration">
+
+            <h4>Exercises:</h4>
+            <label for="workoutExercise1">Exercise 1:</label>
+            <input type="text" id="workoutExercise1">
+
+            <label for="workoutExercise2">Exercise 2:</label>
+            <input type="text" id="workoutExercise2">
+
+            <label for="workoutExercise3">Exercise 3:</label>
+            <input type="text" id="workoutExercise3">
+
+            <label for="workoutExercise4">Exercise 4:</label>
+            <input type="text" id="workoutExercise4">
+
+            <label for="workoutExercise5">Exercise 5:</label>
+            <input type="text" id="workoutExercise5">
+
+
+            <button type="submit" onclick="submitWorkoutRoutineFormData()">Create Workout</button>
+        </form>
+    </div>
+
+    <div id="Workouts">
+        <h2>Start Workout</h2>
+        <form id="workoutData">
+
+            <label for="workoutName">Workout Name:</label>
+            <input type="text" name="workoutName" id="workoutName">
+
+            <label for="weight">Weight (in kg):</label>
+            <input type="number" name="weight" id="weight">
+
+            <label for="workoutNumber">Workout Number:</label>
+            <input type="number" name="workoutNumber" id="workoutNumber">
+
+            <label for="date">Date:</label>
+            <input type="date" name="date" id="date">
+
+            <table>
+                <thead>
+                    <th>Exercise</th>
+                    <th>Round 1</th>
+                    <th>Round 2</th>
+                    <th>Round 3</th>
+                    <th>Round 4</th>
+                    <th>Total Reps</th>
+                    <th>Work Capacity</th>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>2h - Inside Circle</td>
+                        <td>8</td>
+                        <td>9</td>
+                        <td>9</td>
+                        <td>9</td>
+                        <td>35</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>2h - Outside Pendulum</td>
+                        <td>6</td>
+                        <td>6</td>
+                        <td>6</td>
+                        <td>6</td>
+                        <td>24</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>2h - Pullover</td>
+                        <td>8</td>
+                        <td>8</td>
+                        <td>9</td>
+                        <td>8</td>
+                        <td>33</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>2h - Balance Squat</td>
+                        <td>8</td>
+                        <td>8</td>
+                        <td>8</td>
+                        <td>8</td>
+                        <td>32</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>2h - Shield Cast</td>
+                        <td>10</td>
+                        <td>11</td>
+                        <td>12</td>
+                        <td>14</td>
+                        <td>47</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Total Reps</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td>171</td>
+                        <td>1026</td>
+                    </tr>
+                </tbody>
+            </table>
+
+        </form>
+    </div>
 
 </body>
 <script src="./script.js"></script>
