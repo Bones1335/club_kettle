@@ -111,13 +111,14 @@ async function sendExerciseData(jsonData) {
         let jsonOutput = document.getElementById("exercises");
         div.innerHTML = `<pre>${json.name}, ${json.tool}, ${json.id}, ${json.user_id} </pre>`;
         jsonOutput.appendChild(div);
+        fetchExercises();
     }
     catch (error) {
         console.error('Error:', error)
     }
 }
 
-function clearExerciseFromFields() {
+function clearExerciseFormFields() {
     document.getElementById('name').value = '';
     document.getElementById('tool').value = '';
     document.getElementById('user_id').value = '';
@@ -126,7 +127,7 @@ function clearExerciseFromFields() {
 function submitExerciseFormData() {
     let jsonData = convertExerciseToJson();
     sendExerciseData(jsonData);
-    clearExerciseFromFields();
+    clearExerciseFormFields();
 }
 
 async function fetchExercises() {
