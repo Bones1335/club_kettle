@@ -128,3 +128,35 @@ function submitExerciseFormData() {
     sendExerciseData(jsonData);
     clearExerciseFromFields();
 }
+
+async function fetchExercises() {
+    try {
+        const response = await fetch(`${URL}api/exercises`);
+        const exercises = await response.json();
+
+        if (!exercises || exercises.length === 0) {
+            console.warn("No exercises found")
+            return;
+        }
+
+        populateExerciseDropdown(exercises);
+    } catch (error) {
+        console.error("Error fetching exercises:", error);
+    }
+}
+
+function populateExerciseDropdown(exercises) {
+    const selects = document.querySelectorAll("#exerciseList select")
+
+    selects.forEach(select => {
+        select.innerHTML = "";
+        exercises.forEach(exercise => {
+            let option = document.createElement("option");
+            option.value = exercise.id;
+            option.textContent = exercise.name;
+            select.appendChild(option);
+        });
+    });
+}
+
+document.addEventListener("DOMContentLoaded", fetchExercises);
