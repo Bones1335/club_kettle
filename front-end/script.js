@@ -153,7 +153,7 @@ function populateExerciseDropdown(exercises) {
         exercises.forEach(exercise => {
             let option = document.createElement("option");
             option.value = exercise.id;
-            option.textContent = exercise.name;
+            option.textContent = `${exercise.name}, ${exercise.tool}`;
             select.appendChild(option);
         });
     });

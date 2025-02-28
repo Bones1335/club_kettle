@@ -17,6 +17,9 @@ RETURNING *;
 SELECT * FROM exercises
 WHERE user_id = $1;
 
+-- name: GetExercises :many
+SELECT * FROM exercises;
+
 -- name: UpdateExercise :one
 UPDATE exercises SET name = $2, tool = $3 
 WHERE id = $1
