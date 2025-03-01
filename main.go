@@ -60,7 +60,7 @@ func main() {
 	mux.HandleFunc("DELETE /api/exercises/{exercise_id}", apiCfg.handlerDeleteExercises)
 
 	// Workout Endpoints
-	mux.HandleFunc("POST /api/workouts", apiCfg.handlerCreateWorkouts)
+	mux.HandleFunc("POST /api/workouts", apiCfg.handlerCreateWorkoutRoutines)
 	//TODO: mux.HandleFunc("GET /api/users/{user_id}/workouts", apiCfg.handleGetAllUserWorkouts)
 	//TODO: mux.HandleFunc("GET /api/users/workouts/{workout_id}", apiCfg.handleGetWorkout)
 	//TODO: mux.HandleFunc("PUT /api/workouts/{workout_id}", apiCfg.handleUpdateWorkout)
