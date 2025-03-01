@@ -1,37 +1,40 @@
--- name: CreateWorkout :one
-INSERT INTO workouts (
+-- name: CreateWorkoutRoutine :one
+INSERT INTO workout_routines (
     id,
     name,
     description,
     total_duration,
-    user_id
+    rounds_per_exercise,
+    round_duration,
+    rest_duration
 )
 VALUES (
     gen_random_uuid(),
     $1,
     $2,
     $3,
-    $4
+    $4,
+    $5,
+    $6
 )
 RETURNING *;
 
--- name: CreateWorkoutExercise :one
-INSERT INTO workouts_exercises (
+-- name: AddExerciseToWorkout :one
+INSERT INTO workout_exercises (
     id,
-    time_seconds,
-    weight_kg,
     workout_id,
-    exercise_id
+    exercise_id,
+    position
 )
 VALUES (
     gen_random_uuid(),
     $1,
     $2,
-    $3,
-    $4
+    $3
 )
 RETURNING *;
 
+/*
 -- name: CreateRound :one
 INSERT INTO rounds (
     id,
@@ -59,3 +62,4 @@ VALUES (
     $3
 )
 RETURNING *;
+*/
