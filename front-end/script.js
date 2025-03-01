@@ -41,7 +41,7 @@ function clearUserFormFields() {
 }
 
 function submitUserFormData() {
-    let JSONData = convertUserToJson();
+    const JSONData = convertUserToJson();
     sendUserData(JSONData)
     clearUserFormFields();
 }
@@ -49,14 +49,6 @@ function submitUserFormData() {
 function mySubmitFunction(e) {
     e.preventDefault();
 }
-
-/*async function getUsers() {
-    let url = URL + "/api/users"
-    const response = await fetch(url);
-    const users = await response.json();
-    document.getElementById('output').textContent = JSON.stringify(users, null, 2);
-}
-*/
 
 function addExerciseForm() {
     const formContainer = document.createElement("div");
@@ -161,3 +153,64 @@ function populateExerciseDropdown(exercises) {
 }
 
 document.addEventListener("DOMContentLoaded", fetchExercises);
+
+function convertWorkoutToJson() {
+    const form = document.getElementById("workoutRoutineData");
+
+    const formData = {
+        name: form.workoutRoutineName.value,
+        description: form.description.value,
+        total_duration: parseInt(form.duration.value),
+        rounds_per_exercise: parseInt(form.roundsPerExercise.value),
+        round_duration: parseInt(form.roundDuration.value),
+        rest_duration: parseInt(form.restDuration.value),
+        exercises: [
+            form.workoutExercise1.value,
+            form.workoutExercise2.value,
+            form.workoutExercise3.value,
+            form.workoutExercise4.value,
+            form.workoutExercise5.value,
+        ]
+    };
+
+    return JSON.stringify(formData);
+}
+
+async function sendWorkoutData(jsonData) {
+    let url = URL + "api/workouts"
+    try {
+        const response = await fetch(url, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: jsonData,
+        });
+
+        const json = await response.json()
+        console.log(json)
+        let div = document.createElement('div')
+        let jsonOutput = document.getElementById("WorkoutRoutines");
+        div.innerHTML = `<pre>${json.Workout.name}, ${json.Workout.description}</pre>`;
+        jsonOutput.appendChild(div);
+        fetchExercises();
+    }
+    catch (error) {
+        console.error('Error:', error)
+    }
+}
+
+function clearWorkoutFormFields() {
+    document.getElementById('workoutRoutineName').value = '';
+    document.getElementById('description').value = '';
+    document.getElementById('duration').value = '';
+    document.getElementById('roundsPerExercise').value = '';
+    document.getElementById('roundDuration').value = '';
+    document.getElementById('restDuration').value = '';
+}
+
+function submitWorkoutRoutineFormData() {
+    const jsonData = convertWorkoutToJson();
+    sendWorkoutData(jsonData);
+    clearWorkoutFormFields();
+}
