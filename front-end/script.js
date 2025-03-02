@@ -214,3 +214,32 @@ function submitWorkoutRoutineFormData() {
     sendWorkoutData(jsonData);
     clearWorkoutFormFields();
 }
+
+async function fetchWorkouts() {
+    try {
+        const response = await fetch(`${URL}api/workouts`);
+        const workouts = await response.json();
+
+        if (!workouts || workouts.length === 0) {
+            console.warn("No workouts found")
+            return;
+        }
+
+        populateWorkoutDropdown(workouts);
+    } catch (error) {
+        console.error("Error fetching workouts:", error);
+    }
+}
+function populateWorkoutDropdown(workouts) {
+    const select = document.querySelector("#workoutData select")
+
+    select.innerHTML = "";
+    workouts.forEach(workout => {
+        let option = document.createElement("option");
+        option.value = workout.id;
+        option.textContent = workout.name;
+        select.appendChild(option);
+    });
+}
+
+document.addEventListener("DOMContentLoaded", fetchWorkouts);
