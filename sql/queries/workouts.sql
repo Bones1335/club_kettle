@@ -34,6 +34,9 @@ VALUES (
 )
 RETURNING *;
 
+-- name: GetWorkoutRoutines :many
+SELECT * FROM workout_routines;
+
 /*
 -- name: CreateRound :one
 INSERT INTO rounds (

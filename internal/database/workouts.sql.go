@@ -97,3 +97,38 @@ func (q *Queries) CreateWorkoutRoutine(ctx context.Context, arg CreateWorkoutRou
 	)
 	return i, err
 }
+
+const getWorkoutRoutines = `-- name: GetWorkoutRoutines :many
+SELECT id, name, description, total_duration, rounds_per_exercise, round_duration, rest_duration FROM workout_routines
+`
+
+func (q *Queries) GetWorkoutRoutines(ctx context.Context) ([]WorkoutRoutine, error) {
+	rows, err := q.db.QueryContext(ctx, getWorkoutRoutines)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []WorkoutRoutine
+	for rows.Next() {
+		var i WorkoutRoutine
+		if err := rows.Scan(
+			&i.ID,
+			&i.Name,
+			&i.Description,
+			&i.TotalDuration,
+			&i.RoundsPerExercise,
+			&i.RoundDuration,
+			&i.RestDuration,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
