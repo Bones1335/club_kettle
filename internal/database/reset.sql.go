@@ -9,11 +9,38 @@ import (
 	"context"
 )
 
-const reset = `-- name: Reset :exec
+const resetExercises = `-- name: ResetExercises :exec
+DELETE FROM exercises
+`
+
+func (q *Queries) ResetExercises(ctx context.Context) error {
+	_, err := q.db.ExecContext(ctx, resetExercises)
+	return err
+}
+
+const resetUsers = `-- name: ResetUsers :exec
 DELETE FROM users
 `
 
-func (q *Queries) Reset(ctx context.Context) error {
-	_, err := q.db.ExecContext(ctx, reset)
+func (q *Queries) ResetUsers(ctx context.Context) error {
+	_, err := q.db.ExecContext(ctx, resetUsers)
+	return err
+}
+
+const resetWorkoutExercises = `-- name: ResetWorkoutExercises :exec
+DELETE FROM workout_exercises
+`
+
+func (q *Queries) ResetWorkoutExercises(ctx context.Context) error {
+	_, err := q.db.ExecContext(ctx, resetWorkoutExercises)
+	return err
+}
+
+const resetWorkoutRoutines = `-- name: ResetWorkoutRoutines :exec
+DELETE FROM workout_routines
+`
+
+func (q *Queries) ResetWorkoutRoutines(ctx context.Context) error {
+	_, err := q.db.ExecContext(ctx, resetWorkoutRoutines)
 	return err
 }

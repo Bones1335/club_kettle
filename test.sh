@@ -49,3 +49,22 @@ url2="http://localhost:8080/api/exercises/$exercise_id"
 JSON_PUT2=$(curl -X PUT $url2 -H "Content-Type: application/json" -d "{\"name\":\"inside pendulum\",\"tool\":\"clubbell\"}")
 
 echo $JSON_PUT2 | jq .
+
+ex1=$(curl -X POST http://localhost:8080/api/exercises -H "Content-Type:appication/json" -d "{\"name\":\"inside circle\",\"tool\":\"clubbell\",\"user_id\":\"$user_id\"}" | jq -r .id)
+
+
+ex2=$(curl -X POST http://localhost:8080/api/exercises -H "Content-Type:appication/json" -d "{\"name\":\"outside pendulum\",\"tool\":\"clubbell\",\"user_id\":\"$user_id\"}" | jq -r .id)
+
+
+ex3=$(curl -X POST http://localhost:8080/api/exercises -H "Content-Type:appication/json" -d "{\"name\":\"pullover\",\"tool\":\"clubbell\",\"user_id\":\"$user_id\"}" | jq -r .id)
+
+
+ex4=$(curl -X POST http://localhost:8080/api/exercises -H "Content-Type:appication/json" -d "{\"name\":\"balance squat\",\"tool\":\"clubbell\",\"user_id\":\"$user_id\"}" | jq -r .id)
+
+
+ex5=$(curl -X POST http://localhost:8080/api/exercises -H "Content-Type:appication/json" -d "{\"name\":\"shield cast\",\"tool\":\"clubbell\",\"user_id\":\"$user_id\"}" | jq -r .id)
+
+
+JSON_POST5=$(curl -X POST http://localhost:8080/api/workouts -H "Content-Type:application/json" -d "{\"name\":\"2h Mill Squat - Level 1\",\"description\":\"Level 1 two-hand Mill-Squat program for heavy clubs.\",\"total_duration\":20,\"rounds_per_exercise\":4,\"round_duration\":30,\"rest_duration\":30,\"exercises\": [\"$ex1\",\"$ex2\",\"$ex3\",\"$ex4\",\"$ex5\"]}")
+
+echo $JSON_POST5 | jq .

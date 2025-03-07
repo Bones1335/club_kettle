@@ -13,9 +13,9 @@ func (cfg *apiConfig) handlerCreateWorkoutRoutines(w http.ResponseWriter, r *htt
 		Name              string      `json:"name"`
 		Description       string      `json:"description"`
 		TotalDuration     int32       `json:"total_duration"`
-		RoundsPerExercise int         `json:"rounods_per_exercise"`
-		RoundDuration     int         `json:"round_duration"`
-		RestDuration      int         `json:"rest_duration"`
+		RoundsPerExercise int32       `json:"rounds_per_exercise"`
+		RoundDuration     int32       `json:"round_duration"`
+		RestDuration      int32       `json:"rest_duration"`
 		Exercises         []uuid.UUID `json:"exercises"`
 	}
 
