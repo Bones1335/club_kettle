@@ -20,6 +20,10 @@ WHERE user_id = $1;
 -- name: GetExercises :many
 SELECT * FROM exercises;
 
+-- name: GetSingleExercise :one
+SELECT * FROM exercises
+WHERE id = $1;
+
 -- name: UpdateExercise :one
 UPDATE exercises SET name = $2, tool = $3 
 WHERE id = $1
