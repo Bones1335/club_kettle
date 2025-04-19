@@ -165,14 +165,15 @@ function convertWorkoutToJson() {
         round_duration: parseInt(form.roundDuration.value),
         rest_duration: parseInt(form.restDuration.value),
         exercises: [
-            form.workoutExercise1.value,
-            form.workoutExercise2.value,
-            form.workoutExercise3.value,
-            form.workoutExercise4.value,
-            form.workoutExercise5.value,
+            form.elements["exercise1"].value,
+            form.elements["exercise2"].value,
+            form.elements["exercise3"].value,
+            form.elements["exercise4"].value,
+            form.elements["exercise5"].value,
         ]
     };
 
+    console.log(formData)
     return JSON.stringify(formData);
 }
 
@@ -191,9 +192,9 @@ async function sendWorkoutData(jsonData) {
         console.log(json)
         let div = document.createElement('div')
         let jsonOutput = document.getElementById("WorkoutRoutines");
-        div.innerHTML = `<pre>${json.Workout.name}, ${json.Workout.description}</pre>`;
+        div.innerHTML = `<pre>${json.Workout.name}, ${json.Workout.description}, ${json.Exercises}</pre>`;
         jsonOutput.appendChild(div);
-        fetchExercises();
+        fetchWorkouts();
     }
     catch (error) {
         console.error('Error:', error)
@@ -243,3 +244,32 @@ function populateWorkoutDropdown(workouts) {
 }
 
 document.addEventListener("DOMContentLoaded", fetchWorkouts);
+
+async function populateWorkoutExercises() {
+    const workoutID = document.getElementById("workoutData").elements["workoutName"].value;
+    const response = await fetch(`${URL}api/workouts/${workoutID}`);
+    const exercises = await response.json();
+
+    if (!exercises || exercises.length === 0) {
+        console.warn("No workouts found")
+        return;
+    }
+
+    const selects = document.querySelectorAll("td:nth-child(1)")
+
+    const exerciseIDs = exercises.ExerciseIDs;
+
+    const exerciseData = await Promise.all(exerciseIDs.map(async (exerciseID) => {
+        const response = await fetch(URL + `api/exercises/${exerciseID}`);
+        const data = await response.json();
+        return data;
+    }));
+
+    console.log(exerciseData)
+    selects.forEach((select, i) => {
+        if (i < exerciseIDs.length && i < exerciseData.length) {
+            select.value = exerciseIDs[i];
+            select.innerHTML = exerciseData[i].name;
+        }
+    });    
+}

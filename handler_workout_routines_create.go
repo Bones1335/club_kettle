@@ -20,7 +20,8 @@ func (cfg *apiConfig) handlerCreateWorkoutRoutines(w http.ResponseWriter, r *htt
 	}
 
 	type response struct {
-		Workout database.WorkoutRoutine
+		Workout   database.WorkoutRoutine
+		Exercises []uuid.UUID
 	}
 
 	decoder := json.NewDecoder(r.Body)
@@ -57,5 +58,5 @@ func (cfg *apiConfig) handlerCreateWorkoutRoutines(w http.ResponseWriter, r *htt
 
 	}
 
-	respondWithJSON(w, http.StatusCreated, response{Workout: workout})
+	respondWithJSON(w, http.StatusCreated, response{Workout: workout, Exercises: params.Exercises})
 }
