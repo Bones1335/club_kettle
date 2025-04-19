@@ -24,7 +24,7 @@
             <label for="email">Email:</label>
             <input type="email" name="email" id="email">
 
-            <button type="submit" onclick="submitUserFormData()">Submit</button>
+            <button type="submit" onclick="submitUserFormData()">Create User</button>
         </form>
 
         <div id="jsonOutput"></div>    
@@ -88,6 +88,7 @@
 
             <label for="workoutName">Workout Name:</label>
             <select name="workoutName" id="workoutName"></select>
+            <button type="button" onClick="populateWorkoutExercises()">Select Workout</button>
 
             <label for="weight">Weight (in kg):</label>
             <input type="number" name="weight" id="weight">
