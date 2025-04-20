@@ -37,9 +37,14 @@ RETURNING *;
 -- name: GetWorkoutRoutines :many
 SELECT * FROM workout_routines;
 
+-- name: GetSingleWorkoutRoutine :one
+SELECT * FROM workout_routines
+WHERE id = $1;
+
 -- name: GetWorkoutRoutineExercises :many
 SELECT * FROM workout_exercises
 WHERE workout_id = $1;
+
 /*
 -- name: CreateRound :one
 INSERT INTO rounds (

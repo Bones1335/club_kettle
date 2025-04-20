@@ -2,6 +2,44 @@
 
 This API allows the user to interact with a Postgresql database to track and store their workouts.
 
+# Get Started
+
+1. Clone the Repo
+2. Install Goose for database migrations
+3. Install SQLC tool to database related GO code
+4. Setup PostgreSQL
+5. Setup environment variables
+6. Run `./migrate.sh`
+7. Start server
+8. Run `./test.sh` to test endpoints
+9. Get Swol
+
+# How to Use
+
+## User endpoints
+   - "POST /api/users"
+   - "GET /api/users/{user_id}"
+   - "PUT /api/users/{user_id}"
+   - "DELETE /api/users/{user_id}"
+
+## Exercise endpoints
+   - "POST /api/exercises"
+   - "GET /api/exercises"
+   - "GET /api/users/{user_id}/exercises"
+   - "GET /api/exercises/{exercise_id}"
+   - "PUT /api/exercises/{exercise_id}"
+   - "DELETE /api/exercises/{exercise_id}"
+
+## Workout Endpoints
+   - "POST /api/workouts"
+   - "GET /api/workouts"
+   - "GET /api/workouts/{workout_id}"
+   - "PUT /api/workouts/{workout_id}"
+   - "DELETE /api/workouts/{workout_id}"
+
+## Workout Summary Endpoints
+   - TBD
+
 # TODO
  - [x] CREATE basic server with readiness check endpoint
  - [x] CREATE basic user (more user info to be added later)
@@ -14,7 +52,7 @@ This API allows the user to interact with a Postgresql database to track and sto
  - [x] UPDATE an exercise
  - [x] DELETE an exercise
  - [x] CREATE workout with registered exercises
- - [ ] GET full workout
+ - [x] GET full workout
  - [ ] UPDATE workout 
  - [ ] DELETE workout
 
