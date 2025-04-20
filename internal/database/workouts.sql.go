@@ -98,6 +98,26 @@ func (q *Queries) CreateWorkoutRoutine(ctx context.Context, arg CreateWorkoutRou
 	return i, err
 }
 
+const getSingleWorkoutRoutine = `-- name: GetSingleWorkoutRoutine :one
+SELECT id, name, description, total_duration, rounds_per_exercise, round_duration, rest_duration FROM workout_routines
+WHERE id = $1
+`
+
+func (q *Queries) GetSingleWorkoutRoutine(ctx context.Context, id uuid.UUID) (WorkoutRoutine, error) {
+	row := q.db.QueryRowContext(ctx, getSingleWorkoutRoutine, id)
+	var i WorkoutRoutine
+	err := row.Scan(
+		&i.ID,
+		&i.Name,
+		&i.Description,
+		&i.TotalDuration,
+		&i.RoundsPerExercise,
+		&i.RoundDuration,
+		&i.RestDuration,
+	)
+	return i, err
+}
+
 const getWorkoutRoutineExercises = `-- name: GetWorkoutRoutineExercises :many
 SELECT id, workout_id, exercise_id, position FROM workout_exercises
 WHERE workout_id = $1

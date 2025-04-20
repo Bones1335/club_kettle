@@ -265,11 +265,20 @@ async function populateWorkoutExercises() {
         return data;
     }));
 
-    console.log(exerciseData)
     selects.forEach((select, i) => {
         if (i < exerciseIDs.length && i < exerciseData.length) {
             select.value = exerciseIDs[i];
             select.innerHTML = exerciseData[i].name;
         }
     });    
+
+    const timer = document.querySelector("#timer")
+
+    timer.innerHTML = `Timer: ${exercises.Workout.total_duration}:00`
+
+    const roundTime = document.querySelector("#round_duration")
+    const rest = document.querySelector("#rest")
+
+    roundTime.innerHTML = `Round Duration: ${exercises.Workout.round_duration} seconds`
+    rest.innerHTML = `Rest: ${exercises.Workout.rest_duration} seconds`
 }

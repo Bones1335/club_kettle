@@ -4,11 +4,13 @@ import (
 	"net/http"
 	"sort"
 
+	"github.com/Bones1335/workout_api/internal/database"
 	"github.com/google/uuid"
 )
 
 func (cfg *apiConfig) handlerGetWorkout(w http.ResponseWriter, r *http.Request) {
 	type response struct {
+		Workout     database.WorkoutRoutine
 		ExerciseIDs []uuid.UUID
 	}
 	workoutID := r.PathValue("workout_id")
@@ -34,5 +36,11 @@ func (cfg *apiConfig) handlerGetWorkout(w http.ResponseWriter, r *http.Request) 
 		exerciseIDs = append(exerciseIDs, exerciseID.ExerciseID)
 	}
 
-	respondWithJSON(w, http.StatusOK, response{ExerciseIDs: exerciseIDs})
+	dbWorkoutRoutine, err := cfg.db.GetSingleWorkoutRoutine(r.Context(), parsedUUID)
+	if err != nil {
+		respondWithError(w, http.StatusNotFound, "couldn't get workout routines", err)
+		return
+	}
+
+	respondWithJSON(w, http.StatusOK, response{Workout: dbWorkoutRoutine, ExerciseIDs: exerciseIDs})
 }
