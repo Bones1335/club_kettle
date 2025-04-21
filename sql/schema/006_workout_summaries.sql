@@ -1,5 +1,5 @@
 -- +goose Up
-CREATE TABLE workout_summary (
+CREATE TABLE workout_summaries (
     workout_exercise_id UUID NOT NULL REFERENCES workout_exercises (id) ON DELETE CASCADE,
     date TIMESTAMP PRIMARY KEY NOT NULL,
     weight_in_kg INTEGER NOT NULL,

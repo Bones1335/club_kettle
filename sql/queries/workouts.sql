@@ -76,8 +76,8 @@ VALUES (
 )
 RETURNING *;
 
--- name: CreateWorkoutSummary :one
-INSERT INTO workout_summary (
+-- name: CreateWorkoutSummaries :one
+INSERT INTO workout_summaries (
     workout_exercise_id,
     date,
     weight_in_kg,
@@ -94,3 +94,6 @@ VALUES (
     $6
 )
 RETURNING *;
+
+-- name: GetWorkoutSummaries :many
+SELECT * FROM workout_summaries;

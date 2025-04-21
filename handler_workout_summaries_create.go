@@ -43,7 +43,7 @@ func (cfg *apiConfig) handlerCreateWorkoutSummaries(w http.ResponseWriter, r *ht
 	}
 	totalReps := float32(repSum(roundReps))
 
-	summary, err := cfg.db.CreateWorkoutSummary(r.Context(), database.CreateWorkoutSummaryParams{
+	summary, err := cfg.db.CreateWorkoutSummaries(r.Context(), database.CreateWorkoutSummariesParams{
 		WorkoutExerciseID: params.Summary.WorkoutExerciseID,
 		Date:              params.Summary.Date,
 		WeightInKg:        params.Summary.WeightInKg,

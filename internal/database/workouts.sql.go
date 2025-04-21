@@ -142,8 +142,8 @@ func (q *Queries) CreateWorkoutRoutine(ctx context.Context, arg CreateWorkoutRou
 	return i, err
 }
 
-const createWorkoutSummary = `-- name: CreateWorkoutSummary :one
-INSERT INTO workout_summary (
+const createWorkoutSummaries = `-- name: CreateWorkoutSummaries :one
+INSERT INTO workout_summaries (
     workout_exercise_id,
     date,
     weight_in_kg,
@@ -162,7 +162,7 @@ VALUES (
 RETURNING workout_exercise_id, date, weight_in_kg, workout_number, total_reps, work_capacity
 `
 
-type CreateWorkoutSummaryParams struct {
+type CreateWorkoutSummariesParams struct {
 	WorkoutExerciseID uuid.UUID `json:"workout_exercise_id"`
 	Date              time.Time `json:"date"`
 	WeightInKg        int32     `json:"weight_in_kg"`
@@ -171,8 +171,8 @@ type CreateWorkoutSummaryParams struct {
 	WorkCapacity      float32   `json:"work_capacity"`
 }
 
-func (q *Queries) CreateWorkoutSummary(ctx context.Context, arg CreateWorkoutSummaryParams) (WorkoutSummary, error) {
-	row := q.db.QueryRowContext(ctx, createWorkoutSummary,
+func (q *Queries) CreateWorkoutSummaries(ctx context.Context, arg CreateWorkoutSummariesParams) (WorkoutSummary, error) {
+	row := q.db.QueryRowContext(ctx, createWorkoutSummaries,
 		arg.WorkoutExerciseID,
 		arg.Date,
 		arg.WeightInKg,
@@ -276,6 +276,40 @@ func (q *Queries) GetWorkoutRoutines(ctx context.Context) ([]WorkoutRoutine, err
 			&i.RoundsPerExercise,
 			&i.RoundDuration,
 			&i.RestDuration,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getWorkoutSummaries = `-- name: GetWorkoutSummaries :many
+SELECT workout_exercise_id, date, weight_in_kg, workout_number, total_reps, work_capacity FROM workout_summaries
+`
+
+func (q *Queries) GetWorkoutSummaries(ctx context.Context) ([]WorkoutSummary, error) {
+	rows, err := q.db.QueryContext(ctx, getWorkoutSummaries)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []WorkoutSummary
+	for rows.Next() {
+		var i WorkoutSummary
+		if err := rows.Scan(
+			&i.WorkoutExerciseID,
+			&i.Date,
+			&i.WeightInKg,
+			&i.WorkoutNumber,
+			&i.TotalReps,
+			&i.WorkCapacity,
 		); err != nil {
 			return nil, err
 		}
