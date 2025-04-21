@@ -7,6 +7,7 @@ package database
 
 import (
 	"context"
+	"time"
 
 	"github.com/google/uuid"
 )
@@ -41,6 +42,49 @@ func (q *Queries) AddExerciseToWorkout(ctx context.Context, arg AddExerciseToWor
 		&i.WorkoutID,
 		&i.ExerciseID,
 		&i.Position,
+	)
+	return i, err
+}
+
+const createRound = `-- name: CreateRound :one
+INSERT INTO rounds (
+    id,
+    date,
+    round_number,
+    reps_completed,
+    workout_exercise_id
+)
+VALUES (
+    gen_random_uuid(),
+    $1,
+    $2,
+    $3,
+    $4
+)
+RETURNING id, date, round_number, reps_completed, workout_exercise_id
+`
+
+type CreateRoundParams struct {
+	Date              time.Time `json:"date"`
+	RoundNumber       int32     `json:"round_number"`
+	RepsCompleted     float32   `json:"reps_completed"`
+	WorkoutExerciseID uuid.UUID `json:"workout_exercise_id"`
+}
+
+func (q *Queries) CreateRound(ctx context.Context, arg CreateRoundParams) (Round, error) {
+	row := q.db.QueryRowContext(ctx, createRound,
+		arg.Date,
+		arg.RoundNumber,
+		arg.RepsCompleted,
+		arg.WorkoutExerciseID,
+	)
+	var i Round
+	err := row.Scan(
+		&i.ID,
+		&i.Date,
+		&i.RoundNumber,
+		&i.RepsCompleted,
+		&i.WorkoutExerciseID,
 	)
 	return i, err
 }
@@ -98,6 +142,79 @@ func (q *Queries) CreateWorkoutRoutine(ctx context.Context, arg CreateWorkoutRou
 	return i, err
 }
 
+const createWorkoutSummaries = `-- name: CreateWorkoutSummaries :one
+INSERT INTO workout_summaries (
+    id,
+    workout_exercise_id,
+    date,
+    weight_in_kg,
+    workout_number,
+    total_reps,
+    work_capacity
+)
+VALUES (
+    gen_random_uuid(),
+    $1,
+    $2,
+    $3,
+    $4,
+    $5,
+    $6
+)
+RETURNING id, workout_exercise_id, date, weight_in_kg, workout_number, total_reps, work_capacity
+`
+
+type CreateWorkoutSummariesParams struct {
+	WorkoutExerciseID uuid.UUID `json:"workout_exercise_id"`
+	Date              time.Time `json:"date"`
+	WeightInKg        int32     `json:"weight_in_kg"`
+	WorkoutNumber     int32     `json:"workout_number"`
+	TotalReps         float32   `json:"total_reps"`
+	WorkCapacity      float32   `json:"work_capacity"`
+}
+
+func (q *Queries) CreateWorkoutSummaries(ctx context.Context, arg CreateWorkoutSummariesParams) (WorkoutSummary, error) {
+	row := q.db.QueryRowContext(ctx, createWorkoutSummaries,
+		arg.WorkoutExerciseID,
+		arg.Date,
+		arg.WeightInKg,
+		arg.WorkoutNumber,
+		arg.TotalReps,
+		arg.WorkCapacity,
+	)
+	var i WorkoutSummary
+	err := row.Scan(
+		&i.ID,
+		&i.WorkoutExerciseID,
+		&i.Date,
+		&i.WeightInKg,
+		&i.WorkoutNumber,
+		&i.TotalReps,
+		&i.WorkCapacity,
+	)
+	return i, err
+}
+
+const deleteWorkoutRoutines = `-- name: DeleteWorkoutRoutines :exec
+DELETE FROM workout_routines
+WHERE id = $1
+`
+
+func (q *Queries) DeleteWorkoutRoutines(ctx context.Context, id uuid.UUID) error {
+	_, err := q.db.ExecContext(ctx, deleteWorkoutRoutines, id)
+	return err
+}
+
+const deleteWorkoutSummary = `-- name: DeleteWorkoutSummary :exec
+DELETE FROM workout_summaries
+WHERE id = $1
+`
+
+func (q *Queries) DeleteWorkoutSummary(ctx context.Context, id uuid.UUID) error {
+	_, err := q.db.ExecContext(ctx, deleteWorkoutSummary, id)
+	return err
+}
+
 const getSingleWorkoutRoutine = `-- name: GetSingleWorkoutRoutine :one
 SELECT id, name, description, total_duration, rounds_per_exercise, round_duration, rest_duration FROM workout_routines
 WHERE id = $1
@@ -114,6 +231,26 @@ func (q *Queries) GetSingleWorkoutRoutine(ctx context.Context, id uuid.UUID) (Wo
 		&i.RoundsPerExercise,
 		&i.RoundDuration,
 		&i.RestDuration,
+	)
+	return i, err
+}
+
+const getSingleWorkoutSummary = `-- name: GetSingleWorkoutSummary :one
+SELECT id, workout_exercise_id, date, weight_in_kg, workout_number, total_reps, work_capacity FROM workout_summaries
+WHERE id = $1
+`
+
+func (q *Queries) GetSingleWorkoutSummary(ctx context.Context, id uuid.UUID) (WorkoutSummary, error) {
+	row := q.db.QueryRowContext(ctx, getSingleWorkoutSummary, id)
+	var i WorkoutSummary
+	err := row.Scan(
+		&i.ID,
+		&i.WorkoutExerciseID,
+		&i.Date,
+		&i.WeightInKg,
+		&i.WorkoutNumber,
+		&i.TotalReps,
+		&i.WorkCapacity,
 	)
 	return i, err
 }
@@ -184,4 +321,101 @@ func (q *Queries) GetWorkoutRoutines(ctx context.Context) ([]WorkoutRoutine, err
 		return nil, err
 	}
 	return items, nil
+}
+
+const getWorkoutSummaries = `-- name: GetWorkoutSummaries :many
+SELECT id, workout_exercise_id, date, weight_in_kg, workout_number, total_reps, work_capacity FROM workout_summaries
+`
+
+func (q *Queries) GetWorkoutSummaries(ctx context.Context) ([]WorkoutSummary, error) {
+	rows, err := q.db.QueryContext(ctx, getWorkoutSummaries)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []WorkoutSummary
+	for rows.Next() {
+		var i WorkoutSummary
+		if err := rows.Scan(
+			&i.ID,
+			&i.WorkoutExerciseID,
+			&i.Date,
+			&i.WeightInKg,
+			&i.WorkoutNumber,
+			&i.TotalReps,
+			&i.WorkCapacity,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const updateWorkoutExercises = `-- name: UpdateWorkoutExercises :one
+UPDATE workout_exercises SET position = $2
+WHERE workout_id = $1
+RETURNING id, workout_id, exercise_id, position
+`
+
+type UpdateWorkoutExercisesParams struct {
+	WorkoutID uuid.UUID `json:"workout_id"`
+	Position  int32     `json:"position"`
+}
+
+func (q *Queries) UpdateWorkoutExercises(ctx context.Context, arg UpdateWorkoutExercisesParams) (WorkoutExercise, error) {
+	row := q.db.QueryRowContext(ctx, updateWorkoutExercises, arg.WorkoutID, arg.Position)
+	var i WorkoutExercise
+	err := row.Scan(
+		&i.ID,
+		&i.WorkoutID,
+		&i.ExerciseID,
+		&i.Position,
+	)
+	return i, err
+}
+
+const updateWorkoutRoutines = `-- name: UpdateWorkoutRoutines :one
+UPDATE workout_routines SET name = $2, description = $3, total_duration = $4, rounds_per_exercise = $5, round_duration = $6, rest_duration = $7
+WHERE id = $1
+RETURNING id, name, description, total_duration, rounds_per_exercise, round_duration, rest_duration
+`
+
+type UpdateWorkoutRoutinesParams struct {
+	ID                uuid.UUID `json:"id"`
+	Name              string    `json:"name"`
+	Description       string    `json:"description"`
+	TotalDuration     int32     `json:"total_duration"`
+	RoundsPerExercise int32     `json:"rounds_per_exercise"`
+	RoundDuration     int32     `json:"round_duration"`
+	RestDuration      int32     `json:"rest_duration"`
+}
+
+func (q *Queries) UpdateWorkoutRoutines(ctx context.Context, arg UpdateWorkoutRoutinesParams) (WorkoutRoutine, error) {
+	row := q.db.QueryRowContext(ctx, updateWorkoutRoutines,
+		arg.ID,
+		arg.Name,
+		arg.Description,
+		arg.TotalDuration,
+		arg.RoundsPerExercise,
+		arg.RoundDuration,
+		arg.RestDuration,
+	)
+	var i WorkoutRoutine
+	err := row.Scan(
+		&i.ID,
+		&i.Name,
+		&i.Description,
+		&i.TotalDuration,
+		&i.RoundsPerExercise,
+		&i.RoundDuration,
+		&i.RestDuration,
+	)
+	return i, err
 }

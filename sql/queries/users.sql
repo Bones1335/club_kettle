@@ -27,3 +27,7 @@ WHERE id = $1;
 UPDATE users SET last_name = $2, first_name = $3, username = $4, email = $5, updated_at = NOW()
 WHERE id = $1
 RETURNING *;
+
+-- name: DeleteUser :exec
+DELETE FROM users
+WHERE id = $1;

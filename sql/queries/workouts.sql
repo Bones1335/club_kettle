@@ -45,10 +45,24 @@ WHERE id = $1;
 SELECT * FROM workout_exercises
 WHERE workout_id = $1;
 
-/*
+-- name: UpdateWorkoutRoutines :one
+UPDATE workout_routines SET name = $2, description = $3, total_duration = $4, rounds_per_exercise = $5, round_duration = $6, rest_duration = $7
+WHERE id = $1
+RETURNING *;
+
+-- name: UpdateWorkoutExercises :one
+UPDATE workout_exercises SET position = $2
+WHERE workout_id = $1
+RETURNING *;
+
+-- name: DeleteWorkoutRoutines :exec
+DELETE FROM workout_routines
+WHERE id = $1;
+
 -- name: CreateRound :one
 INSERT INTO rounds (
     id,
+    date,
     round_number,
     reps_completed,
     workout_exercise_id
@@ -57,20 +71,39 @@ VALUES (
     gen_random_uuid(),
     $1,
     $2,
-    $3
+    $3,
+    $4
 )
 RETURNING *;
 
--- name: CreateWorkoutSummary :one
-INSERT INTO workout_summary (
+-- name: CreateWorkoutSummaries :one
+INSERT INTO workout_summaries (
+    id,
     workout_exercise_id,
+    date,
+    weight_in_kg,
+    workout_number,
     total_reps,
     work_capacity
 )
 VALUES (
+    gen_random_uuid(),
     $1,
     $2,
-    $3
+    $3,
+    $4,
+    $5,
+    $6
 )
 RETURNING *;
-*/
+
+-- name: GetWorkoutSummaries :many
+SELECT * FROM workout_summaries;
+
+-- name: GetSingleWorkoutSummary :one
+SELECT * FROM workout_summaries
+WHERE id = $1;
+
+-- name: DeleteWorkoutSummary :exec
+DELETE FROM workout_summaries
+WHERE id = $1;
