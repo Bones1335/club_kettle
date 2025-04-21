@@ -9,7 +9,7 @@ This API allows the user to interact with a Postgresql database to track and sto
 3. Install SQLC tool to database related GO code
 4. Setup PostgreSQL
 5. Setup environment variables
-6. Run `./migrate.sh`
+6. Run goose migrations
 7. Start server
 8. Run `./test.sh` to test endpoints
 9. Get Swol
@@ -38,7 +38,10 @@ This API allows the user to interact with a Postgresql database to track and sto
    - "DELETE /api/workouts/{workout_id}"
 
 ## Workout Summary Endpoints
-   - TBD
+   - "POST /api/workout_summaries"
+	- "GET /api/workout_summaries"
+	- "GET /api/workout_summaries/{workout_summary_id}"
+	- "DELETE /api/workout_summaries/{workout_summary_id}"
 
 # TODO
  - [x] CREATE basic server with readiness check endpoint
@@ -46,15 +49,16 @@ This API allows the user to interact with a Postgresql database to track and sto
  - [x] For testing/development, CREATE a reset endpoint to reset the database to zero
  - [x] GET user info
  - [x] UPDATE user info
- - [ ] DELETE user info
+ - [x] DELETE user info
  - [x] CREATE exercise endpoint where the user can create various exercises
  - [x] Endpoint to GET all created exercises by a user
  - [x] UPDATE an exercise
  - [x] DELETE an exercise
  - [x] CREATE workout with registered exercises
  - [x] GET full workout
- - [ ] UPDATE workout 
- - [ ] DELETE workout
+ - [x] UPDATE workout 
+ - [x] DELETE workout
+ - [ ] Finish implementing tests for all endpoints
 
  # References
 
