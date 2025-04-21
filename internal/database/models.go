@@ -53,6 +53,7 @@ type WorkoutRoutine struct {
 }
 
 type WorkoutSummary struct {
+	ID                uuid.UUID `json:"id"`
 	WorkoutExerciseID uuid.UUID `json:"workout_exercise_id"`
 	Date              time.Time `json:"date"`
 	WeightInKg        int32     `json:"weight_in_kg"`

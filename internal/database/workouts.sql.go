@@ -144,6 +144,7 @@ func (q *Queries) CreateWorkoutRoutine(ctx context.Context, arg CreateWorkoutRou
 
 const createWorkoutSummaries = `-- name: CreateWorkoutSummaries :one
 INSERT INTO workout_summaries (
+    id,
     workout_exercise_id,
     date,
     weight_in_kg,
@@ -152,6 +153,7 @@ INSERT INTO workout_summaries (
     work_capacity
 )
 VALUES (
+    gen_random_uuid(),
     $1,
     $2,
     $3,
@@ -159,7 +161,7 @@ VALUES (
     $5,
     $6
 )
-RETURNING workout_exercise_id, date, weight_in_kg, workout_number, total_reps, work_capacity
+RETURNING id, workout_exercise_id, date, weight_in_kg, workout_number, total_reps, work_capacity
 `
 
 type CreateWorkoutSummariesParams struct {
@@ -182,6 +184,7 @@ func (q *Queries) CreateWorkoutSummaries(ctx context.Context, arg CreateWorkoutS
 	)
 	var i WorkoutSummary
 	err := row.Scan(
+		&i.ID,
 		&i.WorkoutExerciseID,
 		&i.Date,
 		&i.WeightInKg,
@@ -218,6 +221,26 @@ func (q *Queries) GetSingleWorkoutRoutine(ctx context.Context, id uuid.UUID) (Wo
 		&i.RoundsPerExercise,
 		&i.RoundDuration,
 		&i.RestDuration,
+	)
+	return i, err
+}
+
+const getSingleWorkoutSummary = `-- name: GetSingleWorkoutSummary :one
+SELECT id, workout_exercise_id, date, weight_in_kg, workout_number, total_reps, work_capacity FROM workout_summaries
+WHERE id = $1
+`
+
+func (q *Queries) GetSingleWorkoutSummary(ctx context.Context, id uuid.UUID) (WorkoutSummary, error) {
+	row := q.db.QueryRowContext(ctx, getSingleWorkoutSummary, id)
+	var i WorkoutSummary
+	err := row.Scan(
+		&i.ID,
+		&i.WorkoutExerciseID,
+		&i.Date,
+		&i.WeightInKg,
+		&i.WorkoutNumber,
+		&i.TotalReps,
+		&i.WorkCapacity,
 	)
 	return i, err
 }
@@ -291,7 +314,7 @@ func (q *Queries) GetWorkoutRoutines(ctx context.Context) ([]WorkoutRoutine, err
 }
 
 const getWorkoutSummaries = `-- name: GetWorkoutSummaries :many
-SELECT workout_exercise_id, date, weight_in_kg, workout_number, total_reps, work_capacity FROM workout_summaries
+SELECT id, workout_exercise_id, date, weight_in_kg, workout_number, total_reps, work_capacity FROM workout_summaries
 `
 
 func (q *Queries) GetWorkoutSummaries(ctx context.Context) ([]WorkoutSummary, error) {
@@ -304,6 +327,7 @@ func (q *Queries) GetWorkoutSummaries(ctx context.Context) ([]WorkoutSummary, er
 	for rows.Next() {
 		var i WorkoutSummary
 		if err := rows.Scan(
+			&i.ID,
 			&i.WorkoutExerciseID,
 			&i.Date,
 			&i.WeightInKg,

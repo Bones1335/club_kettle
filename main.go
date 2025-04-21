@@ -70,8 +70,8 @@ func main() {
 	// Workout Summary Endpoints
 	mux.HandleFunc("POST /api/workout_summaries/", apiCfg.handlerCreateWorkoutSummaries)
 	mux.HandleFunc("GET /api/workout_summaries/", apiCfg.handlerGetWorkoutSummaries)
-	// TODO: mux.HandleFunc("GET /api/workout_summaries/{workout_summary_id/{workout_summary_id}", apiCfg.handlerGetSingleWorkoutSummary)
-	// TODO: mux.HandleFunc("PUT /api/workout_summaries/{workout_summary_id/{workout_summary_id}", apiCfg.handlerUpdateWorkoutSummary)
+	mux.HandleFunc("GET /api/workout_summaries/{workout_summary_id}", apiCfg.handlerGetSingleWorkoutSummary)
+	// TODO: mux.HandleFunc("PUT /api/workout_summaries/{workout_summary_id}", apiCfg.handlerUpdateWorkoutSummary)
 	// TODO: mux.HandleFunc("DELETE /api/workout_summaries/{workout_summary_id}", apiCfg.handlerDeleteWorkoutSummaries)
 
 	srv := &http.Server{

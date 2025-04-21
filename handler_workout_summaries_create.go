@@ -58,6 +58,7 @@ func (cfg *apiConfig) handlerCreateWorkoutSummaries(w http.ResponseWriter, r *ht
 
 	respondWithJSON(w, http.StatusCreated, response{
 		database.WorkoutSummary{
+			ID:                summary.ID,
 			WorkoutExerciseID: summary.WorkoutExerciseID,
 			Date:              summary.Date,
 			WeightInKg:        summary.WeightInKg,

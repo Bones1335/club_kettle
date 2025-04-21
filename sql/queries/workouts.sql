@@ -78,6 +78,7 @@ RETURNING *;
 
 -- name: CreateWorkoutSummaries :one
 INSERT INTO workout_summaries (
+    id,
     workout_exercise_id,
     date,
     weight_in_kg,
@@ -86,6 +87,7 @@ INSERT INTO workout_summaries (
     work_capacity
 )
 VALUES (
+    gen_random_uuid(),
     $1,
     $2,
     $3,
@@ -97,3 +99,7 @@ RETURNING *;
 
 -- name: GetWorkoutSummaries :many
 SELECT * FROM workout_summaries;
+
+-- name: GetSingleWorkoutSummary :one
+SELECT * FROM workout_summaries
+WHERE id = $1;
