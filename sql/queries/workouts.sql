@@ -55,6 +55,10 @@ UPDATE workout_exercises SET position = $2
 WHERE workout_id = $1
 RETURNING *;
 
+-- name: DeleteWorkoutRoutines :exec
+DELETE FROM workout_routines
+WHERE id = $1;
+
 /*
 -- name: CreateRound :one
 INSERT INTO rounds (

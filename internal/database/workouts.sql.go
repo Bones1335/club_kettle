@@ -98,6 +98,16 @@ func (q *Queries) CreateWorkoutRoutine(ctx context.Context, arg CreateWorkoutRou
 	return i, err
 }
 
+const deleteWorkoutRoutines = `-- name: DeleteWorkoutRoutines :exec
+DELETE FROM workout_routines
+WHERE id = $1
+`
+
+func (q *Queries) DeleteWorkoutRoutines(ctx context.Context, id uuid.UUID) error {
+	_, err := q.db.ExecContext(ctx, deleteWorkoutRoutines, id)
+	return err
+}
+
 const getSingleWorkoutRoutine = `-- name: GetSingleWorkoutRoutine :one
 SELECT id, name, description, total_duration, rounds_per_exercise, round_duration, rest_duration FROM workout_routines
 WHERE id = $1
