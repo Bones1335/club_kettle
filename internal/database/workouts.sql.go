@@ -185,3 +185,65 @@ func (q *Queries) GetWorkoutRoutines(ctx context.Context) ([]WorkoutRoutine, err
 	}
 	return items, nil
 }
+
+const updateWorkoutExercises = `-- name: UpdateWorkoutExercises :one
+UPDATE workout_exercises SET position = $2
+WHERE workout_id = $1
+RETURNING id, workout_id, exercise_id, position
+`
+
+type UpdateWorkoutExercisesParams struct {
+	WorkoutID uuid.UUID `json:"workout_id"`
+	Position  int32     `json:"position"`
+}
+
+func (q *Queries) UpdateWorkoutExercises(ctx context.Context, arg UpdateWorkoutExercisesParams) (WorkoutExercise, error) {
+	row := q.db.QueryRowContext(ctx, updateWorkoutExercises, arg.WorkoutID, arg.Position)
+	var i WorkoutExercise
+	err := row.Scan(
+		&i.ID,
+		&i.WorkoutID,
+		&i.ExerciseID,
+		&i.Position,
+	)
+	return i, err
+}
+
+const updateWorkoutRoutines = `-- name: UpdateWorkoutRoutines :one
+UPDATE workout_routines SET name = $2, description = $3, total_duration = $4, rounds_per_exercise = $5, round_duration = $6, rest_duration = $7
+WHERE id = $1
+RETURNING id, name, description, total_duration, rounds_per_exercise, round_duration, rest_duration
+`
+
+type UpdateWorkoutRoutinesParams struct {
+	ID                uuid.UUID `json:"id"`
+	Name              string    `json:"name"`
+	Description       string    `json:"description"`
+	TotalDuration     int32     `json:"total_duration"`
+	RoundsPerExercise int32     `json:"rounds_per_exercise"`
+	RoundDuration     int32     `json:"round_duration"`
+	RestDuration      int32     `json:"rest_duration"`
+}
+
+func (q *Queries) UpdateWorkoutRoutines(ctx context.Context, arg UpdateWorkoutRoutinesParams) (WorkoutRoutine, error) {
+	row := q.db.QueryRowContext(ctx, updateWorkoutRoutines,
+		arg.ID,
+		arg.Name,
+		arg.Description,
+		arg.TotalDuration,
+		arg.RoundsPerExercise,
+		arg.RoundDuration,
+		arg.RestDuration,
+	)
+	var i WorkoutRoutine
+	err := row.Scan(
+		&i.ID,
+		&i.Name,
+		&i.Description,
+		&i.TotalDuration,
+		&i.RoundsPerExercise,
+		&i.RoundDuration,
+		&i.RestDuration,
+	)
+	return i, err
+}
