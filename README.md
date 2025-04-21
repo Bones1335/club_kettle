@@ -59,6 +59,7 @@ This API allows the user to interact with a Postgresql database to track and sto
  - [x] UPDATE workout 
  - [x] DELETE workout
  - [ ] Finish implementing tests for all endpoints
+ - [ ] Finish implementing basic front-end for endpoint testing
 
  # References
 
