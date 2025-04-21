@@ -103,3 +103,7 @@ SELECT * FROM workout_summaries;
 -- name: GetSingleWorkoutSummary :one
 SELECT * FROM workout_summaries
 WHERE id = $1;
+
+-- name: DeleteWorkoutSummary :exec
+DELETE FROM workout_summaries
+WHERE id = $1;
