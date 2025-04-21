@@ -17,6 +17,14 @@ type Exercise struct {
 	UserID uuid.UUID `json:"user_id"`
 }
 
+type Round struct {
+	ID                uuid.UUID `json:"id"`
+	Date              time.Time `json:"date"`
+	RoundNumber       int32     `json:"round_number"`
+	RepsCompleted     float32   `json:"reps_completed"`
+	WorkoutExerciseID uuid.UUID `json:"workout_exercise_id"`
+}
+
 type User struct {
 	ID        uuid.UUID `json:"id"`
 	CreatedAt time.Time `json:"created_at"`
@@ -42,4 +50,13 @@ type WorkoutRoutine struct {
 	RoundsPerExercise int32     `json:"rounds_per_exercise"`
 	RoundDuration     int32     `json:"round_duration"`
 	RestDuration      int32     `json:"rest_duration"`
+}
+
+type WorkoutSummary struct {
+	WorkoutExerciseID uuid.UUID `json:"workout_exercise_id"`
+	Date              time.Time `json:"date"`
+	WeightInKg        int32     `json:"weight_in_kg"`
+	WorkoutNumber     int32     `json:"workout_number"`
+	TotalReps         float32   `json:"total_reps"`
+	WorkCapacity      float32   `json:"work_capacity"`
 }

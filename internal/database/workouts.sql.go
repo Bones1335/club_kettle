@@ -7,6 +7,7 @@ package database
 
 import (
 	"context"
+	"time"
 
 	"github.com/google/uuid"
 )
@@ -41,6 +42,49 @@ func (q *Queries) AddExerciseToWorkout(ctx context.Context, arg AddExerciseToWor
 		&i.WorkoutID,
 		&i.ExerciseID,
 		&i.Position,
+	)
+	return i, err
+}
+
+const createRound = `-- name: CreateRound :one
+INSERT INTO rounds (
+    id,
+    date,
+    round_number,
+    reps_completed,
+    workout_exercise_id
+)
+VALUES (
+    gen_random_uuid(),
+    $1,
+    $2,
+    $3,
+    $4
+)
+RETURNING id, date, round_number, reps_completed, workout_exercise_id
+`
+
+type CreateRoundParams struct {
+	Date              time.Time `json:"date"`
+	RoundNumber       int32     `json:"round_number"`
+	RepsCompleted     float32   `json:"reps_completed"`
+	WorkoutExerciseID uuid.UUID `json:"workout_exercise_id"`
+}
+
+func (q *Queries) CreateRound(ctx context.Context, arg CreateRoundParams) (Round, error) {
+	row := q.db.QueryRowContext(ctx, createRound,
+		arg.Date,
+		arg.RoundNumber,
+		arg.RepsCompleted,
+		arg.WorkoutExerciseID,
+	)
+	var i Round
+	err := row.Scan(
+		&i.ID,
+		&i.Date,
+		&i.RoundNumber,
+		&i.RepsCompleted,
+		&i.WorkoutExerciseID,
 	)
 	return i, err
 }
@@ -94,6 +138,56 @@ func (q *Queries) CreateWorkoutRoutine(ctx context.Context, arg CreateWorkoutRou
 		&i.RoundsPerExercise,
 		&i.RoundDuration,
 		&i.RestDuration,
+	)
+	return i, err
+}
+
+const createWorkoutSummary = `-- name: CreateWorkoutSummary :one
+INSERT INTO workout_summary (
+    workout_exercise_id,
+    date,
+    weight_in_kg,
+    workout_number,
+    total_reps,
+    work_capacity
+)
+VALUES (
+    $1,
+    $2,
+    $3,
+    $4,
+    $5,
+    $6
+)
+RETURNING workout_exercise_id, date, weight_in_kg, workout_number, total_reps, work_capacity
+`
+
+type CreateWorkoutSummaryParams struct {
+	WorkoutExerciseID uuid.UUID `json:"workout_exercise_id"`
+	Date              time.Time `json:"date"`
+	WeightInKg        int32     `json:"weight_in_kg"`
+	WorkoutNumber     int32     `json:"workout_number"`
+	TotalReps         float32   `json:"total_reps"`
+	WorkCapacity      float32   `json:"work_capacity"`
+}
+
+func (q *Queries) CreateWorkoutSummary(ctx context.Context, arg CreateWorkoutSummaryParams) (WorkoutSummary, error) {
+	row := q.db.QueryRowContext(ctx, createWorkoutSummary,
+		arg.WorkoutExerciseID,
+		arg.Date,
+		arg.WeightInKg,
+		arg.WorkoutNumber,
+		arg.TotalReps,
+		arg.WorkCapacity,
+	)
+	var i WorkoutSummary
+	err := row.Scan(
+		&i.WorkoutExerciseID,
+		&i.Date,
+		&i.WeightInKg,
+		&i.WorkoutNumber,
+		&i.TotalReps,
+		&i.WorkCapacity,
 	)
 	return i, err
 }

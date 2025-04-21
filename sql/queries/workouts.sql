@@ -59,10 +59,10 @@ RETURNING *;
 DELETE FROM workout_routines
 WHERE id = $1;
 
-/*
 -- name: CreateRound :one
 INSERT INTO rounds (
     id,
+    date,
     round_number,
     reps_completed,
     workout_exercise_id
@@ -71,20 +71,26 @@ VALUES (
     gen_random_uuid(),
     $1,
     $2,
-    $3
+    $3,
+    $4
 )
 RETURNING *;
 
 -- name: CreateWorkoutSummary :one
 INSERT INTO workout_summary (
     workout_exercise_id,
+    date,
+    weight_in_kg,
+    workout_number,
     total_reps,
     work_capacity
 )
 VALUES (
     $1,
     $2,
-    $3
+    $3,
+    $4,
+    $5,
+    $6
 )
 RETURNING *;
-*/

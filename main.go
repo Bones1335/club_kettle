@@ -67,6 +67,13 @@ func main() {
 	mux.HandleFunc("PUT /api/workouts/{workout_id}", apiCfg.handlerUpdateWorkout)
 	mux.HandleFunc("DELETE /api/workouts/{workout_id}", apiCfg.handlerDeleteWorkout)
 
+	// Workout Summary Endpoints
+	mux.HandleFunc("POST /api/workout_summaries/", apiCfg.handlerCreateWorkoutSummaries)
+	// TODO: mux.HandleFunc("GET /api/workout_summaries/", apiCfg.handlerGetWorkoutSummaries)
+	// TODO: mux.HandleFunc("GET /api/workout_summaries/{workout_summary_id/{workout_summary_id}", apiCfg.handlerGetSingleWorkoutSummary)
+	// TODO: mux.HandleFunc("PUT /api/workout_summaries/{workout_summary_id/{workout_summary_id}", apiCfg.handlerUpdateWorkoutSummary)
+	// TODO: mux.HandleFunc("DELETE /api/workout_summaries/{workout_summary_id}", apiCfg.handlerDeleteWorkoutSummaries)
+
 	srv := &http.Server{
 		Addr:    ":" + port,
 		Handler: mux,

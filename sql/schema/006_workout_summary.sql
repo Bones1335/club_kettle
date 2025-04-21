@@ -1,0 +1,12 @@
+-- +goose Up
+CREATE TABLE workout_summary (
+    workout_exercise_id UUID NOT NULL REFERENCES workout_exercises (id) ON DELETE CASCADE,
+    date TIMESTAMP PRIMARY KEY NOT NULL,
+    weight_in_kg INTEGER NOT NULL,
+    workout_number INTEGER NOT NULL,
+    total_reps REAL NOT NULL,
+    work_capacity REAL NOT NULL
+);
+
+-- +goose Down
+DROP TABLE workout_summary;
