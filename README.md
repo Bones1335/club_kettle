@@ -1,8 +1,8 @@
-# Workout API
+# Club Kettle
 
 This API allows the user to interact with a Postgresql database to track and store their workouts.
 
-# Get Started
+## Get Started
 
 1. Clone the Repo
 2. Install Goose for database migrations
@@ -14,15 +14,15 @@ This API allows the user to interact with a Postgresql database to track and sto
 8. Run `./test.sh` to test endpoints
 9. Get Swol
 
-# How to Use
+## How to Use
 
-## User endpoints
+### User endpoints
    - "POST /api/users"
    - "GET /api/users/{user_id}"
    - "PUT /api/users/{user_id}"
    - "DELETE /api/users/{user_id}"
 
-## Exercise endpoints
+### Exercise endpoints
    - "POST /api/exercises"
    - "GET /api/exercises"
    - "GET /api/users/{user_id}/exercises"
@@ -30,20 +30,20 @@ This API allows the user to interact with a Postgresql database to track and sto
    - "PUT /api/exercises/{exercise_id}"
    - "DELETE /api/exercises/{exercise_id}"
 
-## Workout Endpoints
+### Workout Endpoints
    - "POST /api/workouts"
    - "GET /api/workouts"
    - "GET /api/workouts/{workout_id}"
    - "PUT /api/workouts/{workout_id}"
    - "DELETE /api/workouts/{workout_id}"
 
-## Workout Summary Endpoints
+### Workout Summary Endpoints
    - "POST /api/workout_summaries"
 	- "GET /api/workout_summaries"
 	- "GET /api/workout_summaries/{workout_summary_id}"
 	- "DELETE /api/workout_summaries/{workout_summary_id}"
 
-# TODO
+## TODO
  - [x] CREATE basic server with readiness check endpoint
  - [x] CREATE basic user (more user info to be added later)
  - [x] For testing/development, CREATE a reset endpoint to reset the database to zero
@@ -61,7 +61,7 @@ This API allows the user to interact with a Postgresql database to track and sto
  - [ ] Finish implementing tests for all endpoints
  - [ ] Finish implementing basic front-end for endpoint testing
 
- # References
+ ## References
 
  - Prototype design for the database in regard to implementing exercises into workouts.
     - https://softwareengineering.stackexchange.com/questions/226189/designing-a-fitness-weight-lifiting-routine-database
