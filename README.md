@@ -1,6 +1,12 @@
 # Club Kettle
 
-This API allows the user to interact with a Postgresql database to track and store their workouts.
+Club Kettle is a workout API designed with Clubbells, Kettlebells, and Macebells in mind while staying simple to use.
+
+## Description
+
+Having two seperate apps to log and conduct my workouts has always been rather annoying and other tracking solutions either cost too much or don't have support for my workout tools. So, I built this API to act as my Excel workout logger that also stores how long a workout should take, how many intervals, and how long intervals and rest periods should. That way, I can hook it up to a basic front-end to log an entire workout based on my use case. 
+
+Endurance strength training isn't a new concept, nor are the tools I use. But, having those tools not appear in mainstream applications gets very annoying when all you want to do is have a central location to store your data that isn't some slow spreadsheet or damageable notebook that inevitably gets lost. Not to mention the need for an easy to use timer built-in to the logger.
 
 ## Get Started
 
@@ -43,25 +49,44 @@ This API allows the user to interact with a Postgresql database to track and sto
 	- "GET /api/workout_summaries/{workout_summary_id}"
 	- "DELETE /api/workout_summaries/{workout_summary_id}"
 
-## TODO
- - [x] CREATE basic server with readiness check endpoint
- - [x] CREATE basic user (more user info to be added later)
- - [x] For testing/development, CREATE a reset endpoint to reset the database to zero
- - [x] GET user info
- - [x] UPDATE user info
- - [x] DELETE user info
- - [x] CREATE exercise endpoint where the user can create various exercises
- - [x] Endpoint to GET all created exercises by a user
- - [x] UPDATE an exercise
- - [x] DELETE an exercise
- - [x] CREATE workout with registered exercises
- - [x] GET full workout
- - [x] UPDATE workout 
- - [x] DELETE workout
- - [ ] Finish implementing tests for all endpoints
- - [ ] Finish implementing basic front-end for endpoint testing
+## Contributing
 
- ## References
+### Clone the repo
+
+```bash
+git clone https://github.com/Bones1335/club_kettle
+cd club_kettle
+```
+
+### Build the project
+
+```bash
+go build
+```
+
+### Migrate the Postgres database
+
+```bash
+./migrate.sh
+```
+
+### Run the project
+
+```bash
+./club_kettle
+```
+
+### Run the tests
+
+```bash
+./tests.sh
+```
+
+### Submit a pull request
+
+If you'd like to contribute, please fork the repository and open a pull request to the `main` branch.
+
+#### References
 
  - Prototype design for the database in regard to implementing exercises into workouts.
     - https://softwareengineering.stackexchange.com/questions/226189/designing-a-fitness-weight-lifiting-routine-database
