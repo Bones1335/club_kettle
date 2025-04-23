@@ -46,6 +46,9 @@ func main() {
 	mux.HandleFunc("GET /healthz", handlerReadiness)
 	mux.HandleFunc("POST /admin/reset", apiCfg.handlerReset)
 
+	// Login
+	mux.HandleFunc("POST /api/login", apiCfg.handlerLogin)
+
 	// User endpoints
 	mux.HandleFunc("POST /api/users", apiCfg.handlerCreateUsers)
 	mux.HandleFunc("GET /api/users/{user_id}", apiCfg.handlerGetUsers)
@@ -78,7 +81,7 @@ func main() {
 		Handler: mux,
 	}
 
-	log.Printf("Serving files from %s on port: %s\n", filepathRoot, port)
+	log.Printf("Serving files from http://localhost:%s/app/\n", port)
 	log.Fatal(srv.ListenAndServe())
 
 }

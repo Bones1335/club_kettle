@@ -33,6 +33,7 @@ type User struct {
 	FirstName string    `json:"first_name"`
 	Username  string    `json:"username"`
 	Email     string    `json:"email"`
+	Password  string    `json:"password"`
 }
 
 type WorkoutExercise struct {

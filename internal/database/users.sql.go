@@ -19,7 +19,8 @@ INSERT INTO users (
     last_name,
     first_name,
     username,
-    email
+    email,
+    password
 )
 Values (
     gen_random_uuid(),
@@ -28,9 +29,10 @@ Values (
     $1,
     $2,
     $3,
-    $4
+    $4,
+    $5
 )
-RETURNING id, created_at, updated_at, last_name, first_name, username, email
+RETURNING id, created_at, updated_at, last_name, first_name, username, email, password
 `
 
 type CreateUserParams struct {
@@ -38,6 +40,7 @@ type CreateUserParams struct {
 	FirstName string `json:"first_name"`
 	Username  string `json:"username"`
 	Email     string `json:"email"`
+	Password  string `json:"password"`
 }
 
 func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) (User, error) {
@@ -46,6 +49,7 @@ func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) (User, e
 		arg.FirstName,
 		arg.Username,
 		arg.Email,
+		arg.Password,
 	)
 	var i User
 	err := row.Scan(
@@ -56,6 +60,7 @@ func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) (User, e
 		&i.FirstName,
 		&i.Username,
 		&i.Email,
+		&i.Password,
 	)
 	return i, err
 }
@@ -71,7 +76,7 @@ func (q *Queries) DeleteUser(ctx context.Context, id uuid.UUID) error {
 }
 
 const getUser = `-- name: GetUser :one
-SELECT id, created_at, updated_at, last_name, first_name, username, email FROM users
+SELECT id, created_at, updated_at, last_name, first_name, username, email, password FROM users
 WHERE id = $1
 `
 
@@ -86,14 +91,36 @@ func (q *Queries) GetUser(ctx context.Context, id uuid.UUID) (User, error) {
 		&i.FirstName,
 		&i.Username,
 		&i.Email,
+		&i.Password,
+	)
+	return i, err
+}
+
+const login = `-- name: Login :one
+SELECT id, created_at, updated_at, last_name, first_name, username, email, password FROM users
+WHERE email = $1
+`
+
+func (q *Queries) Login(ctx context.Context, email string) (User, error) {
+	row := q.db.QueryRowContext(ctx, login, email)
+	var i User
+	err := row.Scan(
+		&i.ID,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+		&i.LastName,
+		&i.FirstName,
+		&i.Username,
+		&i.Email,
+		&i.Password,
 	)
 	return i, err
 }
 
 const updateUser = `-- name: UpdateUser :one
-UPDATE users SET last_name = $2, first_name = $3, username = $4, email = $5, updated_at = NOW()
+UPDATE users SET last_name = $2, first_name = $3, username = $4, email = $5, updated_at = NOW(), password = $6
 WHERE id = $1
-RETURNING id, created_at, updated_at, last_name, first_name, username, email
+RETURNING id, created_at, updated_at, last_name, first_name, username, email, password
 `
 
 type UpdateUserParams struct {
@@ -102,6 +129,7 @@ type UpdateUserParams struct {
 	FirstName string    `json:"first_name"`
 	Username  string    `json:"username"`
 	Email     string    `json:"email"`
+	Password  string    `json:"password"`
 }
 
 func (q *Queries) UpdateUser(ctx context.Context, arg UpdateUserParams) (User, error) {
@@ -111,6 +139,7 @@ func (q *Queries) UpdateUser(ctx context.Context, arg UpdateUserParams) (User, e
 		arg.FirstName,
 		arg.Username,
 		arg.Email,
+		arg.Password,
 	)
 	var i User
 	err := row.Scan(
@@ -121,6 +150,7 @@ func (q *Queries) UpdateUser(ctx context.Context, arg UpdateUserParams) (User, e
 		&i.FirstName,
 		&i.Username,
 		&i.Email,
+		&i.Password,
 	)
 	return i, err
 }

@@ -6,7 +6,8 @@ INSERT INTO users (
     last_name,
     first_name,
     username,
-    email
+    email,
+    password
 )
 Values (
     gen_random_uuid(),
@@ -15,16 +16,21 @@ Values (
     $1,
     $2,
     $3,
-    $4
+    $4,
+    $5
 )
 RETURNING *;
+
+-- name: Login :one
+SELECT * FROM users
+WHERE email = $1;
 
 -- name: GetUser :one
 SELECT * FROM users
 WHERE id = $1;
 
 -- name: UpdateUser :one
-UPDATE users SET last_name = $2, first_name = $3, username = $4, email = $5, updated_at = NOW()
+UPDATE users SET last_name = $2, first_name = $3, username = $4, email = $5, updated_at = NOW(), password = $6
 WHERE id = $1
 RETURNING *;
 

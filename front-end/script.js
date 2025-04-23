@@ -1,5 +1,48 @@
 const URL = "http://localhost:8080/"
 
+function convertLoginToJson() {
+    let form = document.getElementById("login");
+    let formData = {};
+    for (let i = 0; i < form.elements.length; i++) {
+        let element = form.elements[i];
+        if (element.type !== "submit") {
+            formData[element.name] = element.value;
+        }
+    }
+    return JSON.stringify(formData);
+}
+
+async function sendLoginData(jsonData) {
+    let url = URL + "api/login"
+    try {
+        const response = await fetch(url, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: jsonData,
+        });
+
+        const json = await response.json()
+        let jsonOutput = document.getElementById("login-container");
+        jsonOutput.innerHTML = `<h4>${json.username} logged in</h4>`;
+    }
+    catch (error) {
+        console.error('Error:', error)
+    }   
+}
+
+function clearLoginFormFields() {
+    document.getElementById('login-email').value = '';
+    document.getElementById('login-password').value = '';
+}
+
+function submitLoginFormData() {
+    const JSONData = convertLoginToJson();
+    sendLoginData(JSONData)
+    clearLoginFormFields();
+}
+
 function convertUserToJson() {
     let form = document.getElementById("userData");
     let formData = {};

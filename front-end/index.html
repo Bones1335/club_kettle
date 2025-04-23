@@ -9,6 +9,18 @@
     
     <h1>Welcome to Club Kettle!</h1>
 
+    <div id="login-container">
+        <form action="post" id="login" onsubmit="mySubmitFunction(event)">
+            <label for="login-email">Email:</label>
+            <input type="email" name="login-email" id="login-email">
+
+            <label for="login-password">Password:</label>
+            <input type="password" name="login-password" id="login-password">
+
+            <button type="submit" onclick="submitLoginFormData()">Login</button>
+        </form>
+    </div>
+
     <div id="Users">
         <h2>Create User</h2>
         <form id="userData" onsubmit="mySubmitFunction(event)" method="post">
@@ -23,6 +35,9 @@
 
             <label for="email">Email:</label>
             <input type="email" name="email" id="email">
+
+            <label for="password">Password:</label>
+            <input type="password" name="password" id="password">
 
             <button type="submit" onclick="submitUserFormData()">Create User</button>
         </form>

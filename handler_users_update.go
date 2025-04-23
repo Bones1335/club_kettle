@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"net/http"
 
+	"github.com/Bones1335/workout_api/internal/auth"
 	"github.com/Bones1335/workout_api/internal/database"
 	"github.com/google/uuid"
 )
@@ -15,6 +16,7 @@ func (cfg *apiConfig) handlerUpdateUsers(w http.ResponseWriter, r *http.Request)
 		FirstName string    `json:"first_name"`
 		Username  string    `json:"username"`
 		Email     string    `json:"email"`
+		Password  string    `json:"password"`
 	}
 
 	type response struct {
@@ -29,12 +31,19 @@ func (cfg *apiConfig) handlerUpdateUsers(w http.ResponseWriter, r *http.Request)
 		return
 	}
 
+	hashedPassword, err := auth.HashPassword(params.Password)
+	if err != nil {
+		respondWithError(w, http.StatusInternalServerError, "couldn't hash password", err)
+		return
+	}
+
 	user, err := cfg.db.UpdateUser(r.Context(), database.UpdateUserParams{
 		ID:        params.ID,
 		LastName:  params.LastName,
 		FirstName: params.FirstName,
 		Username:  params.Username,
 		Email:     params.Email,
+		Password:  hashedPassword,
 	})
 	if err != nil {
 		respondWithError(w, http.StatusInternalServerError, "Couldn't update user", err)
