@@ -1,5 +1,15 @@
 const URL = "http://localhost:8080/"
 
+document.addEventListener("DOMContentLoaded", async () => {
+    const token = localStorage.getItem('token');
+
+    if (token) {
+        document.getElementById("login-container").style.display = "none";
+    } else {
+        document.getElementById("login-container").style.display = "block";
+    }
+});
+
 function convertLoginToJson() {
     let form = document.getElementById("login");
     let formData = {};
@@ -18,14 +28,21 @@ async function sendLoginData(jsonData) {
         const response = await fetch(url, {
             method: "POST",
             headers: {
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
+                //Authorization: `Bearer ${localStorage.getItem('token')}`
             },
             body: jsonData,
         });
 
         const json = await response.json()
-        let jsonOutput = document.getElementById("login-container");
-        jsonOutput.innerHTML = `<h4>${json.username} logged in</h4>`;
+        if (json.token) {
+            localStorage.setItem("token", json.token);
+            let jsonOutput = document.getElementById("login-container");
+            jsonOutput.innerHTML = `<h4>${json.username} logged in</h4>`;
+        } else {
+            alert("Login failed")
+        }
+
     }
     catch (error) {
         console.error('Error:', error)
