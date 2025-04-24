@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"net/http"
+	"time"
 
 	"github.com/Bones1335/workout_api/internal/auth"
 	"github.com/Bones1335/workout_api/internal/database"
@@ -16,6 +17,8 @@ func (cfg *apiConfig) handlerLogin(w http.ResponseWriter, r *http.Request) {
 
 	type response struct {
 		database.User
+		Token        string `json:"token"`
+		RefreshToken string `json:"refresh_token"`
 	}
 
 	decoder := json.NewDecoder(r.Body)
@@ -38,6 +41,28 @@ func (cfg *apiConfig) handlerLogin(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	accessToken, err := auth.MakeJWT(login.ID, cfg.jwtSecret, time.Hour)
+	if err != nil {
+		respondWithError(w, http.StatusInternalServerError, "couldn't create access jwt", err)
+		return
+	}
+
+	refreshToken, err := auth.MakeRefreshToken()
+	if err != nil {
+		respondWithError(w, http.StatusInternalServerError, "couldn't create refresh token", err)
+		return
+	}
+
+	_, err = cfg.db.CreateRefreshToken(r.Context(), database.CreateRefreshTokenParams{
+		UserID:    login.ID,
+		Token:     refreshToken,
+		ExpiresAt: time.Now().UTC().Add(time.Hour * 24 * 60),
+	})
+	if err != nil {
+		respondWithError(w, http.StatusInternalServerError, "couldn't save refresh token", err)
+		return
+	}
+
 	respondWithJSON(w, http.StatusOK, response{
 		User: database.User{
 			ID:        login.ID,
@@ -48,5 +73,7 @@ func (cfg *apiConfig) handlerLogin(w http.ResponseWriter, r *http.Request) {
 			FirstName: login.FirstName,
 			Username:  login.Username,
 		},
+		Token:        accessToken,
+		RefreshToken: refreshToken,
 	})
 }
