@@ -6,26 +6,36 @@ import (
 
 	"github.com/Bones1335/workout_api/internal/auth"
 	"github.com/Bones1335/workout_api/internal/database"
-	"github.com/google/uuid"
 )
 
 func (cfg *apiConfig) handlerUpdateUsers(w http.ResponseWriter, r *http.Request) {
 	type parameters struct {
-		ID        uuid.UUID `json:"id"`
-		LastName  string    `json:"last_name"`
-		FirstName string    `json:"first_name"`
-		Username  string    `json:"username"`
-		Email     string    `json:"email"`
-		Password  string    `json:"password"`
+		LastName  string `json:"last_name"`
+		FirstName string `json:"first_name"`
+		Username  string `json:"username"`
+		Email     string `json:"email"`
+		Password  string `json:"password"`
 	}
 
 	type response struct {
 		database.User
 	}
 
+	token, err := auth.GetBearerToken(r.Header)
+	if err != nil {
+		respondWithError(w, http.StatusUnauthorized, "couldn't find jwt", err)
+		return
+	}
+
+	userID, err := auth.ValidateJWT(token, cfg.jwtSecret)
+	if err != nil {
+		respondWithError(w, http.StatusUnauthorized, "couldn't validate jwt", err)
+		return
+	}
+
 	decoder := json.NewDecoder(r.Body)
 	params := parameters{}
-	err := decoder.Decode(&params)
+	err = decoder.Decode(&params)
 	if err != nil {
 		respondWithError(w, http.StatusInternalServerError, "Couldn't decode parameters", err)
 		return
@@ -38,7 +48,7 @@ func (cfg *apiConfig) handlerUpdateUsers(w http.ResponseWriter, r *http.Request)
 	}
 
 	user, err := cfg.db.UpdateUser(r.Context(), database.UpdateUserParams{
-		ID:        params.ID,
+		ID:        userID,
 		LastName:  params.LastName,
 		FirstName: params.FirstName,
 		Username:  params.Username,
