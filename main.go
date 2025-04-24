@@ -13,14 +13,16 @@ import (
 )
 
 type apiConfig struct {
-	db       *database.Queries
-	platform string
+	db        *database.Queries
+	platform  string
+	jwtSecret string
 }
 
 func main() {
 	godotenv.Load()
 	dbURL := os.Getenv("DB_URL")
 	platform := os.Getenv("PLATFORM")
+	jwtSecret := os.Getenv("JWT_SECRET")
 
 	const filepathRoot = "."
 	const port = "8080"
@@ -33,8 +35,9 @@ func main() {
 	dbQueries := database.New(db)
 
 	apiCfg := apiConfig{
-		db:       dbQueries,
-		platform: platform,
+		db:        dbQueries,
+		platform:  platform,
+		jwtSecret: jwtSecret,
 	}
 
 	mux := http.NewServeMux()
@@ -46,8 +49,10 @@ func main() {
 	mux.HandleFunc("GET /healthz", handlerReadiness)
 	mux.HandleFunc("POST /admin/reset", apiCfg.handlerReset)
 
-	// Login
+	// Authentication/Authorization
 	mux.HandleFunc("POST /api/login", apiCfg.handlerLogin)
+	mux.HandleFunc("POST /api/refresh", apiCfg.handlerRefresh)
+	mux.HandleFunc("POST /api/revoke", apiCfg.handlerRevoke)
 
 	// User endpoints
 	mux.HandleFunc("POST /api/users", apiCfg.handlerCreateUsers)
