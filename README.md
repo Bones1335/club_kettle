@@ -23,6 +23,7 @@ Endurance strength training isn't a new concept, nor are the tools I use. But, h
 ## How to Use
 
 ### User endpoints
+   - "POST /api/login"
    - "POST /api/users"
    - "GET /api/users/{user_id}"
    - "PUT /api/users/{user_id}"
