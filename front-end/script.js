@@ -2,12 +2,18 @@ const URL = "http://localhost:8080/"
 
 // DOM elements
 const contentElement = document.getElementById("content");
+const login = document.getElementById("Users");
+const exercises = document.getElementById("Exercises");
+const workoutRoutines = document.getElementById("WorkoutRoutines");
+const workouts = document.getElementById("Workouts");
 
 // Navigation Elements
 const navProfile = document.getElementById("nav-profile");
 const navExercises = document.getElementById("nav-exercises");
 const navWorkouts = document.getElementById("nav-workouts");
 const navSummaries = document.getElementById("nav-summaries");
+
+
 
 // State
 let currentView = "login";
@@ -16,9 +22,15 @@ document.addEventListener("DOMContentLoaded", async () => {
     const token = localStorage.getItem('token');
 
     if (token) {
-        document.getElementById("Users").style.display = "none";
+        currentView = "workouts";
+        login.style.display = "none";
+        renderWorkouts();
     } else {
-        document.getElementById("Users").style.display = "block";
+        currentView = "login";
+        login.style.display = "block";
+        exercises.style.display = "none";
+        workoutRoutines.style.display = "none";
+        workouts.style.display = "none";
     }
 });
 
@@ -71,12 +83,16 @@ function submitLoginFormData() {
     const JSONData = convertLoginToJson();
     sendLoginData(JSONData)
     clearLoginFormFields();
+    renderWorkouts();
 }
 
 function logout() {
     localStorage.removeItem("token");
     document.getElementById("Users").style.display = "block";
     currentView = "login";
+    exercises.style.display = "none";
+    workoutRoutines.style.display = "none";
+    workouts.style.display = "none";
 }
 
 // Users
@@ -130,6 +146,8 @@ function submitUserFormData() {
 function mySubmitFunction(e) {
     e.preventDefault();
 }
+
+// Exercises
 
 function addExerciseForm() {
     const formContainer = document.createElement("div");
@@ -234,6 +252,8 @@ function populateExerciseDropdown(exercises) {
 }
 
 document.addEventListener("DOMContentLoaded", fetchExercises);
+
+// Workouts
 
 function convertWorkoutToJson() {
     const form = document.getElementById("workoutRoutineData");
@@ -363,3 +383,47 @@ async function populateWorkoutExercises() {
     roundTime.innerHTML = `Round Duration: ${exercises.Workout.round_duration} seconds`
     rest.innerHTML = `Rest: ${exercises.Workout.rest_duration} seconds`
 }
+
+// Workout Summaries
+
+// Render Pages
+// function renderProfile() {}
+
+function renderExercises() {
+    login.style.display = "none";
+    workouts.style.display = "none";
+    exercises.style.display = "block";
+    workoutRoutines.style.display = "block";
+}
+
+function renderWorkouts() {
+    login.style.display = "none";
+    exercises.style.display = "none";
+    workoutRoutines.style.display = "none";
+    workouts.style.display = "block";
+}
+
+// Navigation
+navProfile.addEventListener("click", (e) => {
+    e.preventDefault();
+    currentView = "profile";
+    // renderProfile();
+});
+
+navExercises.addEventListener("click", (e) => {
+    e.preventDefault();
+    currentView = "exercises";
+    renderExercises();
+});
+
+navWorkouts.addEventListener("click", (e) => {
+    e.preventDefault();
+    currentView = "workouts";
+    renderWorkouts();
+});
+
+navSummaries.addEventListener("click", (e) => {
+    e.preventDefault();
+    currentView = "summaries";
+    // renderSummaries();
+});
