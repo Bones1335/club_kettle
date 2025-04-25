@@ -9,185 +9,200 @@
     
     <h1>Welcome to Club Kettle!</h1>
 
-    <div id="login-container">
-        <form action="post" id="login" onsubmit="mySubmitFunction(event)">
-            <label for="login-email">Email:</label>
-            <input type="email" name="login-email" id="login-email">
+    <header>
+        <nav id="nav-bar">
+            <ul>
+                <li id="nav-profile"><a href="#">Profile</a></li>
+                <li id="nav-exercises"><a href="#">Exercises</a></li>
+                <li id="nav-workouts"><a href="#">Workouts</a></li>
+                <li id="nav-summaries"><a href="#">Summaries</a></li>
+                <li id="logout"><button onclick="logout()">Logout</button></li>
+            </ul>
+        </nav>
+    </header>
 
-            <label for="login-password">Password:</label>
-            <input type="password" name="login-password" id="login-password">
+    <main id="content">
+        <div id="Users">
+            <div id="login-container">
+                <h2>Login</h2>
+                <form action="post" id="login" onsubmit="mySubmitFunction(event)">
+                    <label for="login-email">Email:</label>
+                    <input type="email" name="login-email" id="login-email" required>
 
-            <button type="submit" onclick="submitLoginFormData()">Login</button>
-        </form>
-    </div>
+                    <label for="login-password">Password:</label>
+                    <input type="password" name="login-password" id="login-password" required>
 
-    <div id="Users">
-        <h2>Create User</h2>
-        <form id="userData" onsubmit="mySubmitFunction(event)" method="post">
-            <label for="last_name">Last Name:</label>
-            <input type="text" name="last_name" id="last_name">
-
-            <label for="first_name">First Name:</label>
-            <input type="text" name="first_name" id="first_name">
-
-            <label for="username">Username:</label>
-            <input type="text" name="username" id="username">
-
-            <label for="email">Email:</label>
-            <input type="email" name="email" id="email">
-
-            <label for="password">Password:</label>
-            <input type="password" name="password" id="password">
-
-            <button type="submit" onclick="submitUserFormData()">Create User</button>
-        </form>
-
-        <div id="jsonOutput"></div>    
-    </div>
-
-    <div id="Exercises">
-        <h2>Create Exercises</h2>
-        <button id="createExercise" type="button" onclick="addExerciseForm()">Add Exercise</button>
-
-        <div id="exercises"></div>
-
-    </div>
-
-    <div id="WorkoutRoutines">
-        <h2>Create Workout Routine</h2>
-        <form id="workoutRoutineData" onsubmit="mySubmitFunction(event)" method="post">
-            <label for="workoutRoutineName">Workout Name:</label>
-            <input type="text" name="name" id="workoutRoutineName">
-
-            <label for="description">Workout Description:</label>
-            <textarea form="workoutRoutineData" cols="40" rows="5" name="description" id="description"></textarea>
-
-            <label for="duration">Workout Duration (in minutes):</label>
-            <input type="number" name="total_duration" id="duration">
-
-            <label for="roundsPerExercise">Rounds per exercise:</label>
-            <input type="number" name="roundsPerExercise" id="roundsPerExercise">
-
-            <label for="roundDuration">Time per round (in seconds):</label>
-            <input type="number" name="roundDuration" id="roundDuration">
-
-            <label for="restDuration">Rest period (in seconds):</label>
-            <input type="number" name="restDuration" id="restDuration">
-
-            <h4>Exercises:</h4>
-            <div id="exerciseList">
-                <label for="workoutExercise1">Exercise 1:</label>
-                <select id="workoutExercise1" name="exercise1"></select>
-
-                <label for="workoutExercise2">Exercise 2:</label>
-                <select id="workoutExercise2" name="exercise2"></select>
-
-                <label for="workoutExercise3">Exercise 3:</label>
-                <select id="workoutExercise3" name="exercise3"></select>
-
-                <label for="workoutExercise4">Exercise 4:</label>
-                <select id="workoutExercise4" name="exercise4"></select>
-
-                <label for="workoutExercise5">Exercise 5:</label>
-                <select id="workoutExercise5" name="exercise5"></select>
+                    <button type="submit" onclick="submitLoginFormData()">Login</button>
+                </form>
             </div>
 
-            <button type="submit" onclick="submitWorkoutRoutineFormData()">Create Workout</button>
-        </form>
-    </div>
+            <h2>Create Account</h2>
+            <form id="userData" onsubmit="mySubmitFunction(event)" method="post">
+                <label for="last_name">Last Name:</label>
+                <input type="text" name="last_name" id="last_name">
 
-    <div id="Workouts">
-        <h2>Start Workout</h2>
-        <h3 id="timer">Timer: 30:00</h3>
-        <h3 id="round_duration">Round Duration: 20 seconds</h3>
-        <h3 id="rest">Rest: 25 seconds</h3>
+                <label for="first_name">First Name:</label>
+                <input type="text" name="first_name" id="first_name">
 
-        <form id="workoutData">
+                <label for="username">Username:</label>
+                <input type="text" name="username" id="username">
 
-            <label for="workoutName">Workout Name:</label>
-            <select name="workoutName" id="workoutName"></select>
-            <button type="button" onClick="populateWorkoutExercises()">Select Workout</button>
+                <label for="email">Email:</label>
+                <input type="email" name="email" id="email">
 
-            <label for="weight">Weight (in kg):</label>
-            <input type="number" name="weight" id="weight">
+                <label for="password">Password:</label>
+                <input type="password" name="password" id="password">
 
-            <label for="workoutNumber">Workout Number:</label>
-            <input type="number" name="workoutNumber" id="workoutNumber">
+                <button type="submit" onclick="submitUserFormData()">Create User</button>
+            </form>
 
-            <label for="date">Date:</label>
-            <input type="date" name="date" id="date">
+            <div id="jsonOutput"></div>    
+        </div>
 
-            <table>
-                <thead>
-                    <th>Exercise</th>
-                    <th>Round 1</th>
-                    <th>Round 2</th>
-                    <th>Round 3</th>
-                    <th>Round 4</th>
-                    <th>Total Reps</th>
-                    <th>Work Capacity</th>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>2h - Inside Circle</td>
-                        <td><input type="number" name="ex1rd1" id="ex1rd1">8</td>
-                        <td><input type="number" name="ex1rd2" id="ex1rd2">9</td>
-                        <td><input type="number" name="ex1rd3" id="ex1rd3">9</td>
-                        <td><input type="number" name="ex1rd4" id="ex1rd4">9</td>
-                        <td><input type="number" name="ex1rd5" id="ex1rd5">35</td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td>2h - Outside Pendulum</td>
-                        <td><input type="number" name="ex2rd1" id="ex2rd1">6</td>
-                        <td><input type="number" name="ex2rd2" id="ex2rd2">6</td>
-                        <td><input type="number" name="ex2rd3" id="ex2rd3">6</td>
-                        <td><input type="number" name="ex2rd4" id="ex2rd4">6</td>
-                        <td><input type="number" name="ex2rd5" id="ex2rd5">24</td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td>2h - Pullover</td>
-                        <td><input type="number" name="ex3rd1" id="ex3rd1">8</td>
-                        <td><input type="number" name="ex3rd2" id="ex3rd2">8</td>
-                        <td><input type="number" name="ex3rd3" id="ex3rd3">9</td>
-                        <td><input type="number" name="ex3rd4" id="ex3rd4">8</td>
-                        <td><input type="number" name="ex3rd5" id="ex3rd5">33</td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td>2h - Balance Squat</td>
-                        <td><input type="number" name="ex4rd1" id="ex4rd1">8</td>
-                        <td><input type="number" name="ex4rd2" id="ex4rd2">8</td>
-                        <td><input type="number" name="ex4rd3" id="ex4rd3">8</td>
-                        <td><input type="number" name="ex4rd4" id="ex4rd4">8</td>
-                        <td><input type="number" name="ex4rd5" id="ex4rd5">32</td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td>2h - Shield Cast</td>
-                        <td><input type="number" name="ex5rd1" id="ex5rd1">10</td>
-                        <td><input type="number" name="ex5rd2" id="ex5rd2">11</td>
-                        <td><input type="number" name="ex5rd3" id="ex5rd3">12</td>
-                        <td><input type="number" name="ex5rd4" id="ex5rd4">14</td>
-                        <td><input type="number" name="ex5rd5" id="ex5rd5">47</td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td>Total Reps</td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td><input type="number" name="total_reps" id="total_reps">171</td>
-                        <td><input type="number" name="work_capacity" id="work_capacity">1026</td>
-                    </tr>
-                </tbody>
-            </table>
-        <button type="submit" onclick="submitWorkoutData()">Workout Complete</button>
+        <div id="Exercises">
+            <h2>Create Exercises</h2>
+            <button id="createExercise" type="button" onclick="addExerciseForm()">Add Exercise</button>
 
-        </form>
-    </div>
+            <div id="exercises"></div>
+
+        </div>
+
+        <div id="WorkoutRoutines">
+            <h2>Create Workout Routine</h2>
+            <form id="workoutRoutineData" onsubmit="mySubmitFunction(event)" method="post">
+                <label for="workoutRoutineName">Workout Name:</label>
+                <input type="text" name="name" id="workoutRoutineName">
+
+                <label for="description">Workout Description:</label>
+                <textarea form="workoutRoutineData" cols="40" rows="5" name="description" id="description"></textarea>
+
+                <label for="duration">Workout Duration (in minutes):</label>
+                <input type="number" name="total_duration" id="duration">
+
+                <label for="roundsPerExercise">Rounds per exercise:</label>
+                <input type="number" name="roundsPerExercise" id="roundsPerExercise">
+
+                <label for="roundDuration">Time per round (in seconds):</label>
+                <input type="number" name="roundDuration" id="roundDuration">
+
+                <label for="restDuration">Rest period (in seconds):</label>
+                <input type="number" name="restDuration" id="restDuration">
+
+                <h4>Exercises:</h4>
+                <div id="exerciseList">
+                    <label for="workoutExercise1">Exercise 1:</label>
+                    <select id="workoutExercise1" name="exercise1"></select>
+
+                    <label for="workoutExercise2">Exercise 2:</label>
+                    <select id="workoutExercise2" name="exercise2"></select>
+
+                    <label for="workoutExercise3">Exercise 3:</label>
+                    <select id="workoutExercise3" name="exercise3"></select>
+
+                    <label for="workoutExercise4">Exercise 4:</label>
+                    <select id="workoutExercise4" name="exercise4"></select>
+
+                    <label for="workoutExercise5">Exercise 5:</label>
+                    <select id="workoutExercise5" name="exercise5"></select>
+                </div>
+
+                <button type="submit" onclick="submitWorkoutRoutineFormData()">Create Workout</button>
+            </form>
+        </div>
+
+        <div id="Workouts">
+            <h2>Start Workout</h2>
+            <h3 id="timer">Timer: 30:00</h3>
+            <h3 id="round_duration">Round Duration: 20 seconds</h3>
+            <h3 id="rest">Rest: 25 seconds</h3>
+
+            <form id="workoutData">
+
+                <label for="workoutName">Workout Name:</label>
+                <select name="workoutName" id="workoutName"></select>
+                <button type="button" onClick="populateWorkoutExercises()">Select Workout</button>
+
+                <label for="weight">Weight (in kg):</label>
+                <input type="number" name="weight" id="weight">
+
+                <label for="workoutNumber">Workout Number:</label>
+                <input type="number" name="workoutNumber" id="workoutNumber">
+
+                <label for="date">Date:</label>
+                <input type="date" name="date" id="date">
+
+                <table>
+                    <thead>
+                        <th>Exercise</th>
+                        <th>Round 1</th>
+                        <th>Round 2</th>
+                        <th>Round 3</th>
+                        <th>Round 4</th>
+                        <th>Total Reps</th>
+                        <th>Work Capacity</th>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>2h - Inside Circle</td>
+                            <td><input type="number" name="ex1rd1" id="ex1rd1">8</td>
+                            <td><input type="number" name="ex1rd2" id="ex1rd2">9</td>
+                            <td><input type="number" name="ex1rd3" id="ex1rd3">9</td>
+                            <td><input type="number" name="ex1rd4" id="ex1rd4">9</td>
+                            <td><input type="number" name="ex1rd5" id="ex1rd5">35</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>2h - Outside Pendulum</td>
+                            <td><input type="number" name="ex2rd1" id="ex2rd1">6</td>
+                            <td><input type="number" name="ex2rd2" id="ex2rd2">6</td>
+                            <td><input type="number" name="ex2rd3" id="ex2rd3">6</td>
+                            <td><input type="number" name="ex2rd4" id="ex2rd4">6</td>
+                            <td><input type="number" name="ex2rd5" id="ex2rd5">24</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>2h - Pullover</td>
+                            <td><input type="number" name="ex3rd1" id="ex3rd1">8</td>
+                            <td><input type="number" name="ex3rd2" id="ex3rd2">8</td>
+                            <td><input type="number" name="ex3rd3" id="ex3rd3">9</td>
+                            <td><input type="number" name="ex3rd4" id="ex3rd4">8</td>
+                            <td><input type="number" name="ex3rd5" id="ex3rd5">33</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>2h - Balance Squat</td>
+                            <td><input type="number" name="ex4rd1" id="ex4rd1">8</td>
+                            <td><input type="number" name="ex4rd2" id="ex4rd2">8</td>
+                            <td><input type="number" name="ex4rd3" id="ex4rd3">8</td>
+                            <td><input type="number" name="ex4rd4" id="ex4rd4">8</td>
+                            <td><input type="number" name="ex4rd5" id="ex4rd5">32</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>2h - Shield Cast</td>
+                            <td><input type="number" name="ex5rd1" id="ex5rd1">10</td>
+                            <td><input type="number" name="ex5rd2" id="ex5rd2">11</td>
+                            <td><input type="number" name="ex5rd3" id="ex5rd3">12</td>
+                            <td><input type="number" name="ex5rd4" id="ex5rd4">14</td>
+                            <td><input type="number" name="ex5rd5" id="ex5rd5">47</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>Total Reps</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td><input type="number" name="total_reps" id="total_reps">171</td>
+                            <td><input type="number" name="work_capacity" id="work_capacity">1026</td>
+                        </tr>
+                    </tbody>
+                </table>
+            <button type="submit" onclick="submitWorkoutData()">Workout Complete</button>
+
+            </form>
+        </div>
+    </main>
 
 </body>
 <script src="./script.js"></script>

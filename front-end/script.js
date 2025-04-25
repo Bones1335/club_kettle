@@ -1,15 +1,28 @@
 const URL = "http://localhost:8080/"
 
+// DOM elements
+const contentElement = document.getElementById("content");
+
+// Navigation Elements
+const navProfile = document.getElementById("nav-profile");
+const navExercises = document.getElementById("nav-exercises");
+const navWorkouts = document.getElementById("nav-workouts");
+const navSummaries = document.getElementById("nav-summaries");
+
+// State
+let currentView = "login";
+
 document.addEventListener("DOMContentLoaded", async () => {
     const token = localStorage.getItem('token');
 
     if (token) {
-        document.getElementById("login-container").style.display = "none";
+        document.getElementById("Users").style.display = "none";
     } else {
-        document.getElementById("login-container").style.display = "block";
+        document.getElementById("Users").style.display = "block";
     }
 });
 
+// Login + Logout 
 function convertLoginToJson() {
     let form = document.getElementById("login");
     let formData = {};
@@ -59,6 +72,14 @@ function submitLoginFormData() {
     sendLoginData(JSONData)
     clearLoginFormFields();
 }
+
+function logout() {
+    localStorage.removeItem("token");
+    document.getElementById("Users").style.display = "block";
+    currentView = "login";
+}
+
+// Users
 
 function convertUserToJson() {
     let form = document.getElementById("userData");
