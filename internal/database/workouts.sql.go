@@ -52,16 +52,18 @@ INSERT INTO rounds (
     date,
     round_number,
     reps_completed,
-    workout_exercise_id
+    workout_exercise_id,
+    user_id
 )
 VALUES (
     gen_random_uuid(),
     $1,
     $2,
     $3,
-    $4
+    $4,
+    $5
 )
-RETURNING id, date, round_number, reps_completed, workout_exercise_id
+RETURNING id, date, round_number, reps_completed, workout_exercise_id, user_id
 `
 
 type CreateRoundParams struct {
@@ -69,6 +71,7 @@ type CreateRoundParams struct {
 	RoundNumber       int32     `json:"round_number"`
 	RepsCompleted     float32   `json:"reps_completed"`
 	WorkoutExerciseID uuid.UUID `json:"workout_exercise_id"`
+	UserID            uuid.UUID `json:"user_id"`
 }
 
 func (q *Queries) CreateRound(ctx context.Context, arg CreateRoundParams) (Round, error) {
@@ -77,6 +80,7 @@ func (q *Queries) CreateRound(ctx context.Context, arg CreateRoundParams) (Round
 		arg.RoundNumber,
 		arg.RepsCompleted,
 		arg.WorkoutExerciseID,
+		arg.UserID,
 	)
 	var i Round
 	err := row.Scan(
@@ -85,6 +89,7 @@ func (q *Queries) CreateRound(ctx context.Context, arg CreateRoundParams) (Round
 		&i.RoundNumber,
 		&i.RepsCompleted,
 		&i.WorkoutExerciseID,
+		&i.UserID,
 	)
 	return i, err
 }
@@ -150,7 +155,8 @@ INSERT INTO workout_summaries (
     weight_in_kg,
     workout_number,
     total_reps,
-    work_capacity
+    work_capacity,
+    user_id
 )
 VALUES (
     gen_random_uuid(),
@@ -159,9 +165,10 @@ VALUES (
     $3,
     $4,
     $5,
-    $6
+    $6,
+    $7
 )
-RETURNING id, workout_exercise_id, date, weight_in_kg, workout_number, total_reps, work_capacity
+RETURNING id, workout_exercise_id, date, weight_in_kg, workout_number, total_reps, work_capacity, user_id
 `
 
 type CreateWorkoutSummariesParams struct {
@@ -171,6 +178,7 @@ type CreateWorkoutSummariesParams struct {
 	WorkoutNumber     int32     `json:"workout_number"`
 	TotalReps         float32   `json:"total_reps"`
 	WorkCapacity      float32   `json:"work_capacity"`
+	UserID            uuid.UUID `json:"user_id"`
 }
 
 func (q *Queries) CreateWorkoutSummaries(ctx context.Context, arg CreateWorkoutSummariesParams) (WorkoutSummary, error) {
@@ -181,6 +189,7 @@ func (q *Queries) CreateWorkoutSummaries(ctx context.Context, arg CreateWorkoutS
 		arg.WorkoutNumber,
 		arg.TotalReps,
 		arg.WorkCapacity,
+		arg.UserID,
 	)
 	var i WorkoutSummary
 	err := row.Scan(
@@ -191,6 +200,7 @@ func (q *Queries) CreateWorkoutSummaries(ctx context.Context, arg CreateWorkoutS
 		&i.WorkoutNumber,
 		&i.TotalReps,
 		&i.WorkCapacity,
+		&i.UserID,
 	)
 	return i, err
 }
@@ -236,7 +246,7 @@ func (q *Queries) GetSingleWorkoutRoutine(ctx context.Context, id uuid.UUID) (Wo
 }
 
 const getSingleWorkoutSummary = `-- name: GetSingleWorkoutSummary :one
-SELECT id, workout_exercise_id, date, weight_in_kg, workout_number, total_reps, work_capacity FROM workout_summaries
+SELECT id, workout_exercise_id, date, weight_in_kg, workout_number, total_reps, work_capacity, user_id FROM workout_summaries
 WHERE id = $1
 `
 
@@ -251,6 +261,7 @@ func (q *Queries) GetSingleWorkoutSummary(ctx context.Context, id uuid.UUID) (Wo
 		&i.WorkoutNumber,
 		&i.TotalReps,
 		&i.WorkCapacity,
+		&i.UserID,
 	)
 	return i, err
 }
@@ -324,11 +335,12 @@ func (q *Queries) GetWorkoutRoutines(ctx context.Context) ([]WorkoutRoutine, err
 }
 
 const getWorkoutSummaries = `-- name: GetWorkoutSummaries :many
-SELECT id, workout_exercise_id, date, weight_in_kg, workout_number, total_reps, work_capacity FROM workout_summaries
+SELECT id, workout_exercise_id, date, weight_in_kg, workout_number, total_reps, work_capacity, user_id FROM workout_summaries
+WHERE user_id = $1
 `
 
-func (q *Queries) GetWorkoutSummaries(ctx context.Context) ([]WorkoutSummary, error) {
-	rows, err := q.db.QueryContext(ctx, getWorkoutSummaries)
+func (q *Queries) GetWorkoutSummaries(ctx context.Context, userID uuid.UUID) ([]WorkoutSummary, error) {
+	rows, err := q.db.QueryContext(ctx, getWorkoutSummaries, userID)
 	if err != nil {
 		return nil, err
 	}
@@ -344,6 +356,7 @@ func (q *Queries) GetWorkoutSummaries(ctx context.Context) ([]WorkoutSummary, er
 			&i.WorkoutNumber,
 			&i.TotalReps,
 			&i.WorkCapacity,
+			&i.UserID,
 		); err != nil {
 			return nil, err
 		}

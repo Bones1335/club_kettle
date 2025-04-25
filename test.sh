@@ -2,7 +2,7 @@
 
 curl -X POST http://localhost:8080/admin/reset
 
-JSON_POST1=$(curl -X POST http://localhost:8080/api/users -H "Content-Type: application/json" -d '{"email":"abcd@efgh.com","last_name":"Smith","first_name":"John","username":"snow83"}')
+JSON_POST1=$(curl -X POST http://localhost:8080/api/users -H "Content-Type: application/json" -d '{"email":"abcd@efgh.com","last_name":"Smith","first_name":"John","username":"snow83","password":"0123456"}')
 
 echo $JSON_POST1 | jq .
 
@@ -14,7 +14,7 @@ user_user=$(echo $JSON_POST1 | jq -r .username)
 url1="http://localhost:8080/api/users/$user_id"
 
 echo $url1
-JSON_PUT1=$(curl -X PUT $url1 -H "Content-Type: application/json" -d "{\"id\":\"$user_id\",\"email\":\"john.snow83@gmail.com\",\"last_name\":\"$user_last\",\"first_name\":\"$user_first\",\"username\":\"$user_user\",\"password\":\"0123456\"}")
+JSON_PUT1=$(curl -X PUT $url1 -H "Content-Type: application/json" -d "{\"id\":\"$user_id\",\"email\":\"john.snow83@gmail.com\",\"last_name\":\"$user_last\",\"first_name\":\"$user_first\",\"username\":\"$user_user\"}")
 
 echo $JSON_PUT1 | jq .
 

@@ -33,6 +33,7 @@ type Round struct {
 	RoundNumber       int32     `json:"round_number"`
 	RepsCompleted     float32   `json:"reps_completed"`
 	WorkoutExerciseID uuid.UUID `json:"workout_exercise_id"`
+	UserID            uuid.UUID `json:"user_id"`
 }
 
 type User struct {
@@ -71,4 +72,5 @@ type WorkoutSummary struct {
 	WorkoutNumber     int32     `json:"workout_number"`
 	TotalReps         float32   `json:"total_reps"`
 	WorkCapacity      float32   `json:"work_capacity"`
+	UserID            uuid.UUID `json:"user_id"`
 }

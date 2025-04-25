@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"net/http"
 
+	"github.com/Bones1335/workout_api/internal/auth"
 	"github.com/Bones1335/workout_api/internal/database"
 )
 
@@ -17,9 +18,21 @@ func (cfg *apiConfig) handlerCreateWorkoutSummaries(w http.ResponseWriter, r *ht
 		database.WorkoutSummary
 	}
 
+	token, err := auth.GetBearerToken(r.Header)
+	if err != nil {
+		respondWithError(w, http.StatusUnauthorized, "couldn't get jwt", err)
+		return
+	}
+
+	userID, err := auth.ValidateJWT(token, cfg.jwtSecret)
+	if err != nil {
+		respondWithError(w, http.StatusUnauthorized, "couldn't validate jwt", err)
+		return
+	}
+
 	decoder := json.NewDecoder(r.Body)
 	params := parameters{}
-	err := decoder.Decode(&params)
+	err = decoder.Decode(&params)
 	if err != nil {
 		respondWithError(w, http.StatusInternalServerError, "couldn't decode parameters", err)
 		return
@@ -33,6 +46,7 @@ func (cfg *apiConfig) handlerCreateWorkoutSummaries(w http.ResponseWriter, r *ht
 			RoundNumber:       round.RoundNumber,
 			RepsCompleted:     round.RepsCompleted,
 			WorkoutExerciseID: round.WorkoutExerciseID,
+			UserID:            userID,
 		})
 		if err != nil {
 			respondWithError(w, http.StatusInternalServerError, "couldn'tcreate round", err)
@@ -50,6 +64,7 @@ func (cfg *apiConfig) handlerCreateWorkoutSummaries(w http.ResponseWriter, r *ht
 		WorkoutNumber:     params.Summary.WorkoutNumber,
 		TotalReps:         totalReps,
 		WorkCapacity:      totalReps * float32(params.Summary.WeightInKg),
+		UserID:            userID,
 	})
 	if err != nil {
 		respondWithError(w, http.StatusInternalServerError, "couldn't create workout summary", err)
@@ -65,6 +80,7 @@ func (cfg *apiConfig) handlerCreateWorkoutSummaries(w http.ResponseWriter, r *ht
 			WorkoutNumber:     summary.WeightInKg,
 			TotalReps:         summary.TotalReps,
 			WorkCapacity:      summary.WorkCapacity,
+			UserID:            summary.UserID,
 		},
 	})
 }

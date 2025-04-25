@@ -65,14 +65,16 @@ INSERT INTO rounds (
     date,
     round_number,
     reps_completed,
-    workout_exercise_id
+    workout_exercise_id,
+    user_id
 )
 VALUES (
     gen_random_uuid(),
     $1,
     $2,
     $3,
-    $4
+    $4,
+    $5
 )
 RETURNING *;
 
@@ -84,7 +86,8 @@ INSERT INTO workout_summaries (
     weight_in_kg,
     workout_number,
     total_reps,
-    work_capacity
+    work_capacity,
+    user_id
 )
 VALUES (
     gen_random_uuid(),
@@ -93,12 +96,14 @@ VALUES (
     $3,
     $4,
     $5,
-    $6
+    $6,
+    $7
 )
 RETURNING *;
 
 -- name: GetWorkoutSummaries :many
-SELECT * FROM workout_summaries;
+SELECT * FROM workout_summaries
+WHERE user_id = $1;
 
 -- name: GetSingleWorkoutSummary :one
 SELECT * FROM workout_summaries
