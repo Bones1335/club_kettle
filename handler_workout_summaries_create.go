@@ -41,11 +41,20 @@ func (cfg *apiConfig) handlerCreateWorkoutSummaries(w http.ResponseWriter, r *ht
 	var roundReps []int32
 
 	for _, round := range params.Rounds {
+		workoutID, err := cfg.db.GetWorkoutIDFromRoutineAndExerciseID(r.Context(), database.GetWorkoutIDFromRoutineAndExerciseIDParams{
+			WorkoutID:  params.Summary.WorkoutRoutineID,
+			ExerciseID: round.WorkoutExerciseID,
+		})
+		if err != nil {
+			respondWithError(w, http.StatusInternalServerError, "couldn't get workout exercise data", err)
+			return
+		}
+
 		rnd, err := cfg.db.CreateRound(r.Context(), database.CreateRoundParams{
 			Date:              round.Date,
 			RoundNumber:       round.RoundNumber,
 			RepsCompleted:     round.RepsCompleted,
-			WorkoutExerciseID: round.WorkoutExerciseID,
+			WorkoutExerciseID: workoutID.ID,
 			UserID:            userID,
 		})
 		if err != nil {
@@ -60,10 +69,10 @@ func (cfg *apiConfig) handlerCreateWorkoutSummaries(w http.ResponseWriter, r *ht
 	summary, err := cfg.db.CreateWorkoutSummaries(r.Context(), database.CreateWorkoutSummariesParams{
 		WorkoutRoutineID: params.Summary.WorkoutRoutineID,
 		Date:             params.Summary.Date,
-		WeightInKg:       params.Summary.WeightInKg,
+		WeightInKg:       int32(params.Summary.WeightInKg),
 		WorkoutNumber:    params.Summary.WorkoutNumber,
 		TotalReps:        totalReps,
-		WorkCapacity:     totalReps * float32(params.Summary.WeightInKg),
+		WorkCapacity:     float32(totalReps * float32(params.Summary.WeightInKg)),
 		UserID:           userID,
 	})
 	if err != nil {
@@ -73,14 +82,14 @@ func (cfg *apiConfig) handlerCreateWorkoutSummaries(w http.ResponseWriter, r *ht
 
 	respondWithJSON(w, http.StatusCreated, response{
 		database.WorkoutSummary{
-			ID:                summary.ID,
+			ID:               summary.ID,
 			WorkoutRoutineID: summary.WorkoutRoutineID,
-			Date:              summary.Date,
-			WeightInKg:        summary.WeightInKg,
-			WorkoutNumber:     summary.WeightInKg,
-			TotalReps:         summary.TotalReps,
-			WorkCapacity:      summary.WorkCapacity,
-			UserID:            summary.UserID,
+			Date:             summary.Date,
+			WeightInKg:       summary.WeightInKg,
+			WorkoutNumber:    summary.WeightInKg,
+			TotalReps:        summary.TotalReps,
+			WorkCapacity:     summary.WorkCapacity,
+			UserID:           summary.UserID,
 		},
 	})
 }

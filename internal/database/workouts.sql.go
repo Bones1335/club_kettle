@@ -266,6 +266,28 @@ func (q *Queries) GetSingleWorkoutSummary(ctx context.Context, id uuid.UUID) (Wo
 	return i, err
 }
 
+const getWorkoutIDFromRoutineAndExerciseID = `-- name: GetWorkoutIDFromRoutineAndExerciseID :one
+SELECT id, workout_id, exercise_id, position FROM workout_exercises
+WHERE workout_id = $1 AND exercise_id = $2
+`
+
+type GetWorkoutIDFromRoutineAndExerciseIDParams struct {
+	WorkoutID  uuid.UUID `json:"workout_id"`
+	ExerciseID uuid.UUID `json:"exercise_id"`
+}
+
+func (q *Queries) GetWorkoutIDFromRoutineAndExerciseID(ctx context.Context, arg GetWorkoutIDFromRoutineAndExerciseIDParams) (WorkoutExercise, error) {
+	row := q.db.QueryRowContext(ctx, getWorkoutIDFromRoutineAndExerciseID, arg.WorkoutID, arg.ExerciseID)
+	var i WorkoutExercise
+	err := row.Scan(
+		&i.ID,
+		&i.WorkoutID,
+		&i.ExerciseID,
+		&i.Position,
+	)
+	return i, err
+}
+
 const getWorkoutRoutineExercises = `-- name: GetWorkoutRoutineExercises :many
 SELECT id, workout_id, exercise_id, position FROM workout_exercises
 WHERE workout_id = $1

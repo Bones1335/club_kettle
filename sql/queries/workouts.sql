@@ -45,6 +45,10 @@ WHERE id = $1;
 SELECT * FROM workout_exercises
 WHERE workout_id = $1;
 
+-- name: GetWorkoutIDFromRoutineAndExerciseID :one
+SELECT * FROM workout_exercises
+WHERE workout_id = $1 AND exercise_id = $2;
+
 -- name: UpdateWorkoutRoutines :one
 UPDATE workout_routines SET name = $2, description = $3, total_duration = $4, rounds_per_exercise = $5, round_duration = $6, rest_duration = $7
 WHERE id = $1

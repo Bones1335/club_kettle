@@ -63,6 +63,7 @@ async function sendLoginData(jsonData) {
             localStorage.setItem("token", json.token);
             let jsonOutput = document.getElementById("login-container");
             jsonOutput.innerHTML = `<h4>${json.username} logged in</h4>`;
+            renderWorkouts();
         } else {
             alert("Login failed")
         }
@@ -82,7 +83,6 @@ function submitLoginFormData() {
     const JSONData = convertLoginToJson();
     sendLoginData(JSONData)
     clearLoginFormFields();
-    renderWorkouts();
 }
 
 function logout() {
@@ -387,20 +387,20 @@ async function populateWorkoutExercises() {
 function convertCompletedWorkoutToJson() {
     const form = document.getElementById("workoutData");
 
-    const formData = {
+    const summary = {
         workout_routine_id: form.elements["workoutName"].value,
-        weight: parseInt(form.weight.value),
+        weight_in_kg: parseInt(form.weight.value),
         workout_number: parseInt(form.workoutNumber.value),
-        date: form.date.value,
-        rounds: []
+        date: new Date(form.date.value).toISOString(),
     };
 
+    const rounds = [];
     let table = document.getElementById("workoutTableData")
     for (let i = 1; i < table.rows.length; i++) {
         let row = table.rows[i]
         for (let j = 0; j < row.cells.length - 1; j++) {
-            formData.rounds.push({
-                date: form.date.value,
+            rounds.push({
+                date: new Date(form.date.value).toISOString(),
                 round_number: j+1,
                 reps_completed: parseInt(form.elements[`ex${i}rd${j+1}`]?.value),
                 workout_exercise_id: row.cells[0].value,
@@ -408,12 +408,44 @@ function convertCompletedWorkoutToJson() {
         };
     }
 
+    const formData = {
+        workout_summary: summary,
+        rounds: rounds
+    }
+
     console.log(formData)
-    //return JSON.stringify(formData);
+    return JSON.stringify(formData);
 }
 
+async function sendCompletedWorkoutData(jsonData) {
+    let url = URL + "api/workout_summaries"
+    try {
+        
+        const response = await fetch(url, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${localStorage.getItem('token')}`
+            },
+            body: jsonData,
+        });
+
+        const json = await response.json()
+        console.log(json)
+        /*
+        let div = document.createElement('div')
+        let jsonOutput = document.getElementById("WorkoutRoutines");
+        div.innerHTML = `<pre>${json.Workout.name}, ${json.Workout.description}, ${json.Exercises}</pre>`;
+        jsonOutput.appendChild(div);
+        */
+    }
+    catch (error) {
+        console.error('Error:', error)
+    }
+}
 function submitWorkoutData() {
-    convertCompletedWorkoutToJson();
+    const jsonData = convertCompletedWorkoutToJson();
+    sendCompletedWorkoutData(jsonData);
 }
 
 // Workout Summaries
