@@ -81,7 +81,7 @@ RETURNING *;
 -- name: CreateWorkoutSummaries :one
 INSERT INTO workout_summaries (
     id,
-    workout_exercise_id,
+    workout_routine_id,
     date,
     weight_in_kg,
     workout_number,

@@ -58,13 +58,13 @@ func (cfg *apiConfig) handlerCreateWorkoutSummaries(w http.ResponseWriter, r *ht
 	totalReps := float32(repSum(roundReps))
 
 	summary, err := cfg.db.CreateWorkoutSummaries(r.Context(), database.CreateWorkoutSummariesParams{
-		WorkoutExerciseID: params.Summary.WorkoutExerciseID,
-		Date:              params.Summary.Date,
-		WeightInKg:        params.Summary.WeightInKg,
-		WorkoutNumber:     params.Summary.WorkoutNumber,
-		TotalReps:         totalReps,
-		WorkCapacity:      totalReps * float32(params.Summary.WeightInKg),
-		UserID:            userID,
+		WorkoutRoutineID: params.Summary.WorkoutRoutineID,
+		Date:             params.Summary.Date,
+		WeightInKg:       params.Summary.WeightInKg,
+		WorkoutNumber:    params.Summary.WorkoutNumber,
+		TotalReps:        totalReps,
+		WorkCapacity:     totalReps * float32(params.Summary.WeightInKg),
+		UserID:           userID,
 	})
 	if err != nil {
 		respondWithError(w, http.StatusInternalServerError, "couldn't create workout summary", err)
@@ -74,7 +74,7 @@ func (cfg *apiConfig) handlerCreateWorkoutSummaries(w http.ResponseWriter, r *ht
 	respondWithJSON(w, http.StatusCreated, response{
 		database.WorkoutSummary{
 			ID:                summary.ID,
-			WorkoutExerciseID: summary.WorkoutExerciseID,
+			WorkoutRoutineID: summary.WorkoutRoutineID,
 			Date:              summary.Date,
 			WeightInKg:        summary.WeightInKg,
 			WorkoutNumber:     summary.WeightInKg,

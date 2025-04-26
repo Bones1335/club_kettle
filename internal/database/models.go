@@ -65,12 +65,12 @@ type WorkoutRoutine struct {
 }
 
 type WorkoutSummary struct {
-	ID                uuid.UUID `json:"id"`
-	WorkoutExerciseID uuid.UUID `json:"workout_exercise_id"`
-	Date              time.Time `json:"date"`
-	WeightInKg        int32     `json:"weight_in_kg"`
-	WorkoutNumber     int32     `json:"workout_number"`
-	TotalReps         float32   `json:"total_reps"`
-	WorkCapacity      float32   `json:"work_capacity"`
-	UserID            uuid.UUID `json:"user_id"`
+	ID               uuid.UUID `json:"id"`
+	Date             time.Time `json:"date"`
+	WeightInKg       int32     `json:"weight_in_kg"`
+	WorkoutNumber    int32     `json:"workout_number"`
+	TotalReps        float32   `json:"total_reps"`
+	WorkCapacity     float32   `json:"work_capacity"`
+	UserID           uuid.UUID `json:"user_id"`
+	WorkoutRoutineID uuid.UUID `json:"workout_routine_id"`
 }
