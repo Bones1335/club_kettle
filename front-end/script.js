@@ -54,7 +54,6 @@ async function sendLoginData(jsonData) {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
-                //Authorization: `Bearer ${localStorage.getItem('token')}`
             },
             body: jsonData,
         });
@@ -191,7 +190,8 @@ async function sendExerciseData(jsonData) {
         const response = await fetch(url, {
             method: "POST",
             headers: {
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${localStorage.getItem('token')}`
             },
             body: jsonData,
         });
@@ -382,6 +382,38 @@ async function populateWorkoutExercises() {
 
     roundTime.innerHTML = `Round Duration: ${exercises.Workout.round_duration} seconds`
     rest.innerHTML = `Rest: ${exercises.Workout.rest_duration} seconds`
+}
+
+function convertCompletedWorkoutToJson() {
+    const form = document.getElementById("workoutData");
+
+    const formData = {
+        workout_routine_id: form.elements["workoutName"].value,
+        weight: parseInt(form.weight.value),
+        workout_number: parseInt(form.workoutNumber.value),
+        date: form.date.value,
+        rounds: []
+    };
+
+    let table = document.getElementById("workoutTableData")
+    for (let i = 1; i < table.rows.length; i++) {
+        let row = table.rows[i]
+        for (let j = 0; j < row.cells.length - 1; j++) {
+            formData.rounds.push({
+                date: form.date.value,
+                round_number: j+1,
+                reps_completed: parseInt(form.elements[`ex${i}rd${j+1}`]?.value),
+                workout_exercise_id: row.cells[0].value,
+            });
+        };
+    }
+
+    console.log(formData)
+    //return JSON.stringify(formData);
+}
+
+function submitWorkoutData() {
+    convertCompletedWorkoutToJson();
 }
 
 // Workout Summaries

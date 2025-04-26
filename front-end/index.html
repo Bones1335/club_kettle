@@ -116,7 +116,7 @@
             <h3 id="round_duration">Round Duration: 20 seconds</h3>
             <h3 id="rest">Rest: 25 seconds</h3>
 
-            <form id="workoutData">
+            <form id="workoutData" onsubmit="mySubmitFunction(event)">
 
                 <label for="workoutName">Workout Name:</label>
                 <select name="workoutName" id="workoutName"></select>
@@ -131,7 +131,7 @@
                 <label for="date">Date:</label>
                 <input type="date" name="date" id="date">
 
-                <table>
+                <table id="workoutTableData">
                     <thead>
                         <th>Exercise</th>
                         <th>Round 1</th>
@@ -142,38 +142,38 @@
                     <tbody>
                         <tr>
                             <td>2h - Inside Circle</td>
-                            <td><input type="number" name="ex1rd1" id="ex1rd1">8</td>
-                            <td><input type="number" name="ex1rd2" id="ex1rd2">9</td>
-                            <td><input type="number" name="ex1rd3" id="ex1rd3">9</td>
-                            <td><input type="number" name="ex1rd4" id="ex1rd4">9</td>
+                            <td><input type="number" name="ex1rd1" id="ex1rd1"></td>
+                            <td><input type="number" name="ex1rd2" id="ex1rd2"></td>
+                            <td><input type="number" name="ex1rd3" id="ex1rd3"></td>
+                            <td><input type="number" name="ex1rd4" id="ex1rd4"></td>
                         </tr>
                         <tr>
                             <td>2h - Outside Pendulum</td>
-                            <td><input type="number" name="ex2rd1" id="ex2rd1">6</td>
-                            <td><input type="number" name="ex2rd2" id="ex2rd2">6</td>
-                            <td><input type="number" name="ex2rd3" id="ex2rd3">6</td>
-                            <td><input type="number" name="ex2rd4" id="ex2rd4">6</td>
+                            <td><input type="number" name="ex2rd1" id="ex2rd1"></td>
+                            <td><input type="number" name="ex2rd2" id="ex2rd2"></td>
+                            <td><input type="number" name="ex2rd3" id="ex2rd3"></td>
+                            <td><input type="number" name="ex2rd4" id="ex2rd4"></td>
                         </tr>
                         <tr>
                             <td>2h - Pullover</td>
-                            <td><input type="number" name="ex3rd1" id="ex3rd1">8</td>
-                            <td><input type="number" name="ex3rd2" id="ex3rd2">8</td>
-                            <td><input type="number" name="ex3rd3" id="ex3rd3">9</td>
-                            <td><input type="number" name="ex3rd4" id="ex3rd4">8</td>
+                            <td><input type="number" name="ex3rd1" id="ex3rd1"></td>
+                            <td><input type="number" name="ex3rd2" id="ex3rd2"></td>
+                            <td><input type="number" name="ex3rd3" id="ex3rd3"></td>
+                            <td><input type="number" name="ex3rd4" id="ex3rd4"></td>
                         </tr>
                         <tr>
                             <td>2h - Balance Squat</td>
-                            <td><input type="number" name="ex4rd1" id="ex4rd1">8</td>
-                            <td><input type="number" name="ex4rd2" id="ex4rd2">8</td>
-                            <td><input type="number" name="ex4rd3" id="ex4rd3">8</td>
-                            <td><input type="number" name="ex4rd4" id="ex4rd4">8</td>
+                            <td><input type="number" name="ex4rd1" id="ex4rd1"></td>
+                            <td><input type="number" name="ex4rd2" id="ex4rd2"></td>
+                            <td><input type="number" name="ex4rd3" id="ex4rd3"></td>
+                            <td><input type="number" name="ex4rd4" id="ex4rd4"></td>
                         </tr>
                         <tr>
                             <td>2h - Shield Cast</td>
-                            <td><input type="number" name="ex5rd1" id="ex5rd1">10</td>
-                            <td><input type="number" name="ex5rd2" id="ex5rd2">11</td>
-                            <td><input type="number" name="ex5rd3" id="ex5rd3">12</td>
-                            <td><input type="number" name="ex5rd4" id="ex5rd4">14</td>
+                            <td><input type="number" name="ex5rd1" id="ex5rd1"></td>
+                            <td><input type="number" name="ex5rd2" id="ex5rd2"></td>
+                            <td><input type="number" name="ex5rd3" id="ex5rd3"></td>
+                            <td><input type="number" name="ex5rd4" id="ex5rd4"></td>
                         </tr>
           
                     </tbody>
