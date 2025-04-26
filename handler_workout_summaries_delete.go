@@ -3,6 +3,7 @@ package main
 import (
 	"net/http"
 
+	"github.com/Bones1335/workout_api/internal/auth"
 	"github.com/google/uuid"
 )
 
@@ -11,6 +12,18 @@ func (cfg *apiConfig) handlerDeleteWorkoutSummaries(w http.ResponseWriter, r *ht
 	parsedUUID, err := uuid.Parse(summaryID)
 	if err != nil {
 		respondWithError(w, http.StatusBadRequest, "couldn't parse UUID", err)
+		return
+	}
+
+	token, err := auth.GetBearerToken(r.Header)
+	if err != nil {
+		respondWithError(w, http.StatusUnauthorized, "couldn't find jwt", err)
+		return
+	}
+
+	_, err = auth.ValidateJWT(token, cfg.jwtSecret)
+	if err != nil {
+		respondWithError(w, http.StatusUnauthorized, "couldn't validate jwt", err)
 		return
 	}
 

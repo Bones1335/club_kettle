@@ -387,21 +387,24 @@ async function populateWorkoutExercises() {
 // Workout Summaries
 
 // Render Pages
+
 // function renderProfile() {}
 
 function renderExercises() {
     login.style.display = "none";
     workouts.style.display = "none";
+    workoutRoutines.style.display = "none";
     exercises.style.display = "block";
-    workoutRoutines.style.display = "block";
 }
 
 function renderWorkouts() {
     login.style.display = "none";
     exercises.style.display = "none";
-    workoutRoutines.style.display = "none";
+    workoutRoutines.style.display = "block";
     workouts.style.display = "block";
 }
+
+// function renderSummaries() {}
 
 // Navigation
 navProfile.addEventListener("click", (e) => {
