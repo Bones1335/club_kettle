@@ -12,10 +12,13 @@ Endurance strength training isn't a new concept, nor are the tools I use. But, h
 
 1. Clone the Repo
 2. Install Goose for database migrations
-3. Install SQLC tool to database related GO code
+3. Install SQLC tool to create database related GO code
 4. Setup PostgreSQL
 5. Setup environment variables
-6. Run goose migrations
+   - DB_URL
+   - PLATFORM
+   - JWT_SECRET
+6. Run goose migrations `./migrate.sh`
 7. Start server
 8. Run `./test.sh` to test endpoints
 9. Get Swol
