@@ -6,6 +6,7 @@ const login = document.getElementById("Users");
 const exercises = document.getElementById("Exercises");
 const workoutRoutines = document.getElementById("WorkoutRoutines");
 const workouts = document.getElementById("Workouts");
+const workoutSummaries = document.getElementById("WorkoutSummaries");
 
 // Navigation Elements
 const navProfile = document.getElementById("nav-profile");
@@ -119,9 +120,7 @@ async function sendUserData(jsonData) {
             body: jsonData,
         });
 
-        const json = await response.json()
-        let jsonOutput = document.getElementById("jsonOutput");
-        jsonOutput.innerHTML = `<pre>${json.last_name}, ${json.first_name}, ${json.id}, ${json.email}, ${json.username} </pre>`;
+        await response.json()
     }
     catch (error) {
         console.error('Error:', error)
@@ -196,12 +195,8 @@ async function sendExerciseData(jsonData) {
             body: jsonData,
         });
 
-        const json = await response.json()
-        console.log(json)
-        let div = document.createElement('div')
-        let jsonOutput = document.getElementById("exercises");
-        div.innerHTML = `<pre>${json.name}, ${json.tool}, ${json.id}, ${json.user_id} </pre>`;
-        jsonOutput.appendChild(div);
+        await response.json()
+
         fetchExercises();
     }
     catch (error) {
@@ -289,12 +284,7 @@ async function sendWorkoutData(jsonData) {
             body: jsonData,
         });
 
-        const json = await response.json()
-        console.log(json)
-        let div = document.createElement('div')
-        let jsonOutput = document.getElementById("WorkoutRoutines");
-        div.innerHTML = `<pre>${json.Workout.name}, ${json.Workout.description}, ${json.Exercises}</pre>`;
-        jsonOutput.appendChild(div);
+        await response.json()
         fetchWorkouts();
     }
     catch (error) {
@@ -413,7 +403,6 @@ function convertCompletedWorkoutToJson() {
         rounds: rounds
     }
 
-    console.log(formData)
     return JSON.stringify(formData);
 }
 
@@ -430,25 +419,51 @@ async function sendCompletedWorkoutData(jsonData) {
             body: jsonData,
         });
 
-        const json = await response.json()
-        console.log(json)
-        /*
-        let div = document.createElement('div')
-        let jsonOutput = document.getElementById("WorkoutRoutines");
-        div.innerHTML = `<pre>${json.Workout.name}, ${json.Workout.description}, ${json.Exercises}</pre>`;
-        jsonOutput.appendChild(div);
-        */
+        await response.json()
     }
     catch (error) {
         console.error('Error:', error)
     }
 }
+
+function clearCompletedWorkoutFormFields() {
+    const form = document.getElementById("workoutData");
+    const inputs = form.getElementsByTagName("input");
+    for (let i = 0; i < inputs.length; i++) {
+        let input = inputs[i]
+        input.value = "";
+    }
+}
+
 function submitWorkoutData() {
     const jsonData = convertCompletedWorkoutToJson();
+    clearCompletedWorkoutFormFields();
     sendCompletedWorkoutData(jsonData);
 }
 
 // Workout Summaries
+
+async function fetchWorkoutSummaries() {
+    try {
+        const response = await fetch(`${URL}api/workout_summaries`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${localStorage.getItem('token')}`
+            },
+        });
+        const summaries = await response.json();
+
+        if (!summaries || summaries.length === 0) {
+            console.warn("No workout summaries found");
+            return;
+        } 
+
+        return summaries;
+    } catch (error) {
+        console.error("Error fetching workout summaries:", error);
+    }
+}
 
 // Render Pages
 
@@ -458,17 +473,55 @@ function renderExercises() {
     login.style.display = "none";
     workouts.style.display = "none";
     workoutRoutines.style.display = "none";
+    workoutSummaries.style.display = "none";
     exercises.style.display = "block";
 }
 
 function renderWorkouts() {
     login.style.display = "none";
     exercises.style.display = "none";
+    workoutSummaries.style.display = "none";
     workoutRoutines.style.display = "block";
     workouts.style.display = "block";
 }
 
-// function renderSummaries() {}
+async function renderSummaries() {
+    login.style.display = "none";
+    exercises.style.display = "none";
+    workoutRoutines.style.display = "none";
+    workouts.style.display = "none";
+    workoutSummaries.style.display = "block";
+    try {
+        const summaries = await fetchWorkoutSummaries();
+        let html = `
+        <div id="workoutSummaries">
+            <h2>Workout Summaires</h2>
+            <div id="summaryList">
+        `
+        if (summaries.length === 0) {
+            html += "<p>No workout summarires found</p>"
+        } else {
+            html += "<ul>"
+            const summaryItems = await Promise.all(summaries.map(async (summary) => {
+                const response = await fetch(`${URL}api/workouts/${summary.workout_routine_id}`);
+                const routine = await response.json();
+                html += `
+                    <li class="summaryItem" data-id="${summary.id}">
+                        <h3>${routine.Workout.name} - ${new Date(summary.date).toLocaleDateString("en-CA")}</h3>
+                        <button class="viewSummary" data-id="${summary.id}">View Details</button>
+                        <button class="deleteSummary" data-id="${summary.id}">Delete</button>
+                    </li>
+                `;
+            }));
+            html += summaryItems.join("");
+            html += "</ul>";
+        }
+        html += "</div>";
+        workoutSummaries.innerHTML = html;
+    } catch (error) {
+        workoutSummaries.innerHTML = `<div class="error">Error loading workout summaries: ${error.message}</div>`;
+    }
+}
 
 // Navigation
 navProfile.addEventListener("click", (e) => {
@@ -492,5 +545,5 @@ navWorkouts.addEventListener("click", (e) => {
 navSummaries.addEventListener("click", (e) => {
     e.preventDefault();
     currentView = "summaries";
-    // renderSummaries();
+    renderSummaries();
 });
