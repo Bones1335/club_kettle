@@ -3,6 +3,7 @@ const URL = "http://localhost:8080/"
 // DOM elements
 const contentElement = document.getElementById("content");
 const login = document.getElementById("Users");
+const profile = document.getElementById("Profile");
 const exercises = document.getElementById("Exercises");
 const workoutRoutines = document.getElementById("WorkoutRoutines");
 const workouts = document.getElementById("Workouts");
@@ -467,10 +468,52 @@ async function fetchWorkoutSummaries() {
 
 // Render Pages
 
-// function renderProfile() {}
+async function fetchUser() {
+    const response = await fetch(`${URL}api/users/`, {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem('token')}`
+        },
+    });
+    const user = await response.json();
+
+    if (!user) {
+        console.warn("not logged in")
+        return;
+    }
+
+    return user;
+}
+
+async function renderProfile() {
+    login.style.display = "none";
+    exercises.style.display = "none";
+    workoutRoutines.style.display = "none";
+    workouts.style.display = "none";
+    workoutSummaries.style.display = "none";
+    profile.style.display = "block";
+    try {
+        const user = await fetchUser();
+        let html = `
+        <div id="userProfile">
+            <h2>${user.username}'s Profile</h2>
+            <ul>
+                <li>Last Name: ${user.last_name}</li>
+                <li>First Name: ${user.first_name}</li>
+                <li>Email: ${user.email}</li>
+            </ul>
+        </div>
+        `
+        profile.innerHTML = html;
+    } catch (error) {
+        profile.innerHTML = `<div class="error">Error loading workout summaries: ${error.message}</div>`;
+    }
+}
 
 function renderExercises() {
     login.style.display = "none";
+    profile.style.display = "none";
     workouts.style.display = "none";
     workoutRoutines.style.display = "none";
     workoutSummaries.style.display = "none";
@@ -479,6 +522,7 @@ function renderExercises() {
 
 function renderWorkouts() {
     login.style.display = "none";
+    profile.style.display = "none";
     exercises.style.display = "none";
     workoutSummaries.style.display = "none";
     workoutRoutines.style.display = "block";
@@ -487,6 +531,7 @@ function renderWorkouts() {
 
 async function renderSummaries() {
     login.style.display = "none";
+    profile.style.display = "none";
     exercises.style.display = "none";
     workoutRoutines.style.display = "none";
     workouts.style.display = "none";
@@ -527,7 +572,7 @@ async function renderSummaries() {
 navProfile.addEventListener("click", (e) => {
     e.preventDefault();
     currentView = "profile";
-    // renderProfile();
+    renderProfile();
 });
 
 navExercises.addEventListener("click", (e) => {

@@ -5,7 +5,6 @@ import (
 
 	"github.com/Bones1335/workout_api/internal/auth"
 	"github.com/Bones1335/workout_api/internal/database"
-	"github.com/google/uuid"
 )
 
 func (cfg *apiConfig) handlerGetUsers(w http.ResponseWriter, r *http.Request) {
@@ -18,17 +17,6 @@ func (cfg *apiConfig) handlerGetUsers(w http.ResponseWriter, r *http.Request) {
 	userID, err := auth.ValidateJWT(token, cfg.jwtSecret)
 	if err != nil {
 		respondWithError(w, http.StatusBadRequest, "couldn't validate jwt", err)
-		return
-	}
-
-	userIDFromURL := r.PathValue("user_id")
-	parsedUUID, err := uuid.Parse(userIDFromURL)
-	if err != nil {
-		respondWithError(w, http.StatusInternalServerError, "couldn't parse UUID", err)
-		return
-	}
-	if userID != parsedUUID {
-		respondWithError(w, http.StatusUnauthorized, "userID doesn't match", err)
 		return
 	}
 
