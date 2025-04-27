@@ -30,9 +30,11 @@ document.addEventListener("DOMContentLoaded", async () => {
     } else {
         currentView = "login";
         login.style.display = "block";
+        profile.style.display = "none";
         exercises.style.display = "none";
         workoutRoutines.style.display = "none";
         workouts.style.display = "none";
+        workoutSummaries.style.display = "none";
     }
 });
 
