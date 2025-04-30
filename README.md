@@ -6,7 +6,7 @@ Club Kettle is a workout API designed with Clubbells, Kettlebells, and Macebells
 
 Having two seperate apps to log and conduct my workouts has always been rather annoying and other tracking solutions either cost too much or don't have support for my workout tools. So, I built this API to act as my Excel workout logger that also stores how long a workout should take, how many intervals, and how long intervals and rest periods should. That way, I can hook it up to a basic front-end to log an entire workout based on my use case. 
 
-Endurance strength training isn't a new concept, nor are the tools I use. But, having those tools not appear in mainstream applications gets very annoying when all you want to do is have a central location to store your data that isn't some slow spreadsheet or damageable notebook that inevitably gets lost. Not to mention the need for an easy to use timer built-in to the logger.
+Endurance strength training isn't a new concept, nor are the tools I've been using. But, having those tools not appear in mainstream applications gets very annoying when all you want to do is have a central location to store your data that isn't some slow spreadsheet or damageable notebook that inevitably gets lost. Not to mention the need for an easy to use timer built-in to the logger.
 
 ## Get Started
 
@@ -28,7 +28,7 @@ Endurance strength training isn't a new concept, nor are the tools I use. But, h
 ### User endpoints
    - "POST /api/login"
    - "POST /api/users"
-   - "GET /api/users/{user_id}"
+   - "GET /api/users"
    - "PUT /api/users/{user_id}"
    - "DELETE /api/users/{user_id}"
 
