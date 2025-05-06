@@ -114,9 +114,12 @@
 
         <div id="Workouts">
             <h2>Start Workout</h2>
-            <h3 id="timer">Timer: 30:00</h3>
-            <h3 id="round_duration">Round Duration: 20 seconds</h3>
-            <h3 id="rest">Rest: 25 seconds</h3>
+            <div class="timer-container">
+                <h3>Timer: <div id="timer">30:00</div></h3>
+                <button id="timer-start" >Start Timer</button>
+                <h3 id="round_duration">Round Duration: 20 seconds</h3>
+                <h3 id="rest">Rest: 25 seconds</h3>
+            </div>
 
             <form id="workoutData" onsubmit="mySubmitFunction(event)">
 
