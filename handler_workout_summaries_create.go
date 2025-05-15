@@ -4,8 +4,8 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"github.com/Bones1335/workout_api/internal/auth"
-	"github.com/Bones1335/workout_api/internal/database"
+	"github.com/Bones1335/club_kettle/internal/auth"
+	"github.com/Bones1335/club_kettle/internal/database"
 )
 
 func (cfg *apiConfig) handlerCreateWorkoutSummaries(w http.ResponseWriter, r *http.Request) {

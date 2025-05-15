@@ -1,4 +1,4 @@
-module github.com/Bones1335/workout_api
+module github.com/Bones1335/club_kettle
 
 go 1.23.5
 

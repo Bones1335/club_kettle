@@ -7,7 +7,7 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/Bones1335/workout_api/internal/database"
+	"github.com/Bones1335/club_kettle/internal/database"
 	"github.com/joho/godotenv"
 	_ "github.com/lib/pq"
 )

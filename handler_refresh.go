@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/Bones1335/workout_api/internal/auth"
+	"github.com/Bones1335/club_kettle/internal/auth"
 )
 
 func (cfg *apiConfig) handlerRefresh(w http.ResponseWriter, r *http.Request) {

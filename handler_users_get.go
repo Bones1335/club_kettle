@@ -3,8 +3,8 @@ package main
 import (
 	"net/http"
 
-	"github.com/Bones1335/workout_api/internal/auth"
-	"github.com/Bones1335/workout_api/internal/database"
+	"github.com/Bones1335/club_kettle/internal/auth"
+	"github.com/Bones1335/club_kettle/internal/database"
 )
 
 func (cfg *apiConfig) handlerGetUsers(w http.ResponseWriter, r *http.Request) {

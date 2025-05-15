@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"sort"
 
-	"github.com/Bones1335/workout_api/internal/database"
+	"github.com/Bones1335/club_kettle/internal/database"
 	"github.com/google/uuid"
 )
 

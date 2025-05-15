@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"github.com/Bones1335/workout_api/internal/database"
+	"github.com/Bones1335/club_kettle/internal/database"
 	"github.com/google/uuid"
 )
 

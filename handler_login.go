@@ -5,8 +5,8 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/Bones1335/workout_api/internal/auth"
-	"github.com/Bones1335/workout_api/internal/database"
+	"github.com/Bones1335/club_kettle/internal/auth"
+	"github.com/Bones1335/club_kettle/internal/database"
 )
 
 func (cfg *apiConfig) handlerLogin(w http.ResponseWriter, r *http.Request) {

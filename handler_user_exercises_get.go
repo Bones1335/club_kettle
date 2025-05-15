@@ -3,7 +3,7 @@ package main
 import (
 	"net/http"
 
-	"github.com/Bones1335/workout_api/internal/database"
+	"github.com/Bones1335/club_kettle/internal/database"
 	"github.com/google/uuid"
 )
 
@@ -24,10 +24,10 @@ func (cfg *apiConfig) handlerGetUserExercises(w http.ResponseWriter, r *http.Req
 	exercises := []database.Exercise{}
 	for _, dbUserExercise := range dbUserExercises {
 		exercises = append(exercises, database.Exercise{
-			ID:        dbUserExercise.ID,
-			Name:      dbUserExercise.Name,
-			Tool:      dbUserExercise.Tool,
-			UserID:    dbUserExercise.UserID,
+			ID:     dbUserExercise.ID,
+			Name:   dbUserExercise.Name,
+			Tool:   dbUserExercise.Tool,
+			UserID: dbUserExercise.UserID,
 		})
 	}
 
