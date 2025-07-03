@@ -16,42 +16,57 @@
                 <li id="nav-exercises"><a href="#">Exercises</a></li>
                 <li id="nav-workouts"><a href="#">Workouts</a></li>
                 <li id="nav-summaries"><a href="#">Summaries</a></li>
-                <li id="logout"><button onclick="logout()">Logout</button></li>
+                <li id="logout"><button id="logout-btn">Logout</button></li>
             </ul>
         </nav>
     </header>
 
     <main id="content">
         <div id="Users">
-            <div id="login-container">
-                <h2>Login</h2>
-                <form action="post" id="login" onsubmit="mySubmitFunction(event)">
-                    <label for="login-email">Email:</label>
-                    <input type="email" name="login-email" id="login-email" required>
+            <div id="login-screen" class="screen active">
+                <h2>Club Kettle Login</h2>
+                <form id="login-form">
+                    <div class="form-group">
+                        <label for="login-email">Email:</label>
+                        <input type="email" name="login-email" id="login-email" required>
+                    </div>
 
-                    <label for="login-password">Password:</label>
-                    <input type="password" name="login-password" id="login-password" required>
+                    <div class="form-group">
+                        <label for="login-password">Password:</label>
+                        <input type="password" name="login-password" id="login-password" required>
+                    </div>
 
-                    <button type="submit" onclick="submitLoginFormData()">Login</button>
+                    <button type="submit" class="btn">Login</button>
+                    <div id="login-error" class="error"></div>
                 </form>
             </div>
 
             <h2>Create Account</h2>
-            <form id="userData" onsubmit="mySubmitFunction(event)" method="post">
-                <label for="last_name">Last Name:</label>
-                <input type="text" name="last_name" id="last_name">
+            <form id="create-user-form">
+                <div class="form-group">
+                    <label for="create-user-last_name">Last Name:</label>
+                    <input type="text" name="last_name" id="create-user-last_name">
+                </div>
 
-                <label for="first_name">First Name:</label>
-                <input type="text" name="first_name" id="first_name">
+                <div class="form-group">
+                    <label for="create-user-first_name">First Name:</label>
+                    <input type="text" name="first_name" id="create-user-first_name">
+                </div>
 
-                <label for="username">Username:</label>
-                <input type="text" name="username" id="username">
+                <div class="form-group">
+                    <label for="create-user-username">Username:</label>
+                    <input type="text" name="username" id="create-user-username">
+                </div>
 
-                <label for="email">Email:</label>
-                <input type="email" name="email" id="email">
+                <div class="form-group">
+                    <label for="create-user-email">Email:</label>
+                    <input type="email" id="create-user-email">
+                </div>
 
-                <label for="password">Password:</label>
-                <input type="password" name="password" id="password">
+                <div class="form-group">
+                    <label for="create-user-password">Password:</label>
+                    <input type="password" id="create-user-password">
+                </div>
 
                 <button type="submit" onclick="submitUserFormData()">Create Account</button>
             </form>
@@ -192,5 +207,5 @@
     </main>
 
 </body>
-<script src="./script.js"></script>
+<script type="module" src="js/main.js"></script>
 </html>
