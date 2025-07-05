@@ -22,12 +22,12 @@ class WorkoutApp {
             // showScreen('dashboard-screen');
             // this.loadExercises();
         } else {
-            // showScreen('login-screen');
+            showScreen('login-screen');
         }
     }
 
     async handleLogin(e) {
-        // clearError('login-error');
+        clearError('login-error');
 
         const formData = new FormData(e.target);
         const email = formData.get('login-email');
@@ -38,7 +38,7 @@ class WorkoutApp {
             // showScreen('dashboard-screen');
             // this.loadExercises();
         } catch (error) {
-            // showError('login-error', error.message);
+            showError('login-error', error.message);
         }
     }
 }

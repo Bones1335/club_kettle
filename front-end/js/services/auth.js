@@ -32,7 +32,7 @@ export class AuthService {
     logout() {
         this.clearAuthToken();
         this.currentUser = null;
-        // showScreen('login-screen');
+        showScreen('login-screen');
     }
 
     isAuthenticated() {
