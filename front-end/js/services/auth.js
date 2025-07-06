@@ -1,5 +1,5 @@
 import { apiClient } from '../api/client.js';
-// import { showScreen } from '../ui/screens.js';
+import { showScreen } from '../ui/screens.js';
 
 export class AuthService {
     constructor() {

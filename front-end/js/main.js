@@ -46,6 +46,8 @@ class WorkoutApp {
                     this.loadWorkouts();
                 } else if (screenId === 'summaries-screen') {
                     this.loadSummaries();
+                } else if (screenId === 'login-screen') {
+                    authService.logout();
                 }
             }
         });
