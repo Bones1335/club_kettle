@@ -1,7 +1,7 @@
 import { authService } from "./services/auth.js";
 import { exerciseService } from "./services/exercises.js";
 import { workoutService } from "./services/workouts.js";
-import { renderExercises, renderWorkouts } from "./ui/components.js";
+import { addExercise, removeExercise, renderExercises, renderWorkouts } from "./ui/components.js";
 import { showScreen, showError, clearError } from "./ui/screens.js";
 
 class WorkoutApp {
@@ -34,7 +34,7 @@ class WorkoutApp {
     }
 
     setupNavigation() {
-        document.addEventListener('click', (e) => {
+        document.addEventListener('click', async (e) => {
             if (e.target.matches('[data-screen]')) {
                 const screenId = e.target.dataset.screen;
                 showScreen(screenId);
@@ -42,9 +42,19 @@ class WorkoutApp {
                 if (screenId === 'exercises-screen') {
                     this.loadExercises();
                 } else if (screenId === 'workouts-screen') {
+                    let exerciseCount = 0;
+                    let exercises = await exerciseService.getExercises();
+
+                    addExercise(exercises, exerciseCount++);
+
+                    let addExerciseBtn = document.getElementById('add-exercise');
+                    addExerciseBtn.addEventListener('click', () => {
+                        addExercise(exercises, exerciseCount++);
+                    });
+
                     this.loadWorkouts();
                 } else if (screenId === 'summaries-screen') {
-                    this.loadSummaries();
+                    // this.loadSummaries();
                 } else if (screenId === 'login-screen') {
                     authService.logout();
                 }
