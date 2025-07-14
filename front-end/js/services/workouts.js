@@ -27,3 +27,5 @@ export class WorkoutService {
         return await apiClient.delete(`workouts/${id}`);
     }
 }
+
+export const workoutService = new WorkoutService();

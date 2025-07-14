@@ -8,6 +8,10 @@ export class ExerciseService {
         return await apiClient.get('/exercises');
     }
 
+    async getSingleExercise(id) {
+        return await apiClient.get(`/exercises/${id}`);
+    }
+
     async updateExercise(id, exerciseData) {
         return await apiClient.put(`/exercises/${id}`, exerciseData);
     }
