@@ -1,6 +1,7 @@
 import { authService } from "./services/auth.js";
 import { exerciseService } from "./services/exercises.js";
-import { renderExercises } from "./ui/components.js";
+import { workoutService } from "./services/workouts.js";
+import { renderExercises, renderWorkouts } from "./ui/components.js";
 import { showScreen, showError, clearError } from "./ui/screens.js";
 
 class WorkoutApp {
@@ -24,12 +25,10 @@ class WorkoutApp {
             await this.handleCreateExercises(e);
         });
 
-        /*
         document.getElementById('workout-form').addEventListener('submit', async (e) => {
             e.preventDefault();
             await this.handleCreateWorkout(e);
         });
-        */
 
         this.setupNavigation();
     }
@@ -100,6 +99,15 @@ class WorkoutApp {
             renderExercises(exercises, 'exercises-list');
         } catch (error) {
             console.error('Failed to load exercises:', error);
+        }
+    }
+
+    async loadWorkouts() {
+        try {
+            const workouts = await workoutService.getWorkouts();
+            renderWorkouts(workouts, 'workouts-list');
+        } catch (error) {
+            console.error('Failed to load workouts:', error);
         }
     }
 }
