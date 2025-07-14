@@ -48,7 +48,6 @@ func (cfg *apiConfig) handlerUpdateExercises(w http.ResponseWriter, r *http.Requ
 			ID:        exercise.ID,
 			Name:      exercise.Name,
 			Tool:      exercise.Tool,
-			UserID:    exercise.UserID,
 		},
 	})
 }

@@ -12,10 +12,9 @@ import (
 )
 
 type Exercise struct {
-	ID     uuid.UUID `json:"id"`
-	Name   string    `json:"name"`
-	Tool   string    `json:"tool"`
-	UserID uuid.UUID `json:"user_id"`
+	ID   uuid.UUID `json:"id"`
+	Name string    `json:"name"`
+	Tool string    `json:"tool"`
 }
 
 type RefreshToken struct {

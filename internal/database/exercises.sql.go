@@ -15,33 +15,25 @@ const createExercise = `-- name: CreateExercise :one
 INSERT INTO exercises (
     id,
     name,
-    tool,
-    user_id
+    tool
 )
 VALUES (
     gen_random_uuid(),
     $1,
-    $2,
-    $3
+    $2
 )
-RETURNING id, name, tool, user_id
+RETURNING id, name, tool
 `
 
 type CreateExerciseParams struct {
-	Name   string    `json:"name"`
-	Tool   string    `json:"tool"`
-	UserID uuid.UUID `json:"user_id"`
+	Name string `json:"name"`
+	Tool string `json:"tool"`
 }
 
 func (q *Queries) CreateExercise(ctx context.Context, arg CreateExerciseParams) (Exercise, error) {
-	row := q.db.QueryRowContext(ctx, createExercise, arg.Name, arg.Tool, arg.UserID)
+	row := q.db.QueryRowContext(ctx, createExercise, arg.Name, arg.Tool)
 	var i Exercise
-	err := row.Scan(
-		&i.ID,
-		&i.Name,
-		&i.Tool,
-		&i.UserID,
-	)
+	err := row.Scan(&i.ID, &i.Name, &i.Tool)
 	return i, err
 }
 
@@ -56,7 +48,7 @@ func (q *Queries) DeleteExercise(ctx context.Context, id uuid.UUID) error {
 }
 
 const getExercises = `-- name: GetExercises :many
-SELECT id, name, tool, user_id FROM exercises
+SELECT id, name, tool FROM exercises
 `
 
 func (q *Queries) GetExercises(ctx context.Context) ([]Exercise, error) {
@@ -68,12 +60,7 @@ func (q *Queries) GetExercises(ctx context.Context) ([]Exercise, error) {
 	var items []Exercise
 	for rows.Next() {
 		var i Exercise
-		if err := rows.Scan(
-			&i.ID,
-			&i.Name,
-			&i.Tool,
-			&i.UserID,
-		); err != nil {
+		if err := rows.Scan(&i.ID, &i.Name, &i.Tool); err != nil {
 			return nil, err
 		}
 		items = append(items, i)
@@ -88,59 +75,21 @@ func (q *Queries) GetExercises(ctx context.Context) ([]Exercise, error) {
 }
 
 const getSingleExercise = `-- name: GetSingleExercise :one
-SELECT id, name, tool, user_id FROM exercises
+SELECT id, name, tool FROM exercises
 WHERE id = $1
 `
 
 func (q *Queries) GetSingleExercise(ctx context.Context, id uuid.UUID) (Exercise, error) {
 	row := q.db.QueryRowContext(ctx, getSingleExercise, id)
 	var i Exercise
-	err := row.Scan(
-		&i.ID,
-		&i.Name,
-		&i.Tool,
-		&i.UserID,
-	)
+	err := row.Scan(&i.ID, &i.Name, &i.Tool)
 	return i, err
-}
-
-const getUserExercises = `-- name: GetUserExercises :many
-SELECT id, name, tool, user_id FROM exercises
-WHERE user_id = $1
-`
-
-func (q *Queries) GetUserExercises(ctx context.Context, userID uuid.UUID) ([]Exercise, error) {
-	rows, err := q.db.QueryContext(ctx, getUserExercises, userID)
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
-	var items []Exercise
-	for rows.Next() {
-		var i Exercise
-		if err := rows.Scan(
-			&i.ID,
-			&i.Name,
-			&i.Tool,
-			&i.UserID,
-		); err != nil {
-			return nil, err
-		}
-		items = append(items, i)
-	}
-	if err := rows.Close(); err != nil {
-		return nil, err
-	}
-	if err := rows.Err(); err != nil {
-		return nil, err
-	}
-	return items, nil
 }
 
 const updateExercise = `-- name: UpdateExercise :one
 UPDATE exercises SET name = $2, tool = $3 
 WHERE id = $1
-RETURNING id, name, tool, user_id
+RETURNING id, name, tool
 `
 
 type UpdateExerciseParams struct {
@@ -152,11 +101,6 @@ type UpdateExerciseParams struct {
 func (q *Queries) UpdateExercise(ctx context.Context, arg UpdateExerciseParams) (Exercise, error) {
 	row := q.db.QueryRowContext(ctx, updateExercise, arg.ID, arg.Name, arg.Tool)
 	var i Exercise
-	err := row.Scan(
-		&i.ID,
-		&i.Name,
-		&i.Tool,
-		&i.UserID,
-	)
+	err := row.Scan(&i.ID, &i.Name, &i.Tool)
 	return i, err
 }

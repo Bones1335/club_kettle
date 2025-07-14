@@ -2,20 +2,14 @@
 INSERT INTO exercises (
     id,
     name,
-    tool,
-    user_id
+    tool
 )
 VALUES (
     gen_random_uuid(),
     $1,
-    $2,
-    $3
+    $2
 )
 RETURNING *;
-
--- name: GetUserExercises :many
-SELECT * FROM exercises
-WHERE user_id = $1;
 
 -- name: GetExercises :many
 SELECT * FROM exercises;
