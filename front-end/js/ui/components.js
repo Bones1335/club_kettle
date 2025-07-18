@@ -1,3 +1,4 @@
+import { exerciseService } from "../services/exercises.js";
 
 export function createExerciseCard(exercise) {
     return `
@@ -26,6 +27,25 @@ export function renderExercises(exercises, containerId) {
     if (!container) return ;
 
     container.innerHTML = exercises.map(createExerciseCard).join('');
+
+    const deleteButtons = container.querySelectorAll('.btn-danger');
+    deleteButtons.forEach(button => {
+        button.addEventListener('click',  async (e) => {
+            e.preventDefault();
+
+            const exerciseId = e.target.dataset.exerciseId;
+
+            try {
+                await exerciseService.deleteExercise(exerciseId);
+                const card = e.target.closest('.card');
+                if (card) {
+                    card.remove();
+                }
+            } catch (error) {
+                console.error('Failed to delete exercise:', error);
+            }
+        });
+    });
 }
 
 export function renderWorkouts(workouts, containerId) {

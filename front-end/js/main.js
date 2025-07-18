@@ -1,7 +1,7 @@
 import { authService } from "./services/auth.js";
 import { exerciseService } from "./services/exercises.js";
 import { workoutService } from "./services/workouts.js";
-import { addExercise, removeExercise, renderExercises, renderWorkouts } from "./ui/components.js";
+import { addExercise, renderExercises, renderWorkouts } from "./ui/components.js";
 import { showScreen, showError, clearError } from "./ui/screens.js";
 
 class WorkoutApp {
