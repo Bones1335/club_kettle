@@ -4,7 +4,7 @@ export function createExerciseCard(exercise) {
         <div class="card" data-exercise-id=${exercise.id}>
             <h3>${exercise.name}</h3>
             <p><strong>Tool:</strong> ${exercise.tool}</p>
-            <button class="btn btn-danger" onclick="deleteExercise('${exercise.id}')">
+            <button class="btn btn-danger" data-exercise-id=${exercise.id}>
                 Delete
             </button>
         </div>
@@ -16,7 +16,7 @@ export function createWorkoutCard(workout) {
         <div class="card" data_workout_id=${workout.id}>
             <h3>${workout.name}</h3>
             <p>${workout.description || 'No description'}</p>
-            <button class="btn details">View Workout</button>
+            <button class="btn">View Workout</button>
         </div>
     `;
 }
