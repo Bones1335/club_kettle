@@ -24,7 +24,20 @@ export class ApiClient {
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
-            return await response.json();
+
+            const contentType = response.headers.get('content-type');
+            const contentLength = response.headers.get('content-length');
+
+            if (!contentType || contentLength == '0') {
+                return null;
+            }
+
+            if (contentType && contentType.includes('application/json')) {
+                const text = await response.text();
+                return text ? JSON.parse(text) : null;
+            }
+
+            return await response.text();
         } catch (error) {
             console.error('API call failed:', error);
             throw error;

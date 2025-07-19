@@ -1,10 +1,11 @@
+import { exerciseService } from "../services/exercises.js";
 
 export function createExerciseCard(exercise) {
     return `
         <div class="card" data-exercise-id=${exercise.id}>
             <h3>${exercise.name}</h3>
             <p><strong>Tool:</strong> ${exercise.tool}</p>
-            <button class="btn btn-danger" onclick="deleteExercise('${exercise.id}')">
+            <button class="btn btn-danger" data-exercise-id=${exercise.id}>
                 Delete
             </button>
         </div>
@@ -16,7 +17,7 @@ export function createWorkoutCard(workout) {
         <div class="card" data_workout_id=${workout.id}>
             <h3>${workout.name}</h3>
             <p>${workout.description || 'No description'}</p>
-            <button class="btn details">View Workout</button>
+            <button class="btn">View Workout</button>
         </div>
     `;
 }
@@ -26,6 +27,25 @@ export function renderExercises(exercises, containerId) {
     if (!container) return ;
 
     container.innerHTML = exercises.map(createExerciseCard).join('');
+
+    const deleteButtons = container.querySelectorAll('.btn-danger');
+    deleteButtons.forEach(button => {
+        button.addEventListener('click',  async (e) => {
+            e.preventDefault();
+
+            const exerciseId = e.target.dataset.exerciseId;
+
+            try {
+                await exerciseService.deleteExercise(exerciseId);
+                const card = e.target.closest('.card');
+                if (card) {
+                    card.remove();
+                }
+            } catch (error) {
+                console.error('Failed to delete exercise:', error);
+            }
+        });
+    });
 }
 
 export function renderWorkouts(workouts, containerId) {

@@ -1,7 +1,7 @@
 import { authService } from "./services/auth.js";
 import { exerciseService } from "./services/exercises.js";
 import { workoutService } from "./services/workouts.js";
-import { addExercise, removeExercise, renderExercises, renderWorkouts } from "./ui/components.js";
+import { addExercise, renderExercises, renderWorkouts } from "./ui/components.js";
 import { showScreen, showError, clearError } from "./ui/screens.js";
 
 class WorkoutApp {
@@ -100,6 +100,39 @@ class WorkoutApp {
             this.loadExercises();
         } catch (error) {
             console.error('Failed to create exercise:', error);
+        }
+    }
+
+    async handleCreateWorkout(e) {
+        const formData = new FormData(e.target);
+
+        const exerciseElements = document.querySelectorAll('#exercise-selector [name^="exercise-"]');
+        const exercises = [];
+
+        exerciseElements.forEach(element => {
+            const exerciseValue = element.value;
+            if (exerciseValue) {
+                exercises.push(exerciseValue);
+            }
+        });
+
+        const workoutData = {
+            name: formData.get('name'),
+            description: formData.get('workout_description'),
+            total_duration: parseInt(formData.get('total_duration')),
+            rounds_per_exercise: parseInt(formData.get('rounds_per_exercise')),
+            round_duration: parseInt(formData.get('round_duration')),
+            rest_duration: parseInt(formData.get('rest_duration')),
+            exercises: exercises
+        }
+
+        try {
+            await workoutService.createWorkouts(workoutData);
+            e.target.reset();
+            this.loadWorkouts();
+
+        } catch (error) {
+            console.error('Failed to create workout:', error);
         }
     }
 
