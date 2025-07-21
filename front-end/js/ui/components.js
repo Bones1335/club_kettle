@@ -1,4 +1,5 @@
 import { exerciseService } from "../services/exercises.js";
+import { workoutService } from "../services/workouts.js";
 
 export function createExerciseCard(exercise) {
     return `
@@ -13,11 +14,14 @@ export function createExerciseCard(exercise) {
 }
 
 export function createWorkoutCard(workout) {
-    return `
+      return `
         <div class="card" data_workout_id=${workout.id}>
             <h3>${workout.name}</h3>
             <p>${workout.description || 'No description'}</p>
-            <button class="btn">View Workout</button>
+            <button class="btn btn-view" data-workout-id=${workout.id} onclick="showWorkoutDetails('${workout.id}')">View Workout</button>
+            <button class="btn btn-danger" data-workout-id=${workout.id}>
+                Delete
+            </button>
         </div>
     `;
 }
@@ -53,6 +57,25 @@ export function renderWorkouts(workouts, containerId) {
     if (!container) return ;
 
     container.innerHTML = workouts.map(createWorkoutCard).join('');
+    const deleteButtons = container.querySelectorAll('.btn-danger');
+    deleteButtons.forEach(button => {
+        button.addEventListener('click',  async (e) => {
+            e.preventDefault();
+
+            const workoutId = e.target.dataset.workoutId;
+
+            try {
+                await workoutService.deleteWorkout(workoutId);
+                const card = e.target.closest('.card');
+                if (card) {
+                    card.remove();
+                console.log(`workout deleted: ${workoutId}`)
+                }
+            } catch (error) {
+                console.error('Failed to view workout:', error);
+            }
+        });
+    });
 }
 
 function createExerciseOptions(exercises) {

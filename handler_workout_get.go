@@ -10,8 +10,8 @@ import (
 
 func (cfg *apiConfig) handlerGetWorkout(w http.ResponseWriter, r *http.Request) {
 	type response struct {
-		Workout     database.WorkoutRoutine
-		ExerciseIDs []uuid.UUID
+		Workout   database.WorkoutRoutine
+		Exercises []database.Exercise
 	}
 	workoutID := r.PathValue("workout_id")
 	parsedUUID, err := uuid.Parse(workoutID)
@@ -42,5 +42,17 @@ func (cfg *apiConfig) handlerGetWorkout(w http.ResponseWriter, r *http.Request) 
 		return
 	}
 
-	respondWithJSON(w, http.StatusOK, response{Workout: dbWorkoutRoutine, ExerciseIDs: exerciseIDs})
+	var exercises []database.Exercise
+
+	for _, id := range exerciseIDs {
+		exercise, err := cfg.db.GetSingleExercise(r.Context(), id)
+		if err != nil {
+			respondWithError(w, http.StatusNotFound, "couldn't get exercise for workout routine", err)
+			return
+		}
+
+		exercises = append(exercises, exercise)
+	}
+
+	respondWithJSON(w, http.StatusOK, response{Workout: dbWorkoutRoutine, Exercises: exercises})
 }
