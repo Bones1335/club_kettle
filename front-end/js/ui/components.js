@@ -1,4 +1,5 @@
 import { exerciseService } from "../services/exercises.js";
+import { workoutService } from "../services/workouts.js";
 
 export function createExerciseCard(exercise) {
     return `
@@ -13,11 +14,11 @@ export function createExerciseCard(exercise) {
 }
 
 export function createWorkoutCard(workout) {
-    return `
+      return `
         <div class="card" data_workout_id=${workout.id}>
             <h3>${workout.name}</h3>
             <p>${workout.description || 'No description'}</p>
-            <button class="btn">View Workout</button>
+            <button class="btn btn-view" data-workout-id=${workout.id}>View Workout</button>
         </div>
     `;
 }
@@ -53,6 +54,24 @@ export function renderWorkouts(workouts, containerId) {
     if (!container) return ;
 
     container.innerHTML = workouts.map(createWorkoutCard).join('');
+    const viewButtons = container.querySelectorAll('.btn-view');
+    viewButtons.forEach(button => {
+        button.addEventListener('click',  async (e) => {
+            e.preventDefault();
+
+            const workoutId = e.target.dataset.workoutId;
+
+            try {
+                const workout = await workoutService.getWorkout(workoutId);
+                const card = e.target.closest('.card');
+                if (card) {
+                    console.log(workout)
+                }
+            } catch (error) {
+                console.error('Failed to view workout:', error);
+            }
+        });
+    });
 }
 
 function createExerciseOptions(exercises) {
