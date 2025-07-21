@@ -2,15 +2,19 @@ import { authService } from "./services/auth.js";
 import { exerciseService } from "./services/exercises.js";
 import { workoutService } from "./services/workouts.js";
 import { addExercise, renderExercises, renderWorkouts } from "./ui/components.js";
+import { modalManager, modalTemplates } from "./ui/modals.js";
 import { showScreen, showError, clearError } from "./ui/screens.js";
 
 class WorkoutApp {
     constructor() {
+        this.modalManager = modalManager;
+        this.modalTemplates = modalTemplates;
         this.init();
     }
 
     init() {
         this.setupEventListeners();
+        this.setupModalEventListeners();
         this.checkAuthStatus();
     }
 
@@ -31,6 +35,12 @@ class WorkoutApp {
         });
 
         this.setupNavigation();
+    }
+
+    setupModalEventListeners() {
+        document.addEventListener('showWorkoutDetails', (e) => {
+            this.handleShowWorkoutDetails(e.detail);
+        });
     }
 
     setupNavigation() {
@@ -60,6 +70,11 @@ class WorkoutApp {
                 }
             }
         });
+    }
+
+    async handleShowWorkoutDetails(workoutId) {
+        const workout = await workoutService.getWorkout(workoutId);
+        this.modalTemplates.showWorkoutDetails(workout);
     }
 
     checkAuthStatus() {
@@ -156,6 +171,12 @@ class WorkoutApp {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    new WorkoutApp();
+    const app = new WorkoutApp();
+
+    window.workoutApp = app;
+
+    window.showWorkoutDetails = (workoutId) => {
+        app.handleShowWorkoutDetails(workoutId);
+    };
 });
 
