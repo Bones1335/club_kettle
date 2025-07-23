@@ -1,7 +1,7 @@
 import { authService } from "./services/auth.js";
 import { exerciseService } from "./services/exercises.js";
 import { workoutService } from "./services/workouts.js";
-import { addExercise, renderExercises, renderWorkouts } from "./ui/components.js";
+import { addExercise, renderExercises, renderExercisesForSelectedWorkout, renderWorkoutOptions, renderWorkouts } from "./ui/components.js";
 import { modalManager, modalTemplates } from "./ui/modals.js";
 import { showScreen, showError, clearError } from "./ui/screens.js";
 
@@ -34,6 +34,16 @@ class WorkoutApp {
             await this.handleCreateWorkout(e);
         });
 
+        document.getElementById('active-workout-selector').addEventListener('click', async (e) => {
+            e.preventDefault();
+            await this.handleSelectedWorkout(e);
+        })
+
+        document.getElementById('active-workout-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            await this.handleSubmitFinishedWorkout(e);
+        });
+
         this.setupNavigation();
     }
 
@@ -64,7 +74,9 @@ class WorkoutApp {
 
                     this.loadWorkouts();
                 } else if (screenId === 'summaries-screen') {
-                    // this.loadSummaries();
+                    this.loadSummaries();
+                } else if (screenId === 'active-workouts-screen') {
+                    this.loadActiveWorkout();
                 } else if (screenId === 'login-screen') {
                     authService.logout();
                 }
@@ -151,6 +163,43 @@ class WorkoutApp {
         }
     }
 
+    async handleSelectedWorkout(e) {
+        const selector = document.getElementById('active-workout-name');
+        const selectedWorkoutId = selector.value;
+
+        if (!selectedWorkoutId) {
+            alert('please select a workout');
+            return;
+        }
+
+        try {
+            const selectedWorkout = await workoutService.getWorkout(selectedWorkoutId);
+
+            renderExercisesForSelectedWorkout(selectedWorkout, 'active-workout-table-data');
+        } catch (error) {
+            console.error('Failed to select workout', error);
+        }
+    }
+
+    async handleSubmitFinishedWorkout(e) {
+        const formData = new FormData(e.target);
+        try {
+            console.log(formData);
+            this.loadSummaries();
+        } catch (error) {
+            console.error('Failed to submit finished workout data', error);
+        }
+    }
+
+    async loadActiveWorkout() {
+        try {
+            const workouts = await workoutService.getWorkouts();
+            renderWorkoutOptions(workouts, 'active-workout-name');
+        } catch (error) {
+            console.error('Failed to load workout names', error);
+        }
+    }
+
     async loadExercises() {
         try {
             const exercises = await exerciseService.getExercises();
@@ -166,6 +215,14 @@ class WorkoutApp {
             renderWorkouts(workouts, 'workouts-list');
         } catch (error) {
             console.error('Failed to load workouts:', error);
+        }
+    }
+
+    async loadSummaries() {
+        try {
+            console.log('summaries have been loaded');
+        } catch (error) {
+            console.error('Failed to load summaries', error);
         }
     }
 }

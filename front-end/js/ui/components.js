@@ -116,3 +116,63 @@ export function removeExercise(id) {
         exerciseDiv.remove();
     }
 }
+
+export function renderWorkoutOptions(workouts, workoutSelectorName) {
+    const workoutSelector = document.getElementById(workoutSelectorName);
+
+    let options = '<option value="">Select a workout...</option>';
+
+    workouts.forEach(workout => {
+        options += `<option value="${workout.id}">${workout.name}</option>`
+    });
+
+    workoutSelector.innerHTML = options;
+}
+
+export function renderExercisesForSelectedWorkout(workout, tableName) {
+    const tableSelect = document.getElementById(tableName);
+    if (tableSelect.textContent.length > 0) {
+        tableSelect.textContent = "";
+    }
+
+    const tableHead = document.createElement('thead');
+    const tableBody = document.createElement('tbody');
+
+    for (let i = 0; i < workout.Workout.rounds_per_exercise + 1; i++) {
+        let tableHeader = document.createElement('th');
+
+        if (i > 0) {
+            tableHeader.innerText = `Round ${i}`;
+            tableHead.append(tableHeader);
+            continue;
+        }
+
+        tableHeader.innerText = 'Exercises';
+        tableHead.append(tableHeader);
+    }
+    tableSelect.append(tableHead);
+
+    for (let i = 0; i < workout.Exercises.length; i++) {
+        let tableRow = document.createElement('tr');
+
+        for (let j = 0; j < workout.Workout.rounds_per_exercise + 1; j++) {
+            let tableData = document.createElement('td');
+
+            if (j > 0) {
+                const input = document.createElement('input');
+                input.type = 'number';
+                input.name = `ex${i}rd${j}`;
+
+                tableData.appendChild(input);
+            } else {
+                tableRow.id = `${workout.Exercises[i].id}`;
+                tableData.innerText = `${workout.Exercises[i].name}`;
+            }
+
+            tableRow.append(tableData);
+        }
+
+        tableBody.append(tableRow);
+    }
+    tableSelect.append(tableBody);
+}
