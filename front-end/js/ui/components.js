@@ -176,3 +176,20 @@ export function renderExercisesForSelectedWorkout(workout, tableName) {
     }
     tableSelect.append(tableBody);
 }
+
+export function renderWorkoutTimer(workout, timerName) {
+    const timerContainer = document.getElementById(timerName);
+
+    timerContainer.innerHTML = `
+        <h2>Workout Timer</h2>
+        <input type="number" id="minutes" placeholder="Enter minutes" min="0" value="${workout.Workout.total_duration}">
+        <div class="timer-display" id="timer">${workout.Workout.total_duration}:00</div>
+        <div>
+            <button type="button" id="startBtn">Start</button>
+            <button type="button" id="pauseBtn" disabled>Pause</button>
+            <button type="button" id="resetBtn">Reset</button>
+        </div>
+    `
+
+    console.log(workout.Workout.name);
+}
