@@ -69,10 +69,9 @@ export function renderWorkouts(workouts, containerId) {
                 const card = e.target.closest('.card');
                 if (card) {
                     card.remove();
-                console.log(`workout deleted: ${workoutId}`)
                 }
             } catch (error) {
-                console.error('Failed to view workout:', error);
+                console.error('Failed to delete workout:', error);
             }
         });
     });
