@@ -83,7 +83,7 @@ input:focus, select:focus, textarea:focus {
     margin-bottom: 10px;
 }
 
-.btn:hover {
+.btn:hover, .btn-start:hover, .btn-pause:hover, .btn-reset:hover {
     transform: translateY(-2px);
     box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
 }
