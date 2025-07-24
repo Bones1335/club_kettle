@@ -62,6 +62,7 @@
         <div id="dashboard-screen" class="screen">
             <nav id="nav-bar">
                 <button class="btn" data-screen="dashboard-screen">Dashboard</button>
+                <button class="btn" data-screen="active-workouts-screen">Start Workout</button>
                 <button class="btn" data-screen="exercises-screen">Exercises</button>
                 <button class="btn" data-screen="workouts-screen">Workouts</button>
                 <button class="btn" data-screen="summaries-screen">Summaries</button>
@@ -73,9 +74,56 @@
             </div>
         </div>
 
+        <div id="active-workouts-screen" class="screen">
+            <nav id="nav-bar">
+                <button class="btn" data-screen="dashboard-screen">Dashboard</button>
+                <button class="btn" data-screen="active-workouts-screen">Start Workout</button>
+                <button class="btn" data-screen="exercises-screen">Exercises</button>
+                <button class="btn" data-screen="workouts-screen">Workouts</button>
+                <button class="btn" data-screen="summaries-screen">Summaries</button>
+                <button class="btn btn-secondary" data-screen="login-screen">Logout</button>
+            </nav>
+
+            <div id="active-workouts">
+                <h2>Start Workout</h2>
+
+
+                <form id="active-workout-form">
+                    <div class="form-group">
+                        <label for="active-workout-name">Workout Name:</label>
+                        <select name="active-workout-name" id="active-workout-name"></select>
+                    </div>
+                    <button type="button" class="btn" id="active-workout-selector">Select Workout</button>
+
+                    <div class="form-group">
+                        <label for="weight">Weight (in kg):</label>
+                        <input type="number" name="weight" id="weight" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="active-workout-number">Workout Number:</label>
+                        <input type="number" name="active-workout-number" id="active-workout-number" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="date">Date:</label>
+                        <input type="date" name="date" id="date" required>
+                    </div>
+
+                    <div id="timer-container"></div>
+
+                    <div class="form-group">
+                        <table id="active-workout-table-data"></table>
+                    </div>
+                    <button type="submit" class="btn">Workout Complete</button>
+                </form>
+            </div>
+        </div>
+
         <div id="exercises-screen" class="screen">
             <nav id="nav-bar">
                 <button class="btn" data-screen="dashboard-screen">Dashboard</button>
+                <button class="btn" data-screen="active-workouts-screen">Start Workout</button>
                 <button class="btn" data-screen="exercises-screen">Exercises</button>
                 <button class="btn" data-screen="workouts-screen">Workouts</button>
                 <button class="btn" data-screen="summaries-screen">Summaries</button>
@@ -120,6 +168,7 @@
         <div id="workouts-screen" class="screen">
             <nav id="nav-bar">
                 <button class="btn" data-screen="dashboard-screen">Dashboard</button>
+                <button class="btn" data-screen="active-workouts-screen">Start Workout</button>
                 <button class="btn" data-screen="exercises-screen">Exercises</button>
                 <button class="btn" data-screen="workouts-screen">Workouts</button>
                 <button class="btn" data-screen="summaries-screen">Summaries</button>
@@ -177,95 +226,10 @@
             </div>
         </div>
 
-        <div id="active-workouts-screen" class="screen">
-            <nav id="nav-bar">
-                <button class="btn" data-screen="dashboard-screen">Dashboard</button>
-                <button class="btn" data-screen="exercises-screen">Exercises</button>
-                <button class="btn" data-screen="workouts-screen">Workouts</button>
-                <button class="btn" data-screen="summaries-screen">Summaries</button>
-                <button class="btn btn-secondary" data-screen="login-screen">Logout</button>
-            </nav>
-
-            <div id="Workouts">
-                <h2>Start Workout</h2>
-                <div class="timer-container">
-                    <h3>Timer: <div id="timer">30:00</div></h3>
-                    <button id="timer-start" >Start Timer</button>
-                    <h3 id="round_duration">Round Duration: 20 seconds</h3>
-                    <h3 id="rest">Rest: 25 seconds</h3>
-                </div>
-
-                <form id="workoutData" onsubmit="mySubmitFunction(event)">
-
-                    <label for="workoutName">Workout Name:</label>
-                    <select name="workoutName" id="workoutName"></select>
-                    <button type="button" onClick="populateWorkoutExercises()">Select Workout</button>
-
-                    <label for="weight">Weight (in kg):</label>
-                    <input type="number" name="weight" id="weight">
-
-                    <label for="workoutNumber">Workout Number:</label>
-                    <input type="number" name="workoutNumber" id="workoutNumber">
-
-                    <label for="date">Date:</label>
-                    <input type="date" name="date" id="date">
-
-                    <table id="workoutTableData">
-                        <thead>
-                            <th>Exercise</th>
-                            <th>Round 1</th>
-                            <th>Round 2</th>
-                            <th>Round 3</th>
-                            <th>Round 4</th>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>2h - Inside Circle</td>
-                                <td><input type="number" name="ex1rd1" id="ex1rd1"></td>
-                                <td><input type="number" name="ex1rd2" id="ex1rd2"></td>
-                                <td><input type="number" name="ex1rd3" id="ex1rd3"></td>
-                                <td><input type="number" name="ex1rd4" id="ex1rd4"></td>
-                            </tr>
-                            <tr>
-                                <td>2h - Outside Pendulum</td>
-                                <td><input type="number" name="ex2rd1" id="ex2rd1"></td>
-                                <td><input type="number" name="ex2rd2" id="ex2rd2"></td>
-                                <td><input type="number" name="ex2rd3" id="ex2rd3"></td>
-                                <td><input type="number" name="ex2rd4" id="ex2rd4"></td>
-                            </tr>
-                            <tr>
-                                <td>2h - Pullover</td>
-                                <td><input type="number" name="ex3rd1" id="ex3rd1"></td>
-                                <td><input type="number" name="ex3rd2" id="ex3rd2"></td>
-                                <td><input type="number" name="ex3rd3" id="ex3rd3"></td>
-                                <td><input type="number" name="ex3rd4" id="ex3rd4"></td>
-                            </tr>
-                            <tr>
-                                <td>2h - Balance Squat</td>
-                                <td><input type="number" name="ex4rd1" id="ex4rd1"></td>
-                                <td><input type="number" name="ex4rd2" id="ex4rd2"></td>
-                                <td><input type="number" name="ex4rd3" id="ex4rd3"></td>
-                                <td><input type="number" name="ex4rd4" id="ex4rd4"></td>
-                            </tr>
-                            <tr>
-                                <td>2h - Shield Cast</td>
-                                <td><input type="number" name="ex5rd1" id="ex5rd1"></td>
-                                <td><input type="number" name="ex5rd2" id="ex5rd2"></td>
-                                <td><input type="number" name="ex5rd3" id="ex5rd3"></td>
-                                <td><input type="number" name="ex5rd4" id="ex5rd4"></td>
-                            </tr>
-            
-                        </tbody>
-                    </table>
-                <button type="submit" onclick="submitWorkoutData()">Workout Complete</button>
-
-                </form>
-            </div>
-        </div>
-
         <div id="summaries-screen" class="screen">
             <nav id="nav-bar">
                 <button class="btn" data-screen="dashboard-screen">Dashboard</button>
+                <button class="btn" data-screen="active-workouts-screen">Start Workout</button>
                 <button class="btn" data-screen="exercises-screen">Exercises</button>
                 <button class="btn" data-screen="workouts-screen">Workouts</button>
                 <button class="btn" data-screen="summaries-screen">Summaries</button>

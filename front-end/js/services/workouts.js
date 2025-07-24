@@ -24,7 +24,7 @@ export class WorkoutService {
     }
 
     async deleteWorkout(id) {
-        return await apiClient.delete(`workouts/${id}`);
+        return await apiClient.delete(`/workouts/${id}`);
     }
 }
 
