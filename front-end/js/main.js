@@ -1,7 +1,8 @@
 import { authService } from "./services/auth.js";
 import { exerciseService } from "./services/exercises.js";
+import { initializeWorkoutTimer } from "./services/timer.js";
 import { workoutService } from "./services/workouts.js";
-import { addExercise, renderExercises, renderExercisesForSelectedWorkout, renderWorkoutOptions, renderWorkouts, renderWorkoutTimer } from "./ui/components.js";
+import { addExercise, renderExercises, renderExercisesForSelectedWorkout, renderWorkoutOptions, renderWorkouts } from "./ui/components.js";
 import { modalManager, modalTemplates } from "./ui/modals.js";
 import { showScreen, showError, clearError } from "./ui/screens.js";
 
@@ -175,8 +176,9 @@ class WorkoutApp {
         try {
             const selectedWorkout = await workoutService.getWorkout(selectedWorkoutId);
 
+            const timerContainer = document.getElementById('timer-container');
             renderExercisesForSelectedWorkout(selectedWorkout, 'active-workout-table-data');
-            renderWorkoutTimer(selectedWorkout, 'timer-container');
+            initializeWorkoutTimer(timerContainer, selectedWorkout.Workout);
         } catch (error) {
             console.error('Failed to select workout', error);
         }
