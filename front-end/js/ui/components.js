@@ -165,7 +165,7 @@ export function renderExercisesForSelectedWorkout(workout, tableName) {
 
                 tableData.appendChild(input);
             } else {
-                tableRow.id = `${workout.Exercises[i].id}`;
+                tableData.id = `${workout.Exercises[i].id}`;
                 tableData.innerText = `${workout.Exercises[i].name}`;
             }
 

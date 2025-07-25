@@ -26,6 +26,10 @@ export class WorkoutService {
     async deleteWorkout(id) {
         return await apiClient.delete(`/workouts/${id}`);
     }
+
+    async createWorkoutSummary(workoutSummaryData) {
+        return await apiClient.post('/workout_summaries', workoutSummaryData);
+    }
 }
 
 export const workoutService = new WorkoutService();

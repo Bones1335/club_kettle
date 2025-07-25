@@ -186,8 +186,35 @@ class WorkoutApp {
 
     async handleSubmitFinishedWorkout(e) {
         const formData = new FormData(e.target);
+        const workout_summary = {
+            date: new Date(formData.get("date")).toISOString(),
+            weight_in_kg: parseInt(formData.get("weight")),
+            workout_number: parseInt(formData.get("active-workout-number")),
+            workout_routine_id: formData.get("active-workout-name"),
+        };
+
+        const rounds = [];
+        let table = document.getElementById("active-workout-table-data");
+        for (let i = 0; i < table.rows.length; i++) {       
+                let row = table.rows[i];
+                for (let j = 0; j < row.cells.length - 1; j++) {
+                    rounds.push({
+                        date: new Date(formData.get("date")).toISOString(),
+                        round_number: j+1,
+                        reps_completed: parseInt(formData.get(`ex${i}rd${j+1}`)),
+                        workout_exercise_id: row.cells[0].id,
+                    });
+                };
+        }
+
+        const summary = {
+            rounds: rounds,
+            workout_summary: workout_summary,
+        }
         try {
-            console.log(formData);
+            console.log(summary);
+            workoutService.createWorkoutSummary(summary);
+            e.target.reset();
             this.loadSummaries();
         } catch (error) {
             console.error('Failed to submit finished workout data', error);
