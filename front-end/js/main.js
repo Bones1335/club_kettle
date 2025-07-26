@@ -1,8 +1,8 @@
 import { authService } from "./services/auth.js";
 import { exerciseService } from "./services/exercises.js";
 import { initializeWorkoutTimer } from "./services/timer.js";
-import { workoutService } from "./services/workouts.js";
-import { addExercise, renderExercises, renderExercisesForSelectedWorkout, renderWorkoutOptions, renderWorkouts } from "./ui/components.js";
+import { WorkoutService, workoutService } from "./services/workouts.js";
+import { addExercise, renderExercises, renderExercisesForSelectedWorkout, renderWorkoutOptions, renderWorkouts, renderWorkoutSummaries } from "./ui/components.js";
 import { modalManager, modalTemplates } from "./ui/modals.js";
 import { showScreen, showError, clearError } from "./ui/screens.js";
 
@@ -186,8 +186,34 @@ class WorkoutApp {
 
     async handleSubmitFinishedWorkout(e) {
         const formData = new FormData(e.target);
+        const workout_summary = {
+            date: new Date(formData.get("date")).toISOString(),
+            weight_in_kg: parseInt(formData.get("weight")),
+            workout_number: parseInt(formData.get("active-workout-number")),
+            workout_routine_id: formData.get("active-workout-name"),
+        };
+
+        const rounds = [];
+        let table = document.getElementById("active-workout-table-data");
+        for (let i = 0; i < table.rows.length; i++) {       
+                let row = table.rows[i];
+                for (let j = 0; j < row.cells.length - 1; j++) {
+                    rounds.push({
+                        date: new Date(formData.get("date")).toISOString(),
+                        round_number: j+1,
+                        reps_completed: parseInt(formData.get(`ex${i}rd${j+1}`)),
+                        workout_exercise_id: row.cells[0].id,
+                    });
+                };
+        }
+
+        const summary = {
+            rounds: rounds,
+            workout_summary: workout_summary,
+        }
         try {
-            console.log(formData);
+            workoutService.createWorkoutSummary(summary);
+            e.target.reset();
             this.loadSummaries();
         } catch (error) {
             console.error('Failed to submit finished workout data', error);
@@ -223,7 +249,9 @@ class WorkoutApp {
 
     async loadSummaries() {
         try {
-            console.log('summaries have been loaded');
+            const summaries = await workoutService.getWorkoutSummaries();
+            console.log(summaries);
+            renderWorkoutSummaries(summaries, 'workout-summaries');
         } catch (error) {
             console.error('Failed to load summaries', error);
         }
