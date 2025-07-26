@@ -1,8 +1,8 @@
 import { authService } from "./services/auth.js";
 import { exerciseService } from "./services/exercises.js";
 import { initializeWorkoutTimer } from "./services/timer.js";
-import { workoutService } from "./services/workouts.js";
-import { addExercise, renderExercises, renderExercisesForSelectedWorkout, renderWorkoutOptions, renderWorkouts } from "./ui/components.js";
+import { WorkoutService, workoutService } from "./services/workouts.js";
+import { addExercise, renderExercises, renderExercisesForSelectedWorkout, renderWorkoutOptions, renderWorkouts, renderWorkoutSummaries } from "./ui/components.js";
 import { modalManager, modalTemplates } from "./ui/modals.js";
 import { showScreen, showError, clearError } from "./ui/screens.js";
 
@@ -212,7 +212,6 @@ class WorkoutApp {
             workout_summary: workout_summary,
         }
         try {
-            console.log(summary);
             workoutService.createWorkoutSummary(summary);
             e.target.reset();
             this.loadSummaries();
@@ -250,7 +249,9 @@ class WorkoutApp {
 
     async loadSummaries() {
         try {
-            console.log('summaries have been loaded');
+            const summaries = await workoutService.getWorkoutSummaries();
+            console.log(summaries);
+            renderWorkoutSummaries(summaries, 'workout-summaries');
         } catch (error) {
             console.error('Failed to load summaries', error);
         }

@@ -26,6 +26,21 @@ export function createWorkoutCard(workout) {
     `;
 }
 
+export function createSummaryCard(summary) {
+      return `
+        <div class="card" data_workout_id=${summary.id}>
+            <h3>${new Date(summary.date).toLocaleDateString("en-GB")}</h3>
+            <p><strong>Total Reps:</strong> ${summary.total_reps}</p>
+            <p><strong>Weight (in kg):</strong> ${summary.weight_in_kg}</p>
+            <p><strong>Work capacity:</strong> ${summary.work_capacity}</p>
+            <button class="btn btn-view" data-summary-id=${summary.workout_rouetine_id}>More Detail</button>
+            <button class="btn btn-danger" data-summary-id=${summary.id}>
+                Delete
+            </button>
+        </div>
+    `;
+}
+
 export function renderExercises(exercises, containerId) {
     const container = document.getElementById(containerId);
     if (!container) return ;
@@ -72,6 +87,31 @@ export function renderWorkouts(workouts, containerId) {
                 }
             } catch (error) {
                 console.error('Failed to delete workout:', error);
+            }
+        });
+    });
+}
+
+export function renderWorkoutSummaries(summaries, containerId) {
+    const container = document.getElementById(containerId);
+    if (!container) return ;
+
+    container.innerHTML = summaries.map(createSummaryCard).join('');
+    const deleteButtons = container.querySelectorAll('.btn-danger');
+    deleteButtons.forEach(button => {
+        button.addEventListener('click', async (e) => {
+            e.preventDefault();
+
+            const summaryId = e.target.dataset.summaryId;
+
+            try {
+                await workoutService.deleteWorkoutSummaries(summaryId);
+                const card = e.target.closest('.card');
+                if (card) {
+                    card.remove();
+                }
+            } catch (error) {
+                console.error('Failed to delete workout summary:', error);
             }
         });
     });
