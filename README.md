@@ -35,7 +35,6 @@ Endurance strength training isn't a new concept, nor are the tools I've been usi
 ### Exercise endpoints
    - "POST /api/exercises"
    - "GET /api/exercises"
-   - "GET /api/users/{user_id}/exercises"
    - "GET /api/exercises/{exercise_id}"
    - "PUT /api/exercises/{exercise_id}"
    - "DELETE /api/exercises/{exercise_id}"
