@@ -1,6 +1,17 @@
 import { exerciseService } from "../services/exercises.js";
 import { workoutService } from "../services/workouts.js";
 
+export function createDashboard(user) {
+    return `
+        <div class="card" data-user-id=${user.id}>
+            <h3>Profile</h3>
+            <p><strong>Name:</strong> ${user.first_name} ${user.last_name}</p>
+            <p><strong>Username:</strong> ${user.username}</p>
+            <p><strong>Email:</strong> ${user.email}</p>
+        </div>
+    `;
+}
+
 export function createExerciseCard(exercise) {
     return `
         <div class="card" data-exercise-id=${exercise.id}>
@@ -39,6 +50,13 @@ export function createSummaryCard(summary) {
             </button>
         </div>
     `;
+}
+
+export function renderDashboard(user, containerId) {
+    const container = document.getElementById(containerId);
+    if (!container) return ;
+
+    container.innerHTML = createDashboard(user);
 }
 
 export function renderExercises(exercises, containerId) {
