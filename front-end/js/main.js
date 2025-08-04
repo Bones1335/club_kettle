@@ -1,8 +1,9 @@
 import { authService } from "./services/auth.js";
 import { exerciseService } from "./services/exercises.js";
 import { initializeWorkoutTimer } from "./services/timer.js";
-import { WorkoutService, workoutService } from "./services/workouts.js";
-import { addExercise, renderExercises, renderExercisesForSelectedWorkout, renderWorkoutOptions, renderWorkouts, renderWorkoutSummaries } from "./ui/components.js";
+import { userService } from "./services/user.js";
+import { workoutService } from "./services/workouts.js";
+import { addExercise, renderDashboard, renderExercises, renderExercisesForSelectedWorkout, renderWorkoutOptions, renderWorkouts, renderWorkoutSummaries } from "./ui/components.js";
 import { modalManager, modalTemplates } from "./ui/modals.js";
 import { showScreen, showError, clearError } from "./ui/screens.js";
 
@@ -60,7 +61,9 @@ class WorkoutApp {
                 const screenId = e.target.dataset.screen;
                 showScreen(screenId);
 
-                if (screenId === 'exercises-screen') {
+                if (screenId === 'dashboard-screen') {
+                    this.loadDashboard();
+                } else if (screenId === 'exercises-screen') {
                     this.loadExercises();
                 } else if (screenId === 'workouts-screen') {
                     let exerciseCount = 0;
@@ -93,6 +96,7 @@ class WorkoutApp {
     checkAuthStatus() {
         if (authService.isAuthenticated()) {
             showScreen('dashboard-screen');
+            this.loadDashboard();
             this.loadExercises();
         } else {
             showScreen('login-screen');
@@ -109,7 +113,9 @@ class WorkoutApp {
         try {
             await authService.login(email, password);
             showScreen('dashboard-screen');
+            this.loadDashboard();
             this.loadExercises();
+            e.target.reset();
         } catch (error) {
             showError('login-error', error.message);
         }
@@ -220,6 +226,15 @@ class WorkoutApp {
         }
     }
 
+    async loadDashboard() {
+        try {
+            const user = await userService.getUser();
+            renderDashboard(user, 'Profile');
+        } catch (error) {
+            console.error('Failed to load dashboard:', error);
+        }
+    }
+
     async loadActiveWorkout() {
         try {
             const workouts = await workoutService.getWorkouts();
@@ -250,7 +265,6 @@ class WorkoutApp {
     async loadSummaries() {
         try {
             const summaries = await workoutService.getWorkoutSummaries();
-            console.log(summaries);
             renderWorkoutSummaries(summaries, 'workout-summaries');
         } catch (error) {
             console.error('Failed to load summaries', error);
