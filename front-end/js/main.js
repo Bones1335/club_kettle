@@ -26,6 +26,11 @@ class WorkoutApp {
             await this.handleLogin(e);
         });
 
+        document.getElementById('create-user-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            await this.handleCreateUser(e);
+        });
+
         document.getElementById('exercise-form').addEventListener('submit', async (e) => {
             e.preventDefault();
             await this.handleCreateExercises(e);
@@ -118,6 +123,25 @@ class WorkoutApp {
             e.target.reset();
         } catch (error) {
             showError('login-error', error.message);
+        }
+    }
+
+    async handleCreateUser(e) {
+        const formData = new FormData(e.target);
+        const userData = {
+            last_name: formData.get('create-user-last-name'),
+            first_name: formData.get('create-user-first-name'),
+            username: formData.get('create-user-username'),
+            email: formData.get('create-user-email'),
+            password: formData.get('create-user-password'),
+        }
+
+        try {
+            await userService.createUser(userData);
+            alert("Congratulations! You may now login with your registered email and password :)");
+            e.target.reset();
+        } catch (error) {
+            console.error('Failed to create user:', error);
         }
     }
 
