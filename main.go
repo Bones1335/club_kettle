@@ -20,7 +20,7 @@ type apiConfig struct {
 
 func main() {
 	godotenv.Load()
-	dbURL := os.Getenv("DB_URL")
+	dbURL := os.Getenv("DATABASE_URL")
 	platform := os.Getenv("PLATFORM")
 	jwtSecret := os.Getenv("JWT_SECRET")
 
