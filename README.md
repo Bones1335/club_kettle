@@ -15,7 +15,7 @@ Endurance strength training isn't a new concept, nor are the tools I've been usi
 3. Install SQLC tool to create database related GO code
 4. Setup PostgreSQL
 5. Setup environment variables
-   - DB_URL
+   - DATABASE_URL
    - PLATFORM
    - JWT_SECRET
 6. Run goose migrations `./migrate.sh`
