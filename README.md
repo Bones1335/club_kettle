@@ -1,6 +1,6 @@
 # Club Kettle
 
-Club Kettle is a workout API designed with Clubbells, Kettlebells, and Macebells in mind while staying simple to use.
+Club Kettle is a workout API designed with Clubbells, Kettlebells, and Macebells in mind while staying simple to use. Here's the demo: [Club Kettle](http://91.99.60.76/app/)
 
 ## Description
 
